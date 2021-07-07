@@ -1,0 +1,12 @@
+<snippet>
+	<content><![CDATA[
+${1:+|&|-}[${2:fieldListAlias}] : List("${3:opt1}","${4:opt2}") { 
+	name = "${5:...}" 
+	atomic = ${7:true|false}
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>fieldlist</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

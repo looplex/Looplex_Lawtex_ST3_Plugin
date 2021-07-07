@@ -1,0 +1,11 @@
+<snippet>
+	<content><![CDATA[
+beginList("a"),
+	print "\i${1:...}",
+endList()
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>beginEndList</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

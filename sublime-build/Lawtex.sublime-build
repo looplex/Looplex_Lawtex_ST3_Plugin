@@ -1,0 +1,4 @@
+{
+    "target": "validate_lawtex_file",
+    "file_patterns": ["*.lawtex"]
+}

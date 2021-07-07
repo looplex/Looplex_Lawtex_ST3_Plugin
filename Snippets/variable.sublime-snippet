@@ -1,0 +1,14 @@
+<snippet>
+	<content><![CDATA[
+${1:+|&|-}<${2:variableAlias}> : ${3:String|Integer|Real|Currency|Boolean|Date|Time} { 
+	name = "${4:...}"
+	request = "${5:...}"
+	default = "${6:...}"
+	help = "${7:...}"
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>variable</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

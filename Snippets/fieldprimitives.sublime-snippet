@@ -1,0 +1,14 @@
+<snippet>
+	<content><![CDATA[
+${1:+|&|-}[${2:fieldAlias}] : ${3:String|Integer|Real|Currency|Boolean|Date|Time} { 
+	name = "${4:...}"
+	request = "${5:...}"
+	help = "${6:...}"
+	default = "${7:...}"
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>fieldPrimitives</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

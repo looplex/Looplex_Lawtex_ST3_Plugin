@@ -1,0 +1,9 @@
+<snippet>
+	<content><![CDATA[
+printIf(${1:condition}, "${2:consequenceTRUE}", "${3:consequenceFALSE}")
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>printIf</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

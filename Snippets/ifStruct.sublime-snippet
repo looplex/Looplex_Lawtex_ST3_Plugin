@@ -1,0 +1,28 @@
+<snippet>
+	<content><![CDATA[
+${1:*}struct[${2:StructAlias}] {
+	name = "${5:...}"
+	request = "${6:...}"
+	help = "${7:...}"
+	id = "${8:...}" & [${9:fieldAliasQualquer}]
+	fields {
+		${10:+|&|-}[${11:fieldAlias}] : ${12:String|List|Integer|Real|Boolean|Date|Time} { 
+			name = "${13:...}"
+			request = "${14:...}"
+			key = ${15:true|false}
+			default = "${16:...}"
+			help = "${17:...}"
+		},
+		if (${18:condition with field}) {
+			${19:+|&|-}[${20:fieldStructAlias}] : ${21:*StructName}
+		} else {
+			${22:+|&|-}[${23:otherFieldStructAlias}] : ${24:*OtherStructName}
+		}
+	}
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>ifStruct</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

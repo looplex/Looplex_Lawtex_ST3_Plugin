@@ -1,0 +1,6 @@
+[
+    {
+        "keys": ["ctrl+option+u"],
+        "command": "upload_lawtex_template"
+    }
+]

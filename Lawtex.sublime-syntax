@@ -1,186 +1,413 @@
 %YAML 1.2
 ---
-# http://www.sublimetext.com/docs/3/syntax.html
+# https://www.sublimetext.com/docs/syntax.html
+
 name: Lawtex
 file_extensions:
   - lawtex
 scope: source.lawtex
+
+version: 2
+
 contexts:
-  main:
-    - match: ^(#!).+$\n
-      scope: comment.line.hashbang.lawtex
-      captures:
-        1: punctuation.definition.comment.lawtex
-    - match: '^\s*(package)\s+([^ ;]+)'
-      scope: meta.package.lawtex
-      captures:
-        1: keyword.other.package.lawtex
-        2: storage.type.package.lawtex
-    - match: '^\s*(import)\s+([^ ;$]+);?'
-      scope: meta.import.lawtex
-      captures:
-        1: keyword.other.import.lawtex
-        2: storage.type.import.lawtex
-    - include: lawtex
-  class-object:
-    - match: |-
-        (?x)
-            \b(
-              (?:[a-z]\w*\.)* # Optional package specification
-              [A-Z]\w+\b # Class name
-              (?:<(?:[\w, ]*)>)? # Optional Generics
-            )\b
-      scope: storage.type.class.lawtex
-  comment-block:
-    - match: /\*
-      captures:
-        0: punctuation.definition.comment.lawtex
-      push:
-        - meta_scope: comment.block.lawtex
-        - match: \*/
+    main:
+        - match: ^(#!).+$\n
+        # - match: |-
+            # ^                     #  Beginning of line
+            # (#!)                  #  (Group 1) Matches '#!'
+            # .+                    #  Any character (1 or more occurrences)
+            # $                     #  End of line
+            # \n                    #  Back reference to Group 1
+          scope: comment.line.hashbang.lawtex
+          captures:
+            1: punctuation.definition.comment.lawtex
+        - match: '^\s*(package)\s+([^ ;]+)'
+        # - match: |-
+            # ^                     #  Beginning of line
+            # \s*                   #  Whitespace (0 or more occurrences)
+            # (package)             #  The word 'package'
+            # \s+                   #  Whitespace (1 or more occurrences)
+            # ([^ ;]+)              #  Any character prior to semi-colon (1 or more occurrences)
+          scope: meta.package.lawtex
+          captures:
+            1: keyword.other.package.lawtex
+            2: storage.type.package.lawtex
+        - match: '^\s*(import)\s+([^ ;$]+);?'
+        # - match: |-
+            # ^                     #  Beginning of line
+            # \s*                   #  Whitespace (0 or more occurrences)
+            # (import)              #  The word 'import'
+            # \s+                   #  Whitespace (1 or more occurrences)
+            # ([^ ;$]+)             #  Any character prior to semi-colon (1 or more occurrences)
+            # ;?                    #  Semi-colon (optional)
+          scope: meta.import.lawtex
+          captures:
+            1: keyword.other.import.lawtex
+            2: storage.type.import.lawtex
+        - include: lawtex
+    class-object:
+        - match: (?x)\b((?:[a-z]\w*\.)*[A-Z]\w+\b(?:<(?:[\w, ]*)>)?)\b
+        # - match: |-
+            # (?x)
+            # \b
+            # (
+                # (?:[a-z]\w*\.)*       #  Optional package specification
+                # [A-Z]\w+\b            #  Class name
+                # (?:<(?:[\w, ]*)>)?    #  Optional Generics
+            # )
+            # \b
+            # TODO
+          scope: storage.type.class.lawtex
+    comment-block:
+        - match: /\*                #  Matches '/*'
           captures:
             0: punctuation.definition.comment.lawtex
-          pop: true
-  comments:
-    - match: /\*\*/
-      scope: comment.block.empty.lawtex
-      captures:
-        0: punctuation.definition.comment.lawtex
-    - include: scope:text.html.javadoc
-    - include: comment-block
-    - match: (//).*$\n?
-      scope: comment.line.double-slash.lawtex
-      captures:
-        1: punctuation.definition.comment.lawtex
-  constants:
-    - match: \b(true|false|null)\b
-      scope: constant.language.lawtex
-  lawtex:
-    - include: lawtex-code
-  lawtex-code:
-    - include: lawtex-code-minus-map-keys
-    - include: map-keys
-  lawtex-code-minus-map-keys:
-    - include: comments
-    - include: keyword-language
-    - include: values
-    - include: keyword-operator
-    - include: storage-types
-  keyword:
-    - include: keyword-operator
-    - include: keyword-language
-  keyword-language:
-    - match: \b(metainfo|head|body|foot|extra|where|extends|externs|template|list|struct|dependency|branch|topic|loop|period|if|else|elseif|foreach|print|use)\b
-      scope: keyword.control.lawtex
-  keyword-operator:
-    - match: (\[|\]|==|~=|<=|>=|<|>|\|)
-      scope: keyword.operator.comparison.lawtex
-    - match: "="
-      scope: keyword.operator.assignment.lawtex
-    - match: (\-|\+|\&|\*|\/|%|\^)
-      scope: keyword.operator.arithmetic.lawtex
-  map-keys:
-    - match: (\w+)\s*(:)
-      captures:
-        1: constant.other.key.lawtex
-        2: punctuation.definition.separator.key-value.lawtex
-  method-call:
-    - match: (\w+)(\()
-      captures:
-        1: meta.method.lawtex
-        2: punctuation.definition.method-parameters.begin.lawtex
-      push:
-        - meta_scope: meta.method-call.lawtex
-        - match: \)
+          push:
+            - meta_scope: comment.block.lawtex
+            - match: \*/            #  Matches '*/'
+              captures:
+                0: punctuation.definition.comment.lawtex
+              pop: true
+    comments:
+        - match: /\*\*/             #  Matches '/**/'
+          scope: comment.block.empty.lawtex
           captures:
-            0: punctuation.definition.method-parameters.end.lawtex
-          pop: true
-        - match: ","
-          scope: punctuation.definition.separator.parameter.lawtex
-        - include: lawtex-code
-  method-declaration-remainder:
-    - match: \(
-      captures:
-        0: punctuation.definition.parameters.begin.lawtex
-      push:
-        - meta_content_scope: meta.definition.method.parameters.lawtex
-        - match: \)
-          captures:
-            0: punctuation.definition.parameters.end.lawtex
-          pop: true
-        - match: ","
-          scope: punctuation.definition.parameters.separator.lawtex
+            0: punctuation.definition.comment.lawtex
+        - include: scope:text.html.javadoc
         - include: comment-block
-  nest_curly:
-    - match: '\{'
-      captures:
-        0: punctuation.section.scope.lawtex
-      push:
-        - match: '\}'
+        - match: (//).*$\n?
+        # - match: |-
+            # (//)                  #  (Group 1) Matches '//'
+            # .*                    #  Any character (0 or more occurrences)
+            # $                     #  End of line
+            # \n?                   #  Back reference to Group 1 (optional)
+          scope: comment.line.double-slash.lawtex
           captures:
-            0: punctuation.section.scope.lawtex
-          pop: true
-        - include: nest_curly
-  numbers:
-    - match: '((0(x|X)[0-9a-fA-F]*)|(\+|-)?\b(([0-9]+\.?[0-9]*)|(\.[0-9]+))((e|E)(\+|-)?[0-9]+)?)([LlFfUuDd]|UL|ul)?\b'
-      scope: constant.numeric.lawtex
-  storage-types:
-    - match: '(@[^ (]+)(\()'
-      captures:
-        1: storage.type.annotation.lawtex
-        2: punctuation.definition.annotation-arguments.begin.lawtex
-      push:
-        - meta_scope: meta.declaration.annotation.lawtex
-        - match: (\))
-          captures:
-            1: punctuation.definition.annotation-arguments.end.lawtex
-          pop: true
-        - match: (\w*)\s*(=)
+            1: punctuation.definition.comment.lawtex
+    constants:
+        - match: \b(true|false|null)\b
+        # - match: |-
+            # \b                    #  Word boundary
+            # (                     #  List of constant values keywords
+              # true |
+              # false|
+              # null
+            # )
+            # \b                    #  Word boundary
+          scope: constant.language.lawtex
+    lawtex:
+        - include: lawtex-code
+    lawtex-code:
+        - include: lawtex-code-minus-map-keys
+        - include: map-keys
+    lawtex-code-minus-map-keys:
+        - include: comments
+        - include: keyword-language
+        - include: values
+        - include: keyword-operator
+        - include: storage-types
+    keyword:
+        - include: keyword-operator
+        - include: keyword-language
+    keyword-language:
+        - match: \b(metainfo|head|body|foot|extra|where|extends|externs|template|list|struct|dependency|branch|topic|loop|period|if|else|elseif|foreach|print|use)\b
+        # - match: |-
+            # \b                    #  Word boundary
+            # (                     #  List of control keywords
+              # metainfo|
+              # head|
+              # body|
+              # foot|
+              # extra|
+              # where|
+              # extends|
+              # externs|
+              # template|
+              # list|
+              # struct|
+              # dependency|
+              # branch|
+              # topic|
+              # loop|
+              # period|
+              # if|
+              # else|
+              # elseif|
+              # foreach|
+              # print|
+              # use
+            # )
+            # \b                    #  Word boundary
+          scope: keyword.control.lawtex
+    keyword-operator:
+        - match: (\[|\]|==|~=|<=|>=|<|>|\|)
+        # - match: |-
+            # (                     #  List of comparison operator characters
+              # \[|                 #  Open group
+              # \]|                 #  Close group
+              # ==|                 #  Equals
+              # ~=|                 #  Not Equals
+              # <=|                 #  Less than or equals
+              # >=|                 #  More than or equals
+              # <|                  #  Less than
+              # >|                  #  More than
+              # \|                  #  OR
+            # )
+          scope: keyword.operator.comparison.lawtex
+        - match: "="                #  Assignment character
+          scope: keyword.operator.assignment.lawtex
+        - match: (\-|\+|\&|\*|\/|%|\^)
+        # - match: |-
+            # (                     #  List of arithmetic operator characters
+              # \-|                 #  Subtraction
+              # \+|                 #  Addition
+              # \&|                 #  Concatenation
+              # \*|                 #  Multiplication
+              # \/|                 #  Division
+              # %|                  #  Module
+              # \^                  #  Exponentiation
+            # )
+          scope: keyword.operator.arithmetic.lawtex
+    map-keys:
+        - match: (\w+)\s*(:)
+        # - match: |-
+            # (\w+)                 #  Word characters (1 or more occurrences)
+            # \s*                   #  Whitespaces (0 or more occurrences)
+            # (:)                   #  Colon
           captures:
             1: constant.other.key.lawtex
-            2: keyword.operator.assignment.lawtex
-        - include: values
-        - match: ","
-          scope: punctuation.definition.separator.lawtex
-    - match: '@\S+'
-      scope: storage.type.annotation.lawtex
-    - match: '\b(List|Object|String|Integer|Real|Boolean|Date|Time|Text|Document|Currency|Vector|Struct)\b'
-      scope: storage.type.primitive.lawtex
-  string-quoted-double:
-    - match: '"'
-      captures:
-        0: punctuation.definition.string.begin.lawtex
-      push:
-        - meta_scope: string.quoted.double.lawtex
-        - match: '"'
+            2: punctuation.definition.separator.key-value.lawtex
+    method-call:
+        - match: (\w+)(\()
+        # - match: |-
+            # (\w+)                 #  Word characters (1 or more occurrences)
+            # (\()                  #  Open parenthesis
           captures:
-            0: punctuation.definition.string.end.lawtex
-          pop: true
-        - match: \\.
-          scope: constant.character.escape.lawtex
-        - match: \$\w+
-          scope: variable.other.interpolated.lawtex
-        - match: '\$\{'
-          captures:
-            0: punctuation.section.embedded.lawtex
+            1: meta.method.lawtex
+            2: punctuation.definition.method-parameters.begin.lawtex
           push:
-            - meta_scope: source.lawtex.embedded.source
-            - match: '\}'
+            - meta_scope: meta.method-call.lawtex
+            - match: \)             #  Close parenthesis
               captures:
-                0: punctuation.section.embedded.lawtex
+                0: punctuation.definition.method-parameters.end.lawtex
+              pop: true
+            - match: ","            #  Comma
+              scope: punctuation.definition.separator.parameter.lawtex
+            - include: lawtex-code
+    method-declaration-remainder:
+        - match: \(                 #  Open parenthesis
+          captures:
+            0: punctuation.definition.parameters.begin.lawtex
+          push:
+            - meta_content_scope: meta.definition.method.parameters.lawtex
+            - match: \)             #  Close parenthesis
+              captures:
+                0: punctuation.definition.parameters.end.lawtex
+              pop: true
+            - match: ","            #  Comma
+              scope: punctuation.definition.parameters.separator.lawtex
+            - include: comment-block
+    nest_curly:
+        - match: '\{'               #  Open curly brackets
+          captures:
+            0: punctuation.section.scope.lawtex
+          push:
+            - match: '\}'           #  Close curly brackets
+              captures:
+                0: punctuation.section.scope.lawtex
               pop: true
             - include: nest_curly
-  strings:
-    - include: string-quoted-double
-  values:
-    - include: variables
-    - include: strings
-    - include: numbers
-    - include: constants
-    - include: class-object
-    - include: method-call
-  variables:
-    - match: \b(this|value|id|mask|transient|itemsOnPage|language|style|type|default|description|tags|statement|overview|components|audience|inputs|functionalities|warnings|upgrades|title|name|label|order|mandatory|version|index|lower|upper|separator|request|element|help|tip|atomic|fields|loaders|options|key|operation|declarations|operations)\b
-      scope: variable.language.lawtex
-    - match: (NOT|AND|OR|XOR|EXISTS|FORALL|IN)
-      scope: keyword.operator.logical.lawtex
+    numbers:
+        - match: '((0(x|X)[0-9a-fA-F]*)|(\+|-)?\b(([0-9]+\.?[0-9]*)|(\.[0-9]+))((e|E)(\+|-)?[0-9]+)?)([LlFfUuDd]|UL|ul)?\b'
+        # - match: |-
+            # (
+              # (                   #  Pattern for hexadecimal numbers
+                # 0                 #  The number '0'
+                # (x|X)             #  The letter 'x' (case insensitive)
+                # [0-9a-fA-F]*      #  Hexadecimal digits (0 or more occurrences)
+              # )
+              # |
+                                    #  Pattern for decimal numbers
+              # (\+|-)?             #  Positive/Negative modifier (optional)
+              # \b                  #  Word boundary
+              # (
+                # (                 #  Pattern for numbers with digits left of period (e.g. 2.5)
+                  # [0-9]+          #  Decimal digits (1 or more occurrence)
+                  # \.?             #  Period (optional)
+                  # [0-9]*          #  Decimal digits (0 or more occurrences)
+                # )
+                # |
+                # (                 #  Pattern for numbers without digits left of period (e.g. .75)
+                  # \.              #  Period
+                  # [0-9]+          #  Decimal digits (1 or more occurrences)
+                # )
+              # )
+              # (                   #  Scientific notation append (optional)
+                # (e|E)             #  The symbol 'E' (case insensitive)
+                # (\+|-)?           #  Positive/Negative modifier (optional)
+                # [0-9]+            #  Decimal digits (1 or more occurrences)
+              # )?                  #  Scientific notation append (optional)
+            # )
+            # (                     #  Append (optional)
+              # [LlFfUuDd]|         #  The characters 'L', 'F', 'U' or 'D' (case insensitive)
+              # UL|                 #  The word 'UL' (uppercase)
+              # ul                  #  The word 'ul' (lowercase)
+            # )?
+            # \b                    #  Word boundary
+          scope: constant.numeric.lawtex
+    storage-types:
+        - match: '(@[^ (]+)(\()'
+        # - match: |-
+            # (
+              # @                   #  The character '@'
+              # [^ (]+              #  Any character prior to open parenthesis (1 or more occurrences)
+            # )
+            # (
+              # \(                  #  Open parenthesis
+            # )
+          captures:
+            1: storage.type.annotation.lawtex
+            2: punctuation.definition.annotation-arguments.begin.lawtex
+          push:
+            - meta_scope: meta.declaration.annotation.lawtex
+            - match: (\))           #  Close parenthesis
+              captures:
+                1: punctuation.definition.annotation-arguments.end.lawtex
+              pop: true
+            - match: (\w*)\s*(=)
+            # - match: |-
+                # (\w*)             #  Word characters (0 or more occurrences)
+                # \s*               #  Whitespaces (0 or more occurrences)
+                # (=)               #  The character '='
+              captures:
+                1: constant.other.key.lawtex
+                2: keyword.operator.assignment.lawtex
+            - include: values
+            - match: ","            #  Comma
+              scope: punctuation.definition.separator.lawtex
+        - match: '@\S+'
+        # - match: |-
+            # @                     #  The character '@'
+            # \S+                   #  Non-whitespace characters (1 or more occurrences)
+          scope: storage.type.annotation.lawtex
+        - match: '\b(List|Object|String|Integer|Real|Boolean|Date|Time|Text|Document|Currency|Vector|Struct)\b'
+        # - match: |-
+            # \b                    #  Word boundary
+            # (                     #  List of primitives keywords
+              # List|
+              # Object|
+              # String|
+              # Integer|
+              # Real|
+              # Boolean|
+              # Date|
+              # Time|
+              # Text|
+              # Document|
+              # Currency|
+              # Vector|
+              # Struct
+            # )
+            # \b                    #  Word boundary
+          scope: storage.type.primitive.lawtex
+    string-quoted-double:
+        - match: '"'                #  Double-quotation mark
+          captures:
+            0: punctuation.definition.string.begin.lawtex
+          push:
+            - meta_scope: string.quoted.double.lawtex
+            - match: '"'            #  Double-quotation mark
+              captures:
+                0: punctuation.definition.string.end.lawtex
+              pop: true
+            - match: \\.            #  Character escape (any backslash followed by any one character)
+              scope: constant.character.escape.lawtex
+            - match: '\$\w+'
+            # - match: |-
+                # \$                #  The character '$'
+                # \w+               #  Word characters (1 or more occurrences)
+              scope: variable.other.interpolated.lawtex
+            - match: '\$\{'
+            # - match: |-
+                # \$                #  The character '$'
+                # \{                #  Open curly brackets
+              captures:
+                0: punctuation.section.embedded.lawtex
+              push:
+                - meta_scope: source.lawtex.embedded.source
+                - match: '\}'       #  Close curly brackets
+                  captures:
+                    0: punctuation.section.embedded.lawtex
+                  pop: true
+                - include: nest_curly
+    strings:
+        - include: string-quoted-double
+    values:
+        - include: variables
+        - include: strings
+        - include: numbers
+        - include: constants
+        - include: class-object
+        - include: method-call
+    variables:
+        - match: \b(this|value|id|mask|transient|itemsOnPage|language|style|type|default|description|tags|statement|overview|components|audience|inputs|functionalities|warnings|upgrades|title|name|label|order|mandatory|version|index|lower|upper|separator|request|element|help|tip|atomic|fields|loaders|options|key|operation|declarations|operations)\b
+        # - match: |-
+            # \b                    #  Word boundary
+            # (                     #  List of Lawtex language keywords
+              # this|
+              # value|
+              # id|
+              # mask|
+              # transient|
+              # itemsOnPage|
+              # language|
+              # style|
+              # type|
+              # default|
+              # description|
+              # tags|
+              # statement|
+              # overview|
+              # components|
+              # audience|
+              # inputs|
+              # functionalities|
+              # warnings|
+              # upgrades|
+              # title|
+              # name|
+              # label|
+              # order|
+              # mandatory|
+              # version|
+              # index|
+              # lower|
+              # upper|
+              # separator|
+              # request|
+              # element|
+              # help|
+              # tip|
+              # atomic|
+              # fields|
+              # loaders|
+              # options|
+              # key|
+              # operation|
+              # declarations|
+              # operations
+            # )
+            # \b                    #  Word boundary
+          scope: variable.language.lawtex
+        - match: (NOT|AND|OR|XOR|EXISTS|FORALL|IN)
+        # - match: |-
+            # (                     #  List of logical operators keywords
+              # NOT|
+              # AND|
+              # OR|
+              # XOR|
+              # EXISTS|
+              # FORALL|
+              # IN
+            # )
+          scope: keyword.operator.logical.lawtex

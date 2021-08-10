@@ -1,4 +1,4 @@
-from looplex_lawtex_plugin.lib.Config import Config
+from Looplex_Lawtex_ST3_Plugin.lib.Config import Config
 
 class Select_ambient():
     def __init__(self, view):

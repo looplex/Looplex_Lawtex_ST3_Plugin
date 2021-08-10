@@ -1,7 +1,7 @@
 import sublime
-from looplex_lawtex_plugin.lib.Config import Config
-from looplex_lawtex_plugin.lib.Select_ambient import Select_ambient
-from looplex_lawtex_plugin.lib.Save_login_info import Save_login_info
+from Looplex_Lawtex_ST3_Plugin.lib.Config import Config
+from Looplex_Lawtex_ST3_Plugin.lib.Select_ambient import Select_ambient
+from Looplex_Lawtex_ST3_Plugin.lib.Save_login_info import Save_login_info
 
 class Upload_lawtex_template():
     def __init__(self, view, ambient):

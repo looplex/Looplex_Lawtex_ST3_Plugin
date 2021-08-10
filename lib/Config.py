@@ -12,7 +12,7 @@ class Config:
 
     lawtexSettingsFilename = 'Looplex_Lawtex_ST3_Plugin.sublime-settings'
 
-    mainDataFolder = 'Lawtex_ST3_Plugin'
+    mainDataFolder = 'Looplex_Lawtex_ST3_Plugin'
     logsDataSubFolder = 'logs'
     databaseDataSubFolder = 'local_database'
 

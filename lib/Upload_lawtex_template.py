@@ -1,6 +1,6 @@
 import sublime
-from lib.Config import Config
-from lib.Select_ambient import Select_ambient
+from Looplex_Lawtex_ST3_Plugin.lib.Config import Config
+from Looplex_Lawtex_ST3_Plugin.lib.Select_ambient import Select_ambient
 from Looplex_Lawtex_ST3_Plugin.lib.Save_login_info import Save_login_info
 
 class Upload_lawtex_template():

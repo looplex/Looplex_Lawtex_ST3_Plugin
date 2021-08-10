@@ -1,0 +1,186 @@
+%YAML 1.2
+---
+# http://www.sublimetext.com/docs/3/syntax.html
+name: Lawtex
+file_extensions:
+  - lawtex
+scope: source.lawtex
+contexts:
+  main:
+    - match: ^(#!).+$\n
+      scope: comment.line.hashbang.lawtex
+      captures:
+        1: punctuation.definition.comment.lawtex
+    - match: '^\s*(package)\s+([^ ;]+)'
+      scope: meta.package.lawtex
+      captures:
+        1: keyword.other.package.lawtex
+        2: storage.type.package.lawtex
+    - match: '^\s*(import)\s+([^ ;$]+);?'
+      scope: meta.import.lawtex
+      captures:
+        1: keyword.other.import.lawtex
+        2: storage.type.import.lawtex
+    - include: lawtex
+  class-object:
+    - match: |-
+        (?x)
+            \b(
+              (?:[a-z]\w*\.)* # Optional package specification
+              [A-Z]\w+\b # Class name
+              (?:<(?:[\w, ]*)>)? # Optional Generics
+            )\b
+      scope: storage.type.class.lawtex
+  comment-block:
+    - match: /\*
+      captures:
+        0: punctuation.definition.comment.lawtex
+      push:
+        - meta_scope: comment.block.lawtex
+        - match: \*/
+          captures:
+            0: punctuation.definition.comment.lawtex
+          pop: true
+  comments:
+    - match: /\*\*/
+      scope: comment.block.empty.lawtex
+      captures:
+        0: punctuation.definition.comment.lawtex
+    - include: scope:text.html.javadoc
+    - include: comment-block
+    - match: (//).*$\n?
+      scope: comment.line.double-slash.lawtex
+      captures:
+        1: punctuation.definition.comment.lawtex
+  constants:
+    - match: \b(true|false|null)\b
+      scope: constant.language.lawtex
+  lawtex:
+    - include: lawtex-code
+  lawtex-code:
+    - include: lawtex-code-minus-map-keys
+    - include: map-keys
+  lawtex-code-minus-map-keys:
+    - include: comments
+    - include: keyword-language
+    - include: values
+    - include: keyword-operator
+    - include: storage-types
+  keyword:
+    - include: keyword-operator
+    - include: keyword-language
+  keyword-language:
+    - match: \b(metainfo|head|body|foot|extra|where|extends|externs|template|list|struct|dependency|branch|topic|loop|period|if|else|elseif|foreach|print|use)\b
+      scope: keyword.control.lawtex
+  keyword-operator:
+    - match: (\[|\]|==|~=|<=|>=|<|>|\|)
+      scope: keyword.operator.comparison.lawtex
+    - match: "="
+      scope: keyword.operator.assignment.lawtex
+    - match: (\-|\+|\&|\*|\/|%|\^)
+      scope: keyword.operator.arithmetic.lawtex
+  map-keys:
+    - match: (\w+)\s*(:)
+      captures:
+        1: constant.other.key.lawtex
+        2: punctuation.definition.separator.key-value.lawtex
+  method-call:
+    - match: (\w+)(\()
+      captures:
+        1: meta.method.lawtex
+        2: punctuation.definition.method-parameters.begin.lawtex
+      push:
+        - meta_scope: meta.method-call.lawtex
+        - match: \)
+          captures:
+            0: punctuation.definition.method-parameters.end.lawtex
+          pop: true
+        - match: ","
+          scope: punctuation.definition.separator.parameter.lawtex
+        - include: lawtex-code
+  method-declaration-remainder:
+    - match: \(
+      captures:
+        0: punctuation.definition.parameters.begin.lawtex
+      push:
+        - meta_content_scope: meta.definition.method.parameters.lawtex
+        - match: \)
+          captures:
+            0: punctuation.definition.parameters.end.lawtex
+          pop: true
+        - match: ","
+          scope: punctuation.definition.parameters.separator.lawtex
+        - include: comment-block
+  nest_curly:
+    - match: '\{'
+      captures:
+        0: punctuation.section.scope.lawtex
+      push:
+        - match: '\}'
+          captures:
+            0: punctuation.section.scope.lawtex
+          pop: true
+        - include: nest_curly
+  numbers:
+    - match: '((0(x|X)[0-9a-fA-F]*)|(\+|-)?\b(([0-9]+\.?[0-9]*)|(\.[0-9]+))((e|E)(\+|-)?[0-9]+)?)([LlFfUuDd]|UL|ul)?\b'
+      scope: constant.numeric.lawtex
+  storage-types:
+    - match: '(@[^ (]+)(\()'
+      captures:
+        1: storage.type.annotation.lawtex
+        2: punctuation.definition.annotation-arguments.begin.lawtex
+      push:
+        - meta_scope: meta.declaration.annotation.lawtex
+        - match: (\))
+          captures:
+            1: punctuation.definition.annotation-arguments.end.lawtex
+          pop: true
+        - match: (\w*)\s*(=)
+          captures:
+            1: constant.other.key.lawtex
+            2: keyword.operator.assignment.lawtex
+        - include: values
+        - match: ","
+          scope: punctuation.definition.separator.lawtex
+    - match: '@\S+'
+      scope: storage.type.annotation.lawtex
+    - match: '\b(List|Object|String|Integer|Real|Boolean|Date|Time|Text|Document|Currency|Vector|Struct)\b'
+      scope: storage.type.primitive.lawtex
+  string-quoted-double:
+    - match: '"'
+      captures:
+        0: punctuation.definition.string.begin.lawtex
+      push:
+        - meta_scope: string.quoted.double.lawtex
+        - match: '"'
+          captures:
+            0: punctuation.definition.string.end.lawtex
+          pop: true
+        - match: \\.
+          scope: constant.character.escape.lawtex
+        - match: \$\w+
+          scope: variable.other.interpolated.lawtex
+        - match: '\$\{'
+          captures:
+            0: punctuation.section.embedded.lawtex
+          push:
+            - meta_scope: source.lawtex.embedded.source
+            - match: '\}'
+              captures:
+                0: punctuation.section.embedded.lawtex
+              pop: true
+            - include: nest_curly
+  strings:
+    - include: string-quoted-double
+  values:
+    - include: variables
+    - include: strings
+    - include: numbers
+    - include: constants
+    - include: class-object
+    - include: method-call
+  variables:
+    - match: \b(this|value|id|mask|transient|itemsOnPage|language|style|type|default|description|tags|statement|overview|components|audience|inputs|functionalities|warnings|upgrades|title|name|label|order|mandatory|version|index|lower|upper|separator|request|element|help|tip|atomic|fields|loaders|options|key|operation|declarations|operations)\b
+      scope: variable.language.lawtex
+    - match: (NOT|AND|OR|XOR|EXISTS|FORALL|IN)
+      scope: keyword.operator.logical.lawtex

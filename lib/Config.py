@@ -6,11 +6,11 @@ from zipfile import ZipFile
 
 class Config:
 
-    pluginName = 'looplex_lawtex_plugin'
+    pluginName = 'Looplex_Lawtex_ST3_Plugin'
 
-    pluginJar = 'looplex_lawtex_plugin-1.1-SNAPSHOT.jar'
+    pluginJar = 'Looplex_Lawtex_ST3_Plugin-1.1.jar'
 
-    lawtexSettingsFilename = 'looplex_lawtex_plugin.sublime-settings'
+    lawtexSettingsFilename = 'Looplex_Lawtex_ST3_Plugin.sublime-settings'
 
     mainDataFolder = 'Lawtex_ST3_Plugin'
     logsDataSubFolder = 'logs'

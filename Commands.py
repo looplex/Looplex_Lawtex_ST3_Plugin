@@ -4,8 +4,6 @@ import os
 from Default.exec import ExecCommand
 from Looplex_Lawtex_ST3_Plugin.lib.Config import Config
 from Looplex_Lawtex_ST3_Plugin.lib.Validate_lawtex_file import Validate_lawtex_file
-from Looplex_Lawtex_ST3_Plugin.lib.Select_ambient import Select_ambient
-from Looplex_Lawtex_ST3_Plugin.lib.Save_login_info import Save_login_info
 from Looplex_Lawtex_ST3_Plugin.lib.Upload_lawtex_template import Upload_lawtex_template
 
 class LawtexSyntaxErrorHighlightListener(sublime_plugin.EventListener) :

@@ -24,20 +24,8 @@ class Validate_lawtex_fileCommand(ExecCommand) :
 class Upload_lawtex_templateCommand(sublime_plugin.TextCommand) :
     def run(self,edit) :
         Config.check_plugin_jar_dependencies()
-        uplService = Upload_lawtex_template(self.view, None)
+        uplService = Upload_lawtex_template(self.view)
         uplService.upload()
-
-class Upload_lawtex_template_to_testingCommand(sublime_plugin.TextCommand) :
-    def run(self, edit) :
-        Config.check_plugin_jar_dependencies()
-        uplService = Upload_lawtex_template(self.view,'TESTING')
-        uplService.upload()
-
-class Change_login_infoCommand(sublime_plugin.TextCommand) :
-    def run(self,edit) :
-        setAmbService = Select_ambient(self.view)
-        savLogService = Save_login_info(self.view)
-        setAmbService.select_ambient(savLogService.save)
 
 class Open_logs_folderCommand(sublime_plugin.TextCommand) :
     def run(self,edit) :

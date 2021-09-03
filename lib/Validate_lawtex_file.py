@@ -14,37 +14,11 @@ class Validate_lawtex_file() :
             return
 
         self.onPostSave = onPostSave
-        self.set_user()
-
-    def set_user(self):
-
-        self.looplexEnviron = Config.looplexEnvirons
-        self.lawtexSettings = Config.load_lawtex_settings()
-
-        for environ in reversed(self.looplexEnviron) :
-            if not self.lawtexSettings.get(environ + "_username") == None :
-                self.user = self.lawtexSettings.get(environ + "_username")
-                self.validate_file()
-                return
-
-        self.retrieve_user()
-
-    def retrieve_user(self):
-
-        sublime.message_dialog("Salve um usuário antes de validar um arquivo!")
-
-        setAmbService = Select_ambient(self.view)
-        setAmbService.select_ambient(self.setup_user)
-
-    def setup_user(self, ambient):
-        self.ambient = ambient
-
-        savLogService = Save_login_info(self.view)
-        savLogService.save_and_callback(self.ambient, self.set_user)
+        self.validate_file()
 
     def validate_file(self):
 
-        validate_context = "{\"currentFile\":\"" + self.view.file_name() + "\",\"username\":\"" + self.user + "\",\"command\":\"VALIDATE_FILE\"}"
+        validate_context = "{\"currentFile\":\"" + self.view.file_name() + "\",\"lang\":\"pt-br\",\"command\":\"VALIDATE_LAWTEX_FILE\"}"
 
         utilCall = Config()
         stdout = utilCall.run_jar_dependency_in_background(validate_context)

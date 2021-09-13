@@ -1,6 +1,6 @@
 # Looplex Lawtex Plugin - Sublime Text 3
 
-Este é o plugin da Looplex de suporte ao Lawtex e nossa plataforma para o (Sublime Text 3)[https://www.sublimetext.com/3]. Ele irá permitir a validação gramatical de arquivos Lawtex, assim como o upload de templates e anexos para a Looplex. 
+Este é o plugin da Looplex de suporte ao Lawtex e nossa plataforma para o [Sublime Text 3](https://www.sublimetext.com/3). Ele irá permitir a validação gramatical de arquivos Lawtex, assim como o upload de templates e anexos para a Looplex. 
 
 ## Instalação
 

@@ -24,7 +24,10 @@ Para o funcionamento do plugin, é necessário a instalação do [Java 8 JRE](ht
 - Abra o menu _'Tools'_, e selecione _'Command Palette...'_
 - Digite _'Package Control: Add Repository'_ e aperte Enter.
   - No canto inferior da janela aparecerá um campo de entrada.
-- Copie e cole o endereço deste repositório (https://github.com/looplex/Looplex_Lawtex_ST3_Plugin) no campo de entrada que apareceu, e aperte Enter.
+- Copie e cole o endereço deste repositório no campo de entrada que apareceu, e aperte Enter:
+```
+https://github.com/looplex/Looplex_Lawtex_ST3_Plugin
+```
 
 ##### Instale o plugin
 

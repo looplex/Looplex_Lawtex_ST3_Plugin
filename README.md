@@ -120,3 +120,18 @@ Para a inclusão de arquivos de anexo (como imagens, exemplo), basta incluir um 
 ```
 // attach ["arquivo_anexo_1.png", "arquivo_anexo_2.png", "arquivo_anexo.png"]
 ```
+
+##### Inclusão de anexos em subpastas
+
+```
+// attach "subpasta/arquivo_anexo.png"
+// attach ["subpasta/arquivo_anexo_1.png", "subpasta/outra_subpasta/arquivo_anexo_2.png"]
+```
+
+##### Inclusão de anexos em pastas acima
+
+```
+// attach "../arquivo_anexo.png"
+// attach "../../arquivo_anexo.png"
+// attach ["../arquivo_anexo_1.png", "../../arquivo_anexo_2.png"]
+```

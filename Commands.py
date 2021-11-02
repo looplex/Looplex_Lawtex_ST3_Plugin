@@ -5,6 +5,7 @@ from Default.exec import ExecCommand
 from Looplex_Lawtex_ST3_Plugin.lib.Config import Config
 from Looplex_Lawtex_ST3_Plugin.lib.Validate_lawtex_file import Validate_lawtex_file
 from Looplex_Lawtex_ST3_Plugin.lib.Upload_lawtex_template import Upload_lawtex_template
+from Looplex_Lawtex_ST3_Plugin.lib.Change_login_context import Change_login_context
 
 class LawtexSyntaxErrorHighlightListener(sublime_plugin.EventListener) :
     def on_load_async(self, view) :
@@ -24,6 +25,13 @@ class Upload_lawtex_templateCommand(sublime_plugin.TextCommand) :
         Config.check_plugin_jar_dependencies()
         uplService = Upload_lawtex_template(self.view)
         uplService.upload()
+
+class Change_login_contextCommand(sublime_plugin.TextCommand) :
+    def run(self,edit) :
+        Config.check_plugin_jar_dependencies()
+        chngLoginService = Change_login_context(self.view)
+        chngLoginService.changeContext()
+
 
 class Open_logs_folderCommand(sublime_plugin.TextCommand) :
     def run(self,edit) :

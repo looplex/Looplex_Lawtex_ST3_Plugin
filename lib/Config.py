@@ -69,8 +69,8 @@ class Config:
 
     def run_jar_dependency_in_background(self, context) :
 
-        check_plugin_java_dependencies()
-        check_plugin_jar_dependencies()
+        Config.check_plugin_java_dependencies()
+        Config.check_plugin_jar_dependencies()
 
         if sublime.platform() == "windows":
             context = context.replace("\\", "\\\\")

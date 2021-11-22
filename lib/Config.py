@@ -26,7 +26,7 @@ class Config:
 
                         if file.startswith('java/windows/'):
 
-                            zip_obj.extract('java', os.path.join(sublime.packages_path(), Config.pluginName))
+                            zip_obj.extract(file, os.path.join(sublime.packages_path(), Config.pluginName))
 
             elif sublime.platform() == "osx":
 
@@ -36,7 +36,7 @@ class Config:
 
                         if file.startswith('java/osx/'):
 
-                            zip_obj.extract('java', os.path.join(sublime.packages_path(), Config.pluginName))
+                            zip_obj.extract(file, os.path.join(sublime.packages_path(), Config.pluginName))
 
             else:
 
@@ -46,7 +46,7 @@ class Config:
 
                         if file.startswith('java/linux/'):
 
-                            zip_obj.extract('java', os.path.join(sublime.packages_path(), Config.pluginName))
+                            zip_obj.extract(file, os.path.join(sublime.packages_path(), Config.pluginName))
 
     def retrieve_java_dependency_filepath() :
 

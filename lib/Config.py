@@ -24,7 +24,7 @@ class Config:
 
                     zip_obj.extract('java/windows', os.path.join(sublime.packages_path(), Config.pluginName))
 
-            else if sublime.platform() == "osx":
+            elif sublime.platform() == "osx":
 
                 with ZipFile( os.path.dirname( os.path.dirname(__file__) ), 'r') as zip_obj:
 
@@ -81,7 +81,7 @@ class Config:
             CREATE_NO_WINDOW = 0x08000000
             subprocess.Popen([ os.path.join(sublime.packages_path(), Config.pluginName, "windows", "bin", "java"), "-jar", jar_filepath, context], creationflags = CREATE_NO_WINDOW)
 
-        else if sublime.platform() == "osx":
+        elif sublime.platform() == "osx":
             subprocess.Popen([ os.path.join(sublime.packages_path(), Config.pluginName, "osx", "Home", "bin", "java"), "-jar", jar_filepath, context])
 
         else :

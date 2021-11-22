@@ -91,13 +91,13 @@ class Config:
 
         if sublime.platform() == "windows":
             CREATE_NO_WINDOW = 0x08000000
-            subprocess.Popen([ os.path.join(sublime.packages_path(), Config.pluginName, "java", "windows", "bin", "java"), "-jar", jar_filepath, context], creationflags = CREATE_NO_WINDOW)
+            subprocess.Popen([ os.path.join(sublime.packages_path(), Config.pluginName, "java", "windows", "bin"), "java", "-jar", jar_filepath, context], creationflags = CREATE_NO_WINDOW)
 
         elif sublime.platform() == "osx":
-            subprocess.Popen([ os.path.join(sublime.packages_path(), Config.pluginName, "java", "osx", "Home", "bin", "java"), "-jar", jar_filepath, context])
+            subprocess.Popen([ os.path.join(sublime.packages_path(), Config.pluginName, "java", "osx", "Home", "bin"), "java", "-jar", jar_filepath, context])
 
         else :
-            subprocess.Popen([ os.path.join(sublime.packages_path(), Config.pluginName, "java", "linux", "bin", "java"), "-jar", jar_filepath, context])
+            subprocess.Popen([ os.path.join(sublime.packages_path(), Config.pluginName, "java", "linux", "bin"), "java", "-jar", jar_filepath, context])
 
     def retrieve_logs_folder_linux() :
 

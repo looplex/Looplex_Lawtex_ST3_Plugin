@@ -2,7 +2,9 @@ import sublime
 from Looplex_Lawtex_ST3_Plugin.lib.Config import Config
 
 class Change_login_context() :
+
     def __init__(self, view) :
+        
         self.view = view
 
     def changeContext(self) :

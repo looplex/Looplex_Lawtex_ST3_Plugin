@@ -22,19 +22,25 @@ class Config:
 
                 with ZipFile( os.path.dirname( os.path.dirname(__file__) ), 'r') as zip_obj:
 
-                    zip_obj.extractall('java/windows', os.path.join(sublime.packages_path(), Config.pluginName))
+                    if file.startswith('java/windows/'):
+
+                        zip_obj.extract('java', os.path.join(sublime.packages_path(), Config.pluginName))
 
             elif sublime.platform() == "osx":
 
                 with ZipFile( os.path.dirname( os.path.dirname(__file__) ), 'r') as zip_obj:
 
-                    zip_obj.extractall('java/osx', os.path.join(sublime.packages_path(), Config.pluginName))
+                    if file.startswith('java/osx/'):
+
+                        zip_obj.extractall('java', os.path.join(sublime.packages_path(), Config.pluginName))
 
             else:
 
                 with ZipFile( os.path.dirname( os.path.dirname(__file__) ), 'r') as zip_obj:
 
-                    zip_obj.extractall('java/linux', os.path.join(sublime.packages_path(), Config.pluginName))
+                    if file.startswith('java/linux/'):
+
+                        zip_obj.extractall('java', os.path.join(sublime.packages_path(), Config.pluginName))
 
     def retrieve_java_dependency_filepath() :
 

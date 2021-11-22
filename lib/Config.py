@@ -28,13 +28,13 @@ class Config:
 
                 with ZipFile( os.path.dirname( os.path.dirname(__file__) ), 'r') as zip_obj:
 
-                    zip_obj.extract('java/osx' + Config.pluginJar, os.path.join(sublime.packages_path(), Config.pluginName))
+                    zip_obj.extract('java/osx', os.path.join(sublime.packages_path(), Config.pluginName))
 
             else:
 
                 with ZipFile( os.path.dirname( os.path.dirname(__file__) ), 'r') as zip_obj:
 
-                    zip_obj.extract('java/linux' + Config.pluginJar, os.path.join(sublime.packages_path(), Config.pluginName))
+                    zip_obj.extract('java/linux', os.path.join(sublime.packages_path(), Config.pluginName))
 
     def retrieve_java_dependency_filepath() :
 

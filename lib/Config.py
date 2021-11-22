@@ -18,13 +18,13 @@ class Config:
 
         if not os.path.exists( Config.retrieve_java_dependency_filepath() ):
 
-            if sublime.platform() = "windows":
+            if sublime.platform() == "windows":
 
                 with ZipFile( os.path.dirname( os.path.dirname(__file__) ), 'r') as zip_obj:
 
                     zip_obj.extract('java/windows', os.path.join(sublime.packages_path(), Config.pluginName))
 
-            else if sublime.platform() = "osx":
+            else if sublime.platform() == "osx":
 
                 with ZipFile( os.path.dirname( os.path.dirname(__file__) ), 'r') as zip_obj:
 

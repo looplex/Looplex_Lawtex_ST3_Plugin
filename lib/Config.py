@@ -2,7 +2,7 @@ import sublime
 import subprocess
 import re
 import os
-from zipfile import ZipFile
+from Looplex_Lawtex_ST3_Plugin.lib.ZipFile import ZipFile
 
 class Config:
 

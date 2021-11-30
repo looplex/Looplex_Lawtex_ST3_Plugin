@@ -10,48 +10,11 @@ class Config:
 
     pluginJar = 'looplex_lawtex_plugin-1.4.4.jar'
 
+    pluginExe = 'looplex_lawtex_plugin-1.4.4.exe'
+
     mainDataFolder = 'Looplex_Lawtex_ST3_Plugin'
     logsDataSubFolder = 'logs'
     databaseDataSubFolder = 'local_database'
-
-    def check_plugin_java_dependencies():
-
-        if not os.path.exists( Config.retrieve_java_dependency_filepath() ):
-
-            if sublime.platform() == "windows":
-
-                with ZipFile( os.path.dirname( os.path.dirname(__file__) ), 'r') as zip_obj:
-
-                    for file in zip_obj.namelist():
-
-                        if file.startswith('java/windows/'):
-
-                            zip_obj.extract(file, os.path.join(sublime.packages_path(), Config.pluginName))
-
-            elif sublime.platform() == "osx":
-
-                with ZipFile( os.path.dirname( os.path.dirname(__file__) ), 'r') as zip_obj:
-
-                    for file in zip_obj.namelist():
-
-                        if file.startswith('java/osx/'):
-
-                            zip_obj.extract(file, os.path.join(sublime.packages_path(), Config.pluginName))
-
-            else:
-
-                with ZipFile( os.path.dirname( os.path.dirname(__file__) ), 'r') as zip_obj:
-
-                    for file in zip_obj.namelist():
-
-                        if file.startswith('java/linux/'):
-
-                            zip_obj.extract(file, os.path.join(sublime.packages_path(), Config.pluginName))
-
-    def retrieve_java_dependency_filepath() :
-
-        return os.path.join(sublime.packages_path(), Config.pluginName, 'java')
-
 
     def check_plugin_jar_dependencies():
 
@@ -64,6 +27,18 @@ class Config:
     def retrieve_jar_dependency_filepath() :
 
         return os.path.join(sublime.packages_path(), Config.pluginName, 'jar', Config.pluginJar)
+
+    def check_plugin_exe_dependencies():
+
+        if not os.path.exists( Config.retrieve_exe_dependency_filepath() ):
+
+            with ZipFile( os.path.dirname( os.path.dirname(__file__) ), 'r') as zip_obj:
+
+                zip_obj.extract('exe/' + Config.pluginExe, os.path.join(sublime.packages_path(), Config.pluginName))
+
+    def retrieve_exe_dependency_filepath() :
+
+        return os.path.join(sublime.packages_path(), Config.pluginName, 'exe', Config.pluginExe)
 
     def check_if_in_lawtex_file(view):
 
@@ -81,23 +56,24 @@ class Config:
 
     def run_jar_dependency_in_background(self, context) :
 
-        Config.check_plugin_java_dependencies()
-        Config.check_plugin_jar_dependencies()
-
         if sublime.platform() == "windows":
             context = context.replace("\\", "\\\\")
 
         jar_filepath = Config.retrieve_jar_dependency_filepath()
+        exe_filepath = Config.retrieve_exe_dependency_filepath()
 
         if sublime.platform() == "windows":
+            Config.check_plugin_exe_dependencies()
             CREATE_NO_WINDOW = 0x08000000
-            subprocess.Popen([ os.path.join(sublime.packages_path(), Config.pluginName, "java", "windows", "bin", "java"), "-jar", jar_filepath, context], creationflags = CREATE_NO_WINDOW)
+            subprocess.Popen([ exe_filepath, context], creationflags = CREATE_NO_WINDOW)
 
         elif sublime.platform() == "osx":
-            subprocess.Popen([ os.path.join(sublime.packages_path(), Config.pluginName, "java", "osx", "Home", "bin", "java"), "-jar", jar_filepath, context])
+            Config.check_plugin_jar_dependencies()
+            subprocess.Popen([ "java", "-jar", jar_filepath, context ])
 
         else :
-            subprocess.Popen([ os.path.join(sublime.packages_path(), Config.pluginName, "java", "linux", "bin", "java"), "-jar", jar_filepath, context])
+            Config.check_plugin_jar_dependencies()
+            subprocess.Popen([ "java", "-jar", jar_filepath, context ])
 
     def retrieve_logs_folder_linux() :
 

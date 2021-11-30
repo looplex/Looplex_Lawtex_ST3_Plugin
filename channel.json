@@ -2,7 +2,7 @@
 	"schema_version": "3.0.0",
 	"packages": [
 		{
-			"name": "Looplex Lawtex Plugin",
+			"name": "Looplex Lawtex Plugin - DEV",
 			"details": "https://github.com/looplex/looplex_lawtex_ST3_plugin",
 			"homepage": "https://www.looplex.com.br/",
 			"author": "Looplex S.A.",

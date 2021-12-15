@@ -65,7 +65,7 @@ class Config:
         if sublime.platform() == "windows":
             Config.check_plugin_exe_dependencies()
             CREATE_NO_WINDOW = 0x08000000
-            subprocess.Popen([ exe_filepath, context], creationflags = CREATE_NO_WINDOW)
+            subprocess.Popen([ exe_filepath, context], creationflags = CREATE_NO_WINDOW )
 
         elif sublime.platform() == "osx":
             Config.check_plugin_jar_dependencies()

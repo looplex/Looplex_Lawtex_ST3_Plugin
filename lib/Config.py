@@ -29,32 +29,32 @@ class Config:
 
     def run_jar_dependency_in_background(self, context) :
 
-        if sublime.platform() == "windows":
-            context = context.replace("\\", "\\\\")
-
-        jre_filepath = Config.retrieve_jre_dependency_filepath()
         jar_filepath = Config.retrieve_jar_dependency_filepath()
-
-        print("JAR: " + jar_filepath)
-        print("JRE: " + jre_filepath)
 
         if sublime.platform() == "windows":
             CREATE_NO_WINDOW = 0x08000000
+            context = context.replace("\\", "\\\\")
+            jre_filepath = Config.retrieve_windows_jre_dependency_filepath()
             subprocess.Popen([ jre_filepath, '-jar', jar_filepath, context], creationflags = CREATE_NO_WINDOW )
 
         elif sublime.platform() == "osx":
             subprocess.Popen([ "java", "-jar", jar_filepath, context ])
 
         else :
-            subprocess.Popen([ "java", "-jar", jar_filepath, context ])
+            jre_filepath = Config.retrieve_linux_jre_dependency_filepath()
+            subprocess.Popen([ jre_filepath, '-jar', jar_filepath, context], creationflags = CREATE_NO_WINDOW )
 
     def retrieve_jar_dependency_filepath() :
 
         return os.path.join(sublime.packages_path(), Config.pluginName, 'jar', Config.pluginJar)
 
-    def retrieve_jre_dependency_filepath() :
+    def retrieve_windows_jre_dependency_filepath() :
 
-        return os.path.join(sublime.packages_path(), Config.pluginName, 'jre',  sublime.platform(), 'bin', 'java')
+        return os.path.join(sublime.packages_path(), Config.pluginName, 'jre', 'windows', 'bin', 'java')
+
+    def retrieve_linux_jre_dependency_filepath() :
+
+        return os.path.join(sublime.packages_path(), Config.pluginName, 'jre', 'linux', 'bin', 'java')
 
     def retrieve_logs_folder_linux() :
 
@@ -62,7 +62,7 @@ class Config:
             os.mkdir(os.path.join(os.getenv("HOME"), Config.mainDataFolder, Config.logsDataSubFolder))
 
         except OSError as error:
-            print(error)
+            pass
 
         return os.path.join(os.getenv("HOME"), Config.mainDataFolder, Config.logsDataSubFolder)
 
@@ -72,7 +72,7 @@ class Config:
             os.mkdir(os.path.join(os.getenv("HOME"), Config.mainDataFolder, Config.databaseDataSubFolder))
 
         except OSError as error:
-            print(error)
+            pass
 
         return os.path.join(os.getenv("HOME"), Config.mainDataFolder, Config.databaseDataSubFolder)
 
@@ -82,7 +82,7 @@ class Config:
             os.mkdir(os.path.join(os.path.expanduser('~'), Config.mainDataFolder, Config.logsDataSubFolder))
 
         except OSError as error:
-            print(error)
+            pass
 
         return os.path.join(os.path.expanduser('~'), Config.mainDataFolder, Config.logsDataSubFolder)
 
@@ -92,6 +92,6 @@ class Config:
             os.mkdir(os.path.join(os.path.expanduser('~'), 'Documents', Config.mainDataFolder, Config.databaseDataSubFolder))
 
         except OSError as error:
-            print(error)
+            pass
 
         return os.path.join(os.path.expanduser('~'), 'Documents', Config.mainDataFolder, Config.databaseDataSubFolder)

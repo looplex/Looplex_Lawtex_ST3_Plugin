@@ -42,7 +42,7 @@ class Config:
 
         else :
             jre_filepath = Config.retrieve_linux_jre_dependency_filepath()
-            subprocess.Popen([ jre_filepath, '-jar', jar_filepath, context], creationflags = CREATE_NO_WINDOW )
+            subprocess.Popen([ jre_filepath, '-jar', jar_filepath, context] )
 
     def retrieve_jar_dependency_filepath() :
 

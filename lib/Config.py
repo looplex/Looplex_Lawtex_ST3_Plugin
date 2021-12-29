@@ -32,7 +32,7 @@ class Config:
         if sublime.platform() == "windows":
             context = context.replace("\\", "\\\\")
 
-        jre_filepath = Config.retrieve_jre_dependency_filepath(sublime.platform())
+        jre_filepath = Config.retrieve_jre_dependency_filepath()
         jar_filepath = Config.retrieve_jar_dependency_filepath()
 
         print("JAR: " + jar_filepath)
@@ -52,9 +52,9 @@ class Config:
 
         return os.path.join(sublime.packages_path(), Config.pluginName, 'jar', Config.pluginJar)
 
-    def retrieve_jre_dependency_filepath(operational_system) :
+    def retrieve_jre_dependency_filepath() :
 
-        return os.path.join(sublime.packages_path(), Config.pluginName, 'jre', operational_system, 'bin', 'java')
+        return os.path.join(sublime.packages_path(), Config.pluginName, 'jre',  sublime.platform(), 'bin', 'java')
 
     def retrieve_logs_folder_linux() :
 

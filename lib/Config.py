@@ -52,7 +52,7 @@ class Config:
 
         return os.path.join(sublime.packages_path(), Config.pluginName, 'jar', Config.pluginJar)
 
-    def retrieve_jre_dependency_filepath(self, operational_system) :
+    def retrieve_jre_dependency_filepath(operational_system) :
 
         return os.path.join(sublime.packages_path(), Config.pluginName, 'jre', operational_system, 'bin', 'java')
 

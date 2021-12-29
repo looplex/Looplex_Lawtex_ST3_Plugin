@@ -37,12 +37,8 @@ class Config:
             jre_filepath = Config.retrieve_windows_jre_dependency_filepath()
             subprocess.Popen([ jre_filepath, '-jar', jar_filepath, context], creationflags = CREATE_NO_WINDOW )
 
-        elif sublime.platform() == "osx":
-            subprocess.Popen([ "java", "-jar", jar_filepath, context ])
-
         else :
-            jre_filepath = Config.retrieve_linux_jre_dependency_filepath()
-            subprocess.Popen([ jre_filepath, '-jar', jar_filepath, context] )
+            subprocess.Popen([ "java", "-jar", jar_filepath, context ])
 
     def retrieve_jar_dependency_filepath() :
 

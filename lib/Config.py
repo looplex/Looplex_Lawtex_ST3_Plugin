@@ -8,37 +8,11 @@ class Config:
 
     pluginName = 'Looplex_Lawtex_ST3_Plugin'
 
-    pluginJar = 'looplex_lawtex_plugin-1.4.4.jar'
-
-    pluginExe = 'looplex_lawtex_plugin-1.4.4.exe'
+    pluginJar = 'looplex_lawtex_plugin-1.4.5.jar'
 
     mainDataFolder = 'Looplex_Lawtex_ST3_Plugin'
     logsDataSubFolder = 'logs'
     databaseDataSubFolder = 'local_database'
-
-    def check_plugin_jar_dependencies():
-
-        if not os.path.exists( Config.retrieve_jar_dependency_filepath() ):
-
-            with ZipFile( os.path.dirname( os.path.dirname(__file__) ), 'r') as zip_obj:
-
-                zip_obj.extract('jar/' + Config.pluginJar, os.path.join(sublime.packages_path(), Config.pluginName))
-
-    def retrieve_jar_dependency_filepath() :
-
-        return os.path.join(sublime.packages_path(), Config.pluginName, 'jar', Config.pluginJar)
-
-    def check_plugin_exe_dependencies():
-
-        if not os.path.exists( Config.retrieve_exe_dependency_filepath() ):
-
-            with ZipFile( os.path.dirname( os.path.dirname(__file__) ), 'r') as zip_obj:
-
-                zip_obj.extract('exe/' + Config.pluginExe, os.path.join(sublime.packages_path(), Config.pluginName))
-
-    def retrieve_exe_dependency_filepath() :
-
-        return os.path.join(sublime.packages_path(), Config.pluginName, 'exe', Config.pluginExe)
 
     def check_if_in_lawtex_file(view):
 
@@ -59,29 +33,34 @@ class Config:
         if sublime.platform() == "windows":
             context = context.replace("\\", "\\\\")
 
+        jre_filepath = Config.retrieve_jre_dependency_filepath(sublime.platform())
         jar_filepath = Config.retrieve_jar_dependency_filepath()
-        exe_filepath = Config.retrieve_exe_dependency_filepath()
 
         if sublime.platform() == "windows":
-            Config.check_plugin_exe_dependencies()
             CREATE_NO_WINDOW = 0x08000000
-            subprocess.Popen([ exe_filepath, context], creationflags = CREATE_NO_WINDOW )
+            subprocess.Popen([ jre_filepath, '-jar', jar_filepath, context], creationflags = CREATE_NO_WINDOW )
 
         elif sublime.platform() == "osx":
-            Config.check_plugin_jar_dependencies()
             subprocess.Popen([ "java", "-jar", jar_filepath, context ])
 
         else :
-            Config.check_plugin_jar_dependencies()
             subprocess.Popen([ "java", "-jar", jar_filepath, context ])
+
+    def retrieve_jar_dependency_filepath() :
+
+        return os.path.join(sublime.packages_path(), Config.pluginName, 'jar', Config.pluginJar)
+
+    def retrieve_jre_dependency_filepath(operational_system) :
+
+        return os.path.join(sublime.packages_path(), Config.pluginName, 'jre', operational_system, 'bin', 'java.exe')
 
     def retrieve_logs_folder_linux() :
 
         try :
             os.mkdir(os.path.join(os.getenv("HOME"), Config.mainDataFolder, Config.logsDataSubFolder))
 
-        except OSError:
-            pass
+        except OSError as error:
+            print(error)
 
         return os.path.join(os.getenv("HOME"), Config.mainDataFolder, Config.logsDataSubFolder)
 
@@ -90,8 +69,8 @@ class Config:
         try :
             os.mkdir(os.path.join(os.getenv("HOME"), Config.mainDataFolder, Config.databaseDataSubFolder))
 
-        except OSError:
-            pass
+        except OSError as error:
+            print(error)
 
         return os.path.join(os.getenv("HOME"), Config.mainDataFolder, Config.databaseDataSubFolder)
 
@@ -100,8 +79,8 @@ class Config:
         try :
             os.mkdir(os.path.join(os.path.expanduser('~'), Config.mainDataFolder, Config.logsDataSubFolder))
 
-        except OSError:
-            pass
+        except OSError as error:
+            print(error)
 
         return os.path.join(os.path.expanduser('~'), Config.mainDataFolder, Config.logsDataSubFolder)
 
@@ -110,7 +89,7 @@ class Config:
         try :
             os.mkdir(os.path.join(os.path.expanduser('~'), 'Documents', Config.mainDataFolder, Config.databaseDataSubFolder))
 
-        except OSError:
-            pass
+        except OSError as error:
+            print(error)
 
         return os.path.join(os.path.expanduser('~'), 'Documents', Config.mainDataFolder, Config.databaseDataSubFolder)

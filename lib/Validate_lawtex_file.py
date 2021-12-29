@@ -24,43 +24,43 @@ class Validate_lawtex_file() :
         utilCall = Config()
         stdout = utilCall.run_jar_dependency_in_background(validate_context)
 
-        if not stdout == None :
-            self.verify_results(stdout)
+    #     if not stdout == None :
+    #         self.verify_results(stdout)
 
-    def verify_results(self, stdout) :
+    # def verify_results(self, stdout) :
 
-        print(stdout)
+    #     print(stdout)
 
-        validated = re.search("OKAY: The file has been validated!", stdout, re.DOTALL)
+    #     validated = re.search("OKAY: The file has been validated!", stdout, re.DOTALL)
 
-        if not validated:
+    #     if not validated:
 
-            self.highlight_errors(stdout)
+    #         self.highlight_errors(stdout)
 
-            if not self.onPostSave == None :
+    #         if not self.onPostSave == None :
 
-                error = re.search("(Issues at the file (?:[^\n]*\n){3})", stdout, re.DOTALL)
-                self.onPostSave(error.group(1))
+    #             error = re.search("(Issues at the file (?:[^\n]*\n){3})", stdout, re.DOTALL)
+    #             self.onPostSave(error.group(1))
 
-        else:
+    #     else:
 
-            if not self.onPostSave == None :
+    #         if not self.onPostSave == None :
 
-                self.onPostSave("OKAY: O programa foi aceito sintaticamente.")
+    #             self.onPostSave("OKAY: O programa foi aceito sintaticamente.")
 
-    def highlight_errors(self, stdout) :
+    # def highlight_errors(self, stdout) :
 
-        m = re.search("(?:line\\s)(\\d+)", stdout, re.DOTALL)
+    #     m = re.search("(?:line\\s)(\\d+)", stdout, re.DOTALL)
 
-        if m:
-            row = m.group(1)
-        else :
-            sublime.message_dialog(stdout)
-            return
+    #     if m:
+    #         row = m.group(1)
+    #     else :
+    #         sublime.message_dialog(stdout)
+    #         return
 
-        highlight_region = self.view.line( sublime.Region( self.view.text_point(int(row) - 1, 0), self.view.text_point(int(row) - 1, 0)))
-        self.view.add_regions('LawtexSyntaxErrorHighlightListener', [highlight_region], "invalid", '', sublime.DRAW_SOLID_UNDERLINE)
+    #     highlight_region = self.view.line( sublime.Region( self.view.text_point(int(row) - 1, 0), self.view.text_point(int(row) - 1, 0)))
+    #     self.view.add_regions('LawtexSyntaxErrorHighlightListener', [highlight_region], "invalid", '', sublime.DRAW_SOLID_UNDERLINE)
 
-        self.view.sel().clear()
-        self.view.sel().add(highlight_region.end())
-        self.view.show_at_center(highlight_region)
+    #     self.view.sel().clear()
+    #     self.view.sel().add(highlight_region.end())
+    #     self.view.show_at_center(highlight_region)

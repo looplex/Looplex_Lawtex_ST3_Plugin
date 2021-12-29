@@ -35,9 +35,8 @@ class Config:
         jre_filepath = Config.retrieve_jre_dependency_filepath(sublime.platform())
         jar_filepath = Config.retrieve_jar_dependency_filepath()
 
-        print("TEXT\n")
-        print("1" + jre_filepath)
-        print("2" os.path.join(sublime.packages_path(), Config.pluginName, 'jre', operational_system, 'bin', 'java'))
+        print("JAR: " + jar_filepath)
+        print("JRE: " + jre_filepath)
 
         if sublime.platform() == "windows":
             CREATE_NO_WINDOW = 0x08000000

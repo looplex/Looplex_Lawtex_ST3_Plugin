@@ -35,7 +35,9 @@ class Config:
         jre_filepath = Config.retrieve_jre_dependency_filepath(sublime.platform())
         jar_filepath = Config.retrieve_jar_dependency_filepath()
 
+        print("TEXT\n")
         print(jre_filepath)
+        print(os.path.join(sublime.packages_path(), Config.pluginName, 'jre', operational_system, 'bin', 'java'))
 
         if sublime.platform() == "windows":
             CREATE_NO_WINDOW = 0x08000000
@@ -53,7 +55,7 @@ class Config:
 
     def retrieve_jre_dependency_filepath(operational_system) :
 
-        return os.path.join(sublime.packages_path(), Config.pluginName, 'jre', operational_system, 'bin', 'java.exe')
+        return os.path.join(sublime.packages_path(), Config.pluginName, 'jre', operational_system, 'bin', 'java')
 
     def retrieve_logs_folder_linux() :
 

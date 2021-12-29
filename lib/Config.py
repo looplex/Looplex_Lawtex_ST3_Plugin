@@ -48,10 +48,6 @@ class Config:
 
         return os.path.join(sublime.packages_path(), Config.pluginName, 'jre', 'windows', 'bin', 'java')
 
-    def retrieve_linux_jre_dependency_filepath() :
-
-        return os.path.join(sublime.packages_path(), Config.pluginName, 'jre', 'linux', 'bin', 'java')
-
     def retrieve_logs_folder_linux() :
 
         try :

@@ -8,6 +8,7 @@ class Config:
     pluginName = 'Looplex_Lawtex_ST3_Plugin'
 
     pluginJar = 'looplex_lawtex_plugin-1.4.5.jar'
+    pluginExe = 'Application.exe'
 
     mainDataFolder = 'Looplex_Lawtex_ST3_Plugin'
     logsDataSubFolder = 'logs'
@@ -34,8 +35,8 @@ class Config:
         if sublime.platform() == "windows":
             CREATE_NO_WINDOW = 0x08000000
             context = context.replace("\\", "\\\\")
-            jre_filepath = Config.retrieve_windows_jre_dependency_filepath()
-            subprocess.Popen([ jre_filepath, '-jar', jar_filepath, context], creationflags = CREATE_NO_WINDOW )
+            exe_filepath = Config.retrieve_windows_exe_dependency_filepath()
+            subprocess.Popen([ exe_filepath, context ], creationflags = CREATE_NO_WINDOW )
 
         else :
             subprocess.Popen([ "java", "-jar", jar_filepath, context ])
@@ -44,9 +45,9 @@ class Config:
 
         return os.path.join(sublime.packages_path(), Config.pluginName, 'jar', Config.pluginJar)
 
-    def retrieve_windows_jre_dependency_filepath() :
+    def retrieve_windows_exe_dependency_filepath() :
 
-        return os.path.join(sublime.packages_path(), Config.pluginName, 'jre', 'windows', 'bin', 'java')
+        return os.path.join(sublime.packages_path(), Config.pluginName, 'plugin', Config.pluginExe)
 
     def retrieve_logs_folder_linux() :
 

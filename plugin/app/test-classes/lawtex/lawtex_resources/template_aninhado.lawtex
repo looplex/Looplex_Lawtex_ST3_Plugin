@@ -1,0 +1,39 @@
+template[TEMP_TemplateAninhado] {
+	metainfo {
+		language = "pt_BR"
+	}
+ 	body {
+ 		declarations {
+ 			+|vect| : Vector[String] {
+ 				name = "Aninhado"
+ 				request = "Vetor exemplo"
+ 			}
+ 		}
+		operations {
+			foreach(<elem> IN |vect|) {
+				foreach(<elem> IN |vect|) {
+					print {
+						version =<elem>
+					}
+				}
+			}
+		}
+ 	}
+ }
+
+ *loop[LOOP_AliasLoop] {
+ 	name = "L1"
+ 	separator = "%f1; %s2; %p2; e %l2."
+ 	declarations {
+ 		+|vectorAlias| : Vector[Time]
+ 	}
+ 	operation {
+ 		foreach (<elem> IN |vectorAlias|) {
+ 			foreach(<elem> IN |vectorAlias|) where (separator = "%f1; %s2; %p2; e %l2.") {
+ 				print {
+ 					version = <elem>
+ 				}
+ 			}
+ 		}
+ 	}
+ }

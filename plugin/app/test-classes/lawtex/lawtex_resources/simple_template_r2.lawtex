@@ -1,0 +1,117 @@
+/* Simple Template */
+template[TEMP_TemplateAlias_R2] {
+	metainfo {
+		language = "pt_BR"
+		description = "Exemplo de template simples"
+		tags {
+			"template", "simples"
+		}
+		declarations {
+			&<varGlobal> : String {
+				name = "Variável Global"
+				request = "Qual o valor da variável?"
+			}
+		}
+	}
+	head {
+		title = "Um documento qualquer"
+		operations {
+			<varGlobal>.ask(),
+			<varGlobal>.ask("Uma nova pergunta?"),
+			<varGlobal.ggg>.ask("obrigatório"),
+			upload("filename.*/img/jpeg/jpg/png/gif/eps","pergunta",true),
+			attach("filename.*"),
+			use *period[PER_Global_R2],
+			use *period[PER_Global_R2],
+			use *period[PER_Global_R2],
+			use *period[PER_Global_R1],
+			use *period[PER_Global_R1]
+		}
+ 	}
+ 	body {
+		declarations {
+			&<varLocal> : String {
+				name = "Variável Local do Body"
+				request = "Qual o valor da variável?"
+			}
+		}
+		operations {
+			print {
+				[version = "Um período localmente definido em Body."],
+				[version = "Segunda versão de um período localmente definido em Body."]
+			},
+			print {
+				version = "Segundo período local definido em Body com var: " & <varLocal>
+			},
+			use *period[PER_Global_R2],
+			use *period[PER_Global_R2],
+			use *period[PER_Global_R2],
+			use *period[PER_Global_R1],
+			use *period[PER_Global_R1]
+		}
+ 	}
+ 	foot{
+		operations {
+			use *period[PER_Global_R2],
+			use *period[PER_Global_R2],
+			use *period[PER_Global_R2],
+			use *period[PER_Global_R1],
+			use *period[PER_Global_R1]
+		}
+ 	}
+}
+
+period[PER_LOCAL_SALVABLE] {
+	name = "jjjjjjjjjjjj"
+	description = "rrrrrrrrrrr"
+	tags {
+		"B", "A"
+	}
+	operation {
+		print {
+			[version = "NOT SALVABLE"],
+			[version = "LOCAL", name = "Pero Vaz de Caminha"]
+		}
+	}
+}
+
+*period[PER_Global_R1] {
+	name = "(   1   ) - Um exemplo de período global"
+	description = "Um período globalmente definido para testes de um template simples."
+	tags {
+		"período", "global"
+	}
+	declarations {
+		&<varLocal> : String {
+			name = "Variável Local do Body"
+			request = "Qual o valor da variável do período?"
+		}
+	}
+	operation {
+		print {
+			[version = "Imprimindo a variável do período: " & <varLocal>],
+			[version = "Do período a variável imprimindo ao estilo Ioda: " & <varLocal>, name = "Estilo Ioda"]
+		}
+	}
+}
+
+*period[PER_Global_R2] {
+	name = "(   2   ) - Um exemplo de período global teste."
+	description = "Um período globalmente definido para testes de um template simples."
+	tags {
+		"período", "global"
+	}
+	declarations {
+		+<varLocal> : String {
+			name = "Variável Local do Body"
+			request = "Qual o valor da variável do período?"
+		}
+	}
+	operation {
+		print {
+			[version = "Imprimindo a variável do período: " & <varLocal>],
+			[version = "Do período a variável imprimindo ao estilo Ioda: " & <varLocal>, name = "Estilo Ioda"],
+			[version = "Não há nada aqui.", name = "Nada"]
+		}
+	}
+}

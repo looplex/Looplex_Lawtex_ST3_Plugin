@@ -1,0 +1,47 @@
+template[TEMP_TemplateAlias] {
+	metainfo {
+		language = "pt_BR"
+	}
+	head {
+		title = "Um Title"
+ 	}
+ 	body {
+		operations {
+			use branch[BRC_AliasBranch_LOC1],
+			use branch[BRC_AliasBranch_LOC2]
+		}
+ 	}
+}
+
+*period[PER_AliasPeriod__GLOB] {
+	operation {
+		print "Pero Vaz de Caminha G"
+	}
+}
+
+period[PER_AliasPeriod__LOC] {
+	operation {
+		print "Pero Vaz de Caminha L"
+	}
+}
+
+*period[PER_AliasPeriod__LOCGLOB] {
+	operation {
+		print "Pero Vaz de Caminha LG"
+	}
+}
+
+branch[BRC_AliasBranch_LOC1] {
+	operations {
+		use *period[PER_AliasPeriod__GLOB],
+		use period[PER_AliasPeriod__LOC],
+		use *period[PER_AliasPeriod__LOCGLOB]
+	}
+}
+
+branch[BRC_AliasBranch_LOC2] {
+	operations {
+		use *period[PER_AliasPeriod__GLOB],
+		use *period[PER_AliasPeriod__LOCGLOB]
+	}
+}

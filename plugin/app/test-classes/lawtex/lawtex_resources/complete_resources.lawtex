@@ -1,0 +1,236 @@
+*topic[TOP_AliasTopic] {
+	name = "..."
+	description = "..."
+	title = "..."
+	tags {
+		"...", "..."
+	}
+	declarations {
+		period[PER_AliasPeriodL] {
+			name = "..."
+			description = "..."
+			tags {
+				"...", "..."
+			}
+			declarations {
+				+<objectAlias> : StructAlias
+			}
+			operation {
+				print {
+					[version = "..."],
+					[version = "...", name = "Pero Vaz de Caminha"]
+				}
+			}
+		},
+		topic[TOP_AliasTopicL] {
+			name = "..."
+			description = "..."
+			title = "..."
+			tags {
+				"...", "..."
+			}
+			operations {
+				use period[PER_AliasPeriodL]
+			}
+		}
+	}
+	operations {
+		use topic[TOP_AliasTopicL]
+	}
+}
+
+*loop[LOOP_AliasLoop] {
+	name = "..."
+	description = "..."
+	separator = "%f1; %s2; %p2; e %l2."
+	tags {
+		"...", "..."
+	}
+	declarations {
+		+|vectorAlias| : Vector[String] {
+			name = "..."
+			request = "..."
+			lower = 1
+			upper = 10
+		},
+		loop[LOOP_AliasLoopL] {
+			name = "..."
+			description = "..."
+			separator = "%f1; %s2; %p2; e %l2."
+			tags {
+				"...", "..."
+			}
+			declarations {
+				+|vectorAlias| : Vector[Integer] {
+					name = "..."
+					request = "..."
+					lower = 1
+					upper = 10
+				}
+			}
+			operation {
+				foreach (<elem> IN |vectorAlias|) {
+					print <elem>
+				}
+			}
+		}
+	}
+	operation {
+		foreach (<elem> IN |vectorAlias|) {
+			use loop[LOOP_AliasLoopL]
+		}
+	}
+}
+
+*branch[BRC_AliasBranch] {
+	name = "..."
+	description = "..."
+	tags {
+		"...", "..."
+	}
+	declarations {
+		branch[BRC_AliasBranchL] {
+			name = "..."
+			description = "..."
+			tags {
+				"...", "..."
+			}
+			declarations {
+				struct[StructAliasL1] {
+					name = "..."
+					request = "..."
+					help = "..."
+					fields {
+						+[a] : String {
+							name = "..."
+							request = "..."
+							default = "..."
+							help = "..."
+						}
+					}
+				},
+				+<x> : StructAliasL1,
+				+<y> : struct[StructAliasL2] {
+					name = "..."
+					request = "..."
+					help = "..."
+					fields {
+						+[a] : String {
+							name = "..."
+							request = "..."
+							default = "..."
+							help = "..."
+						}
+					}
+				}
+			}
+			operations {
+				print <x> & <y>
+			}
+		}
+	}
+	operations {
+		use branch[BRC_AliasBranchL]
+	}
+}
+
+*dependency[DEP_AliasDependency] {
+	name = "..."
+	description = "..."
+	tags {
+		"...", "..."
+	}
+	declarations {
+		list[AliasListL1] {
+			name = "..."
+			options = ("Option1a","Option1b")
+			type = "String"
+		},
+		+<a> : List[AliasListL1] {
+			name = "..."
+			request = "..."
+			default = "..."
+			atomic = true
+			help = "..."
+		},
+		+<b> : List("A", "B") {
+			name = "..."
+			request = "..."
+			default = "..."
+			atomic = false
+			help = "..."
+		}
+	}
+	operation {
+		if ( "A" IN <b> ) {
+ 			print <a>
+		}
+	}
+}
+
+*period[PER_AliasPeriod] {
+	name = "..."
+	description = "..."
+	tags {
+		"...", "..."
+	}
+	operation {
+		print {
+			[version = "..."],
+			[version = "...", name = "Pero Vaz de Caminha"]
+		}
+	}
+}
+
+*list[AliasList] {
+	name = "..."
+	fields = {"Key1", "Key2"}
+	options = ({"Option1a","Option2a"}, {"Option1b","Option2b"})
+	type = "String"
+}
+
+*struct[StructAlias] {
+	name = "..."
+	request = "..."
+	help = "..."
+	id = "..." & [someFieldAlias]
+	fields {
+		+[fieldAlias] : String {
+			name = "..."
+			request = "..."
+			key = true
+			default = "..."
+			help = "..."
+		}
+	}
+}
+
+template[TEMP_TemplateAlias] {
+	metainfo {
+		language = "pt_BR"
+		name = "..."
+		description = "..."
+		tags {
+			"...", "..."
+		}
+	}
+	head {
+		title = "..."
+ 	}
+ 	body {
+ 		declarations {
+ 			+<i> : List[*AliasList] {
+ 				atomic = true
+ 			},
+ 			+<j> : *StructAlias
+ 		}
+		operations {
+			print <i> & <j>,
+			use *period[PER_AliasPeriod],
+			use *dependency[DEP_AliasDependency],
+			use *branch[BRC_AliasBranch],
+			use *loop[LOOP_AliasLoop],
+			use *topic[TOP_AliasTopic]
+		}
+ 	}
+}

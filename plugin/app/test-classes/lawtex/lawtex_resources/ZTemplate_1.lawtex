@@ -1,0 +1,809 @@
+template[TEMP_Template1] {
+	metainfo {
+		language = "pt_BR"
+		name = "Proposta de Honorários - 1.0"
+		description = "Template de teste para uso do Anderson - versão 1"
+		tags {"Proposta", "Proposta de honorários", "Serviços jurídicos", "Assessoria jurídica"}
+		declarations {
+			+<cliente> : String {
+				name = "Cliente"
+				request = "Nome completo do cliente"
+				default = ""
+				help = "Insira o nome ou denominação completos do cliente."
+				tip = ""
+			},
+			+#apelidoCliente# : String {
+				name = "Apelido do cliente"
+				value = "Cliente"
+				help = ""
+			}
+		}
+	}
+	head {
+		title = "Proposta de honorários"
+		declarations {
+			period[PER_Cabecalho] {
+				name = "Cabeçalho"
+				description = "Período sobre o cabeçalho da proposta de honorários"
+				tags {"Cabeçalho"}
+				declarations {
+					+<meioDeEnvio> : List ("Via e-mail", "Em mãos", "Via courier", "Via correio") {
+					  	name = "Meio de envio"
+					  	request = "Qual a forma de envio ou entrega da proposta?"
+					  	default = "Via e-mail"
+					  	atomic = true
+					  	help = "A forma de envio padrão é por e-mail. Se a forma de envio for correio ou courier, o endereçamento completo torna-se obrigatório."
+					  	tip = ""
+					},
+					+<endereco> : String {
+						name = "Endereço"
+						request = "Qual o endereço do remetente da proposta de honorários?"
+					},
+					+<localDaProposta> : String {
+						name = "Local da Proposta"
+						request = "Qual o local do remetente da proposta de honorários?"
+						default = "São Paulo"
+						help = "Por exemplo, se o escritório que estiver enviando a proposta for situado em são Paulo, informe \"São Paulo\"."
+						tip =""
+					},
+					+<dataDaProposta> : Date {
+						name = "Data da proposta"
+						request = "Qual a data da proposta?"
+					}
+				}
+				operation {
+					print {
+						[version =	"Para\n" & bold(<cliente>) & "\n"
+									& "Endereço: " & <endereco> & "\n"
+									& <meioDeEnvio> & "\n"
+									& <localDaProposta> & ", " & <dataDaProposta> & ".\n\n" & "Confidencial\s"
+						]
+					}
+				}
+			}
+		}
+		operations {
+			use period[PER_Cabecalho]
+		}
+ 	}
+ 	body {
+		declarations {
+			period[PER_IntroducaoDaProposta] {
+				name = "Introdução da proposta de honorários"
+				description = "..."
+				tags {"Introdução", "Proposta de honorários"}
+				operation {
+					print {
+						[version =	"Prezado " & #apelidoCliente# & ",\n"
+									& "Agradecemos seu contato e a oportunidade de apresentar-lhe nossa proposta para prestar
+										assessoria jurídica. Esta proposta define nosso escopo de trabalho e os termos e condições aplicáveis aos nossos serviços."]
+					}
+				}
+			},
+			+<escopoDaProposta> : List ("Assessoria geral", "Assessoria rotina societária", "Projeto de M&A") {
+				name = "Escopo da proposta"
+				request = "Qual o escopo da proposta de honorários"
+				default = "Assessoria geral"
+				atomic = true
+				help = ""
+				tip = ""
+			},
+			topic[TOP_Escopo] {
+				name = "Escopo"
+				index = true
+				description = "Tópico sobre o escopo da proposta de honorários"
+				title = "Escopo"
+				tags {"Escopo", "Proposta de honorários"}
+				declarations {
+					dependency[DEP_EscopoProposta] {
+						name = "Escopo da proposta de honorários"
+						description = "Dependência para escolha do escopo da proposta de honorários"
+						tags {"Escopo", "Proposta de honorários"}
+						declarations {
+							period[PER_AssessoriaGeral] {
+							 	name = "Escopo - assessoria geral"
+							 	description = "Período sobre escopo de assessoria jurídica geral"
+							 	tags {"assessoria jurídica geral"}
+							 	operation {
+							 		print {
+							 			[version =	"De acordo com os termos desta proposta, nossa assessoria jurídica ao "
+													& #apelidoCliente#
+													& " compreenderá advocacia em qualquer esfera judicial dentro do território nacional
+														e serviços gerais de consultoria jurídica em todas as áreas do direito."]
+							 		}
+							 	}
+							},
+							period[PER_RotinaSocietaria] {
+							 	name = "Escopo - assessoria em rotina societária"
+							 	description = "Período sobre escopo de assessoria jurídica em rotina societária"
+							 	tags {"assessoria jurídica rotina societária"}
+
+							 	operation {
+							 		print {
+							 			[version =	"De acordo com os termos desta proposta, nossos serviços de assessoria jurídica compreenderão o
+								 						seguinte escopo: assessoria jurídica na rotina societária do "
+								 						& #apelidoCliente#
+								 						& ", que engloba a realização de atos societários, bem como o registro e arquivamento nos
+							 								órgãos de comércio e outras medidas pertinentes, com o objetivo da preservação da
+							 								regularidade do "
+							 							& #apelidoCliente#
+							 							& " perante a lei societária. Mediante solicitação, poderemos assessorar o "
+							 							& #apelidoCliente#
+							 							& " com as atualizações cadastrais nos diferentes órgãos públicos municipais, estaduais
+							 								e federais, necessárias em decorrência da realização desses atos societários."]
+							 		}
+							 	}
+							},
+							period[PER_MaA] {
+							 	name = "Escopo - assessoria em operação de M&A"
+							 	description = "Período sobre escopo de assessoria jurídica em operação de M&A"
+							 	tags {"assessoria jurídica", "M&A"}
+							 	declarations {
+							 		+<nomeDoAlvo> : String {
+										name = "Nome do alvo"
+										request = "Qual a razão social ou denominação completa da pessoa jurídica emissora da
+															participação societária (ações ou quotas) a ser adquirida?"
+										default = ""
+										help = "Por exemplo, se a aquisição fosse de ações emitidas pela Looplex, o campo deveria
+												ser preenchido com \"Looplex S.A.\"."
+										tip = ""
+									},
+									+<percentualDaAquisicao> : Real {
+									 	name = "Percentual da aquisição"
+									 	request = "Qual o percentual do capital social a ser adquirido?"
+									 	default = "100"
+										help = "Informe o percentual a ser adquirido, independentemente de ele ser o percentual
+									 			mínimo ou máximo ou exato a ser adquirido. Você poderá informar o tipo de percentual
+									 			quando responder outra pergunta."
+									 	tip = "Se a aquisição for de toda a empresa, informe 100."
+									},
+									+<tipoDePercentual> : List ("percentual exato", "percentual máximo", "percentual mínimo") {
+										name = "Tipo de percentual"
+										request = "Em relação ao percentual do capital social a ser adquirido, ele é
+													o percentual exato a ser adquirido, o percentual máximo a ser adquirido ou
+													o percentual mínimo a ser adquirido?"
+										default = "percentual exato"
+										atomic = true
+										help = ""
+										tip = ""
+									},
+									+<identidadeDoVendedor> : String {
+										name = "Identidade do vendedor"
+										request = "Qual é ou quais são o(s) vendedor(es)?"
+										default = ""
+										help = "Informe os nomes como texto corrente, separados por vírgulas, exceto entre o
+										penúltimo e último nomes. Nesse caso, use \"e\". Por exemplo: José, Maria e João. Não
+										adicione ponto final depois dos nomes."
+										tip = ""
+									}
+							 	}
+							 	operation {
+							 		print {
+							 			[version =	"Prestaremos serviço de assessoria jurídica ao "
+							 					& #apelidoCliente#
+							 						& " em relação à potencial aquisição do "
+							 						&  <tipoDePercentual>
+							 						& " de "
+							 						& <percentualDaAquisicao>
+							 						& "% do capital social de emissão da "
+							 						& <nomeDoAlvo>
+							 						& ", de propriedade de "
+							 						& <identidadeDoVendedor>
+							 						& "."
+										]
+							 		}
+							 	}
+							 }
+						}
+						operation {
+							if (<escopoDaProposta> == "Assessoria geral") {
+					 			use period[PER_AssessoriaGeral]
+							} elseif (<escopoDaProposta> == "Assessoria rotina societária") {
+								use period[PER_RotinaSocietaria]
+							} else {
+								use period[PER_MaA]
+							}
+						}
+					}
+				}
+				operations {
+					use dependency[DEP_EscopoProposta]
+				}
+			},
+			branch[BRC_PremissasEscopo] {
+				name = "Premissas de escopo"
+				index = true
+				description = "Branch sobre as premisssas de escopo"
+				tags {"Escopo", "Premissas de escopo", "Proposta de honorários"}
+				declarations {
+					topic[TOP_Premissas] {
+						name = "Premissas de escopo"
+						description = "Tópico sobre premissas de escopo"
+						title = "Premissas de escopo"
+						tags {"Escopo", "Premissas de escopo", "Proposta de honorários"}
+						declarations {
+							period[PER_PremissasIntroducao] {
+								name = "Premissas de escopo - introdução"
+								description = "Período sobre premissas de escopo - introdução"
+								tags {"Escopo", "Premissas de escopo", "Proposta de honorários"}
+
+								operation {
+									print {
+										[version = "Nossa proposta foi feita com base nas seguintes premissas:\n"]
+									}
+								}
+							}
+						}
+						operations {
+							use period[PER_PremissasIntroducao]
+						}
+					},
+					dependency[DEP_PremissasEspecificas] {
+						name = "Premissas de escopo específicas"
+						description = "Dependência sobre premissas de escopo específicas"
+						tags {"Escopo", "Premissas de escopo", "Proposta de honorários"}
+						declarations {
+							period[PER_PremissasAssessoriaGeral] {
+							 	name = "Premissas de escopo - assessoria geral"
+							 	description = "Período sobre premissas de escopo - assessoria geral"
+							 	tags {"Escopo", "Premissas de escopo", "Proposta de honorários"}
+							 	operation {
+							 		print {
+							 			[version =	"\i nossa assessoria jurídica está limitada ao escopo descrito nesta proposta;\n"
+							 						& "\i nossa assessoria jurídica se limitará às leis da República Federativa do Brasil e
+														não abrangerá outra jurisdição que não a brasileira; e \n"
+													& "\i não prestaremos assessoria jurídica em matérias criminais."
+										]
+							 		}
+							 	}
+							},
+							period[PER_PremissasRotinaSocietaria] {
+							 	name = "Premissas de escopo - assessoria em rotina societária"
+							 	description = "Período sobre premissas de escopo - assessoria em rotina societária"
+							 	tags {"Escopo", "Premissas de escopo", "Proposta de honorários"}
+
+							 	operation {
+							 		print {
+							 			[version =	"\i nossa assessoria jurídica está limitada ao escopo descrito nesta proposta;\n"
+							 						& "\i nossa assessoria jurídica se limitará às leis da República Federativa do Brasil e
+														não abrangerá outra jurisdição que não a brasileira;\n"
+													& "\i a publicação de atos societários, quando necessária, será relizada diretamente por
+														V.Sas. às suas custas; e\n"
+													& "\i esta proposta cobre somente as pessoas jurídicas afiliadas hoje existentes."
+										]
+							 		}
+							 	}
+							},
+							period[PER_PremissasMaA] {
+							 	name = "Premissas de escopo - operação de M&A"
+							 	description = "Período sobre premissas de escopo - operação de M&A"
+							 	tags {"Escopo", "Premissas de escopo", "Proposta de honorários"}
+
+							 	operation {
+							 		print {
+							 			[version = 	"\i as partes envolvidas cooperarão de maneira profissional e o escritório de advocacia
+														representando a parte contrária será um escritório com reconhecida experiência em operações
+														semelhantes ao projeto objeto desta proposta;\n"
+													& "\i o projeto, como um todo, deverá estar concluído em até 180 dias a contar da data do
+														envio da primeira minuta de contrato;\n"
+													& "\i os documentos da operação serão redigidos exclusivamente em português;\n"
+													& "\i nossa assessoria não inclui a negociação e discussão de quaisquer
+															documentos que disciplinem relações com terceiros ou não diretamente
+															relacionadas ao projeto (por exemplo, contratos com fornecedores);\n"
+													& "\i esta proposta não inclui assessoria na notificação da operação, caso seja
+															exigível, ao Conselho Administrativo de Defesa Econômica - CADE;\n"
+													& "\i nossa assessoria jurídica está limitada ao escopo descrito
+															nesta proposta; e\n"
+													& "\i nossa assessoria jurídica se limitará às leis da República
+																Federativa do Brasil e não abrangerá outra jurisdição que não a brasileira."
+							 			]
+							 		}
+							 	}
+							 }
+						}
+						operation {
+							if (<escopoDaProposta> == "Assessoria geral") {
+					 			use period[PER_PremissasAssessoriaGeral]
+							} elseif (<escopoDaProposta> == "Assessoria rotina societária") {
+								use period[PER_PremissasRotinaSocietaria]
+							} else {
+								use period[PER_PremissasMaA]
+							}
+						}
+					}
+				}
+				operations {
+					/*use topic[TOP_Excecoes],*/
+					use topic[TOP_Premissas],
+					use dependency[DEP_PremissasEspecificas]
+				}
+			},
+			topic[TOP_Honorarios] {
+				name = "Honorários"
+				index = true
+				description = "Tópico sobre regras de honorários"
+				title = "Honorários"
+				tags {"Honorários", "Proposta de honorários"}
+				declarations {
+					period[PER_HonorariosIntroducao] {
+						name = "Honorários - introdução"
+						description = "Período sobre introdução das regras de honorários"
+						tags {"Honorários", "Proposta de honorários"}
+
+						operation {
+							print {
+								[version = "Esta frase é um placeholder para as regras de honorários.\p"]
+							}
+						}
+					}
+				}
+				operations {
+					use period[PER_HonorariosIntroducao]
+				}
+			},
+			topic[TOP_Despesas] {
+				name = "Despesas"
+				index = true
+				description = "Tópico sobre despesas - reembolso - proposta de honorários"
+				title = "Despesas"
+				tags {"Despesas", "Reembolso", "Serviços jurídicos", "Proposta de honorários"}
+				declarations {
+					+<periodicidadeReembolso> : List ("semanalmente", "quinzenalmente", "mensalmente", "ao final da prestação dos serviços") {
+						name = "Periodicidade do reembolso"
+						request = "Qual a periodicidade do reembolso das despesas incorridas na prestação dos serviços?"
+						default = "mensalmente"
+						atomic = true
+						help = ""
+						tip = ""
+					}
+				}
+				operations {
+					print {
+						[version =	"O Cliente concorda em nos reembolsar de todas as despesas que incorrermos na prestação dos serviços,
+										como tarifas telefônicas, despesas com viagens e locomoção, despesas com traduções e demais
+										incorridas na execução de nossos serviços. Os reembolsos deverão ser feitos "
+			 						& <periodicidadeReembolso>
+			 						& ", contra nossa apresentação das cópias das notas de despesas correspondentes. Reservamo-nos o direito de
+			 						solicitar o pagamento adiantado de determinados tipos de despesas de maior valor, tais como aquelas incorridas
+			 						com a compra de passagens aéreas, custos mais elevados de despachantes e tradutores juramentados, dentre outros.
+			 						Em tais casos, informaremos antecipadamente a respeito de estimativas de tais gastos, para os quais solicitaremos
+			 						prévia aprovação."
+			 			]
+					}
+				}
+			},
+			topic[TOP_Faturamento] {
+				name = "Faturamento"
+				index = true
+				description = "Tópico sobre os termos e condições do faturamento pelos serviços jurídicos."
+				title = "Faturas"
+				tags {"Proposta de honorários", "Serviços jurídicos", "Fatura", "Pagamento"}
+				declarations {
+					+<tipoDeFaturamento> : List ("Periódico", "Por evento", "Periódico e por evento") {
+						name = "Tipo de faturamento"
+						request = "Qual será o tipo de faturamento?"
+						default = "Periódico"
+						atomic = true
+						help = "Na faturamento periódico, as faturas são enviadas em intervalos regulares (por exemplo, mensalmente). No
+								faturamento por evento, as faturas são enviadas mediante a ocorrência de determinados eventos. Na opção
+								mista, as faturas são, em geral, enviadas em intervalos regulares, mas se ocorrerem certos eventos,
+								o advogado ou escritório podem faturar o cliente fora desses intervalos."
+						tip = ""
+					},
+					period[PER_FaturamentoPeriodico] {
+						name = "Faturamento periódico"
+						description = "Período que descreve o faturamento periódico - proposta de honorários."
+						tags {"Proposta de honorários", "Serviços jurídicos", "Fatura", "Pagamento"}
+						operation {
+							print {
+								[version = "Emitiremos nossas faturas mensalmente, até o 5º dia útil do mês subsequente ao
+											da prestação dos serviços."]
+							}
+						}
+					},
+					period[PER_FaturamentoPorEvento] {
+						name = "Faturamento por evento"
+						description = "Período que descreve o faturamento por evento - proposta de honorários."
+						tags {"Proposta de honorários", "Serviços jurídicos", "Fatura", "Pagamento"}
+						operation {
+							print {
+								[version = "Considerando que as regras de honorários descritas nesta proposta
+											preveem pagamento condicionado à ocorrência de certos eventos, emitiremos a fatura
+											correspondente até o 5º (quinto) dia útil a contar da data da ocorrência do respectivo evento."]
+							}
+						}
+					},
+					period[PER_FaturamentoMisto] {
+						name = "Faturamento periódico e por evento"
+						description = "Período que descreve o faturamento periódico e por evento - proposta de honorários."
+						tags {"Proposta de honorários", "Serviços jurídicos", "Fatura", "Pagamento"}
+						operation {
+							print {
+								[version = "De forma geral, emitiremos nossas faturas mensalmente, até o 5º dia útil do mês
+											subsequente ao da prestação dos serviços. Se alguma regra de honorários descrita nesta
+											proposta requerer algum pagamento condicionado à ocorrência de algum evento (por exemplo,
+											a conclusão de alguma etapa de algum projeto), emitiremos a fatura correspondente
+											até o 5º dia útil a contar da data da ocorrência do evento."]
+							}
+						}
+					},
+					+<descricaoDosServicos> : List ("A fatura não incluirá qualquer descrição dos serviços", "A fatura incluirá uma descrição resumida dos serviços", "A fatura incluirá uma descrição completa dos serviços") {
+						name = "Descrição dos serviços"
+						request = "Quanto à descrição dos serviços na fatura, escolha uma opção."
+						default = "A fatura incluirá uma descrição resumida dos serviços"
+						atomic = true
+						help = ""
+						tip = ""
+					},
+					period[PER_DescricaoResumidaDosServicos] {
+						name = "Descrição resumida dos serviços"
+						description = "Período de para descrição resumida dos serviços jurídicos na fatura"
+						tags {"Proposta de honorários", "Serviços jurídicos", "Fatura", "Pagamento"}
+						operation {
+							print {
+								[version = "Nossas faturas conterão breve descrição dos trabalhos executados."]
+							}
+						}
+					},
+					period[PER_DescricaoCompletaDosServicos] {
+						name = "Descrição completa dos serviços"
+						description = "Período para descrição completa dos serviços jurídicos na fatura."
+						tags {"Proposta de honorários", "Serviços jurídicos", "Fatura", "Pagamento"}
+						operation {
+							print {
+								[version = "Nossas faturas conterão uma descrição completa dos trabalhos executados."]
+							}
+						}
+					},
+					+<informacoesInterinas> : Boolean {
+						name = "Informações interinas"
+						request = "O cliente pediu que seu escritório envie informações interinas sobre os honorários incorridos?"
+						default = false
+						help = "Por exemplo, pode ser que o cliente queira receber informes semanais sobre as horas trabalhadas no seu
+								caso, mesmo que as faturas só sejam enviadas mensalmente."
+						tip = ""
+					},
+					period[PER_EnviaraInformacoesInterinas] {
+						name = "Informações interinas"
+						description = "Período para envio de informações interinas - cliente pediu."
+						tags {"Proposta de honorários", "Serviços jurídicos", "Fatura", "Pagamento"}
+						declarations {
+							+<periodicidadeInformacoesInterinas> : List ("semanalmente", "a cada duas semanas" , "mensalmente") {
+								name = "Periodicidade das informações interinas"
+								request = "Qual será a periodicidade de envio das informações interinas ao cliente?"
+								default = "semanalmente"
+								atomic = true
+								help = ""
+								tip = ""
+							}
+						}
+						operation {
+							print {
+								[version = "Conforme sua solicitação, enviaremos informações interinas sobre os honorários
+											e despesas incorridos "
+											& <periodicidadeInformacoesInterinas>
+											& ", ou em outra periodicidade que acordarmos por escrito."]
+							}
+						}
+					},
+					period[PER_PodeEnviarInformacoesInterinas] {
+						name = "Informações interinas"
+						description = "Período para envio de informações interinas - mediante solicitação."
+						tags {"Proposta de honorários", "Serviços jurídicos", "Fatura", "Pagamento"}
+						operation {
+							print {
+								[version = "Mediante sua solicitação, poderemos enviar informações interinas sobre os honorários
+											e despesas incorridos."]
+							}
+						}
+					},
+					period[PER_LiquidacaoDaFatura] {
+						name = "Liquidação das faturas"
+						description = "Período que descreve o prazo para liquidação das faturas."
+						tags {"Proposta de honorários", "Serviços jurídicos", "Fatura", "Pagamento"}
+						declarations {
+							+<prazoDeLiquidacao> : Integer {
+								name = "Prazo de liquidação das faturas"
+								request = "Quantos dias o cliente terá para liquidar as as faturas, a contar da data de sua emissão?"
+								default = "30"
+								help = ""
+								tip = ""
+							}
+						}
+						operation {
+							print {
+								[version = "Nossas faturas devem ser liquidadas em até "
+											& <prazoDeLiquidacao>
+											& " dias da sua data de emissão."]
+							}
+						}
+					},
+					period[PER_FaturaFinal] {
+						name = "Fatura final"
+						description = "Período que descreve as condições para emissão da fatura final relativa à prestação dos serviços jurídicos."
+						tags {"Proposta de honorários", "Serviços jurídicos", "Fatura", "Pagamento"}
+						operation {
+							print {
+								[version = "Na conclusão de nossos serviços por qualquer motivo, submeteremos uma fatura final
+											compreendendo os honorários incorridos e ainda não faturados até tal data e as despesas
+											ainda não reembolsadas."]
+							}
+						}
+					}
+				}
+				operations {
+					if (<tipoDeFaturamento> == "Periódico") {
+						use period[PER_FaturamentoPeriodico]
+					} elseif (<tipoDeFaturamento> == "Por evento") {
+						use period[PER_FaturamentoPorEvento]
+					} else {
+						use period[PER_FaturamentoMisto]
+					},
+					if (<descricaoDosServicos> == "A fatura incluirá uma descrição resumida dos serviços") {
+						use period[PER_DescricaoResumidaDosServicos]
+					} elseif (<descricaoDosServicos> == "A fatura incluirá uma descrição completa dos serviços") {
+						use period[PER_DescricaoCompletaDosServicos]
+					},
+					if (<informacoesInterinas>) {
+						use period[PER_EnviaraInformacoesInterinas]
+					} else {
+						use period[PER_PodeEnviarInformacoesInterinas]
+					},
+					use period[PER_LiquidacaoDaFatura],
+					use period[PER_FaturaFinal]
+				}
+			},
+			topic[TOP_DisposicoesGerais] {
+				name = "Disposições gerais"
+				index = true
+				description = "Tópico sobre disposições gerais aplicáveis a proposta de honorários."
+				title = "Disposições Gerais"
+				tags {"Disposições gerais", "Proposta de honorários", "Serviços jurídicos"}
+				declarations {
+					topic[TOP_DefinicoesPropostaDeHonorarios] {
+						name = "Definições"
+						description = "Tópico de definições específicas para propostas de honorários."
+						title = "Certas definições"
+						tags {"Definições", "Disposições gerais", "Proposta de honorários", "Serviços jurídicos"}
+						operations {
+							print {
+								[version = "Nesta proposta, referências ao \"Cliente\" significam referências ao Cliente
+o
+												acima e as referências a \"nós\" significam referências ao nosso escritório. \"Partes\"
+												refere-se ao Cliente e a nós, conjuntamente."
+								]
+							}
+						}
+					},
+					dependency[DEP_DivulgacaoAutorizadaVersusAutorizacaoDoCliente] {
+						name = "Autorização para divulgação"
+						description = "Dependência para determinar se o cliente será consultado antes da divulgação de informações sobre a prestação de serviços nos materiais de marketing do advogado ou escritório - proposta de honorários"
+						tags {"Divulgação de informações", "Autorização para divulgação", "Serviços jurídicos"}
+						declarations {
+							+<divulgacaoAutorizada> : Boolean {
+								name = "Consulta ao cliente"
+								request = "O cliente deverá ser sempre consultado antes da divulgação de informações sobre a prestação de serviços, por exemplo, no seu material de marketing?"
+								default = true
+								help = "Em caso negativo, a proposta conterá uma disposição pela qual o cliente autoriza o advogado ou escritório a divulgar dados sobre a prestação de serviços realizada."
+								tip = ""
+							},
+							topic[TOP_AdvogadoConsultaCliente] {
+								name = "Divulgação de informações"
+								description = "Tópico que dispõe que o advogado ou escritório devem consultar o cliente antes de divulgar informações - proposta de honorários"
+								title = "Divulgação de informações"
+								tags {"Divulgação de informações", "Autorização para divulgação", "Consulta prévia", "Serviços jurídicos"}
+
+								operations {
+									print {
+										[version = "Consultaremos o Cliente antes de divulgarmos informações sobre a prestação de serviços
+													objeto desta proposta. Porém, essa autorização não será necessária para a divulgação dessas informações
+													internamente ou para publicações e rankings que não identifiquem clientes individualmente."
+										]
+									}
+								}
+							},
+							topic[TOP_DivulgacaoAutorizada] {
+								name = "Divulgação de informações"
+								description = "Tópico que dispõe que o advogado ou escritório devem consultar o cliente antes de divulgar informações - proposta de honorários"
+								title = "Divulgação de informações"
+								tags {"Divulgação de informações", "Autorização para divulgação", "Consulta prévia", "Serviços jurídicos"}
+								declarations {
+									+<mencionarValores> : Boolean {
+										name = "Divulgação de valores"
+										request = "A divulgação poderá incluir menção a valores?"
+										default = false
+										help = "Em caso afirmativo, poderão ser divulgados os valores relacionados ao caso. Por exemplo, no caso de o cliente ter realizado a aquisição de uma empresa, poderá ser divulgado o valor dessa aquisição."
+										tip = ""
+									}
+								}
+								operations {
+									print {
+										[version = "O Cliente nos autoriza a divulgar, sem menção de valores, informações sobre a prestação
+													de serviços objeto dessa proposta, incluindo o fato de termos prestado tais serviços."]
+									}
+								}
+							}
+						}
+						operation {
+							if (<divulgacaoAutorizada>) {
+					 			use topic[TOP_AdvogadoConsultaCliente]
+							} else {
+								use topic[TOP_DivulgacaoAutorizada]
+							}
+						}
+					},
+					topic[TOP_CancelamentoServiçosJuridicos] {
+						name = "Prazo e cancelamento dos serviços"
+						description = "Tópico sobre prazo e cancelamento da prestação dos serviços jurídicos - proposta de honorários."
+						title = "Prazo e cancelamento dos serviços"
+						tags {"Prazo", "Cancelamento", "Rescisão", "Serviços jurídicos"}
+						operations {
+							print {
+								[version = "Os termos e condições desta proposta permanecerão válidos a partir da data da sua aceitação pelo
+											Cliente até a conclusão do escopo dos serviços descrito nesta proposta ou o cancelamento dos
+											serviços. O Cliente poderá interromper os nossos serviços a qualquer momento. Do nosso lado,
+											somente poderemos interromper os serviços prestados se houver fundamento para tanto e mediante
+											notificação prévia. Em qualquer caso, o Cliente será responsável pelo pagamento dos honorários
+											por todos os serviços prestados até a data da interrupção ou término dos serviços."]
+							}
+						}
+					},
+					topic[TOP_IndependenciaDeDisposicoes] {
+						name = "Independência de disposições"
+						description = "Tópico sobre independências das disposições - proposta de honorários"
+						title = "Independência de disposições"
+						tags {"Independência de disposições", "Nulo", "Anulável", "Inexequivel", "Ilegal", "Validade", "Legalidade", "Eficácia"}
+						operations {
+							print {
+								[version = "Caso uma autoridade competente declare qualquer das disposições desta proposta nula, ilegal ou inexequível, isso não
+											prejudicará a validade, legalidade e eficácia das demais disposições, que as Partes deverão cumprir integralmente."]
+							}
+						}
+					},
+					topic[TOP_AcordoIntegral] {
+						name = "Acordo integral"
+						description = "Tópico sobre acordo integral - proposta de honorários"
+						title = "Acordo integral"
+						tags {"Acordo integral", "Proposta de honorários", "Serviços jurídicos"}
+						operations {
+							print {
+								[version = "A presente proposta de honorários constitui o acordo integral entre as Partes com relação às matérias aqui contempladas,
+											prevalecendo sobre qualquer outro acordo anteriormente firmado entre elas, seja verbalmente ou por escrito."]
+							}
+						}
+					},
+					topic[TOP_Aditamento] {
+						name = "Aditamento"
+						description = "Tópico sobre aditamento por escrito - proposta de honorários"
+						title = "Aditamento"
+						tags {"Aditamento", "Proposta de honorários", "Serviços jurídicos"}
+						operations {
+							print {
+								[version = "Qualquer alteração ou renúncia aos termos previstos nesta proposta de honorários somente será
+											considerada válida se formalizada por escrito e por cada uma das Partes."]
+							}
+						}
+					},
+					topic[TOP_Sucessores] {
+						name = "Sucessores"
+						description = "Tópico sobre sucessores - proposta de honorários"
+						title = "Sucessores"
+						tags {"Sucessores", "Proposta de honorários", "Serviços jurídicos"}
+						operations {
+							print {
+								[version = "As obrigações criadas por esta proposta obrigam as Partes e seus sucessores a qualquer título."]
+							}
+						}
+					},
+					topic[TOP_Novacao] {
+						name = "Novação"
+						description = "Tópico sobre novação - proposta de honorários"
+						title = "Novação"
+						tags {"Novação", "Proposta de honorários", "Serviços jurídicos"}
+						operations {
+							print {
+								[version = "A falta ou o atraso de qualquer das Partes em exercer qualquer de seus direitos oriundos desta proposta não
+											deverá ser considerado como renúncia ou novação e não deverá afetar o subsequente exercício de tal direito.
+											Qualquer renúncia produzirá efeitos somente se for específica e por escrito."]
+							}
+						}
+					},
+					topic[TOP_Cessao] {
+						name = "Cessão"
+						description = "Tópico sobre cessão - proposta de honorários"
+						title = "Cessão"
+						tags {"Cessão", "Proposta de honorários", "Serviços jurídicos"}
+						operations {
+							print {
+								[version = "É vedada a cessão de quaisquer dos direitos e obrigações aqui pactuados sem o prévio e expresso consentimento, por escrito,
+											de cada uma das Partes."]
+							}
+						}
+					},
+					topic[TOP_LeiAplicavel] {
+						name = "Lei aplicável"
+						description = "Tópico sobre lei aplicável- proposta de honorários"
+						title = "Lei aplicável"
+						tags {"Lei aplicável", "Jurisdição", "Proposta de honorários", "Serviços jurídicos"}
+						operations {
+							print {
+								[version = "Esta proposta será regida e interpretada de acordo com as leis da República Federativa do Brasil."]
+							}
+						}
+					}
+				}
+				operations {
+					use topic[TOP_DefinicoesPropostaDeHonorarios],
+					use dependency[DEP_DivulgacaoAutorizadaVersusAutorizacaoDoCliente],
+					use topic[TOP_CancelamentoServiçosJuridicos],
+					use topic[TOP_IndependenciaDeDisposicoes],
+					use topic[TOP_AcordoIntegral],
+					use topic[TOP_Aditamento],
+					use topic[TOP_Sucessores],
+					use topic[TOP_Novacao],
+					use topic[TOP_Cessao],
+					use topic[TOP_LeiAplicavel]
+				}
+			},
+			*topic[TOP_ValidadeAceitacaoDaProposta] {
+				name = "Validade e aceitação da proposta"
+				index = true
+				description = "Tópico sobre a validade da proposta e sobre a forma de aceitação da proposta."
+				title = "Validade e aceitação da proposta"
+				tags {"Validade", "Aceitação", "Proposta de honorários", "Serviços jurídicos"}
+				declarations {
+					+<validadeDaProposta> : Integer {
+						name = "Validade da proposta"
+						request = "Qual a validade da proposta, em número de dias, a contar da sua data?"
+						default = "30"
+						help = "Uma proposta precisa ter um prazo de validade. Por exemplo, se a validade for de 30 dias a contar da data da proposta, informe \"30\"."
+						tip = ""
+					}
+				}
+				operations {
+					print {
+						[version = "Esta proposta tem validade de "
+									& <validadeDaProposta>
+									& " dias a contar de sua data de emissão. Pedimos que o Cliente confirme a sua aceitação enviando-nos
+										uma via da presente proposta assinada física ou eletronicamente
+										ou enviando um e-mail confirmando sua aceitação."
+						]
+					}
+				}
+			}
+		}
+		operations {
+			use period[PER_IntroducaoDaProposta],
+			use topic[TOP_Escopo],
+			use branch[BRC_PremissasEscopo],
+			use topic[TOP_Honorarios],
+			use topic[TOP_Despesas],
+			use topic[TOP_Faturamento],
+			use topic[TOP_DisposicoesGerais],
+			use *topic[TOP_ValidadeAceitacaoDaProposta],
+			print {
+				[version = "Será para nós um grande prazer assessorá-lo. Estamos à disposição para esclarecer e discutir quaisquer
+							dúvidas ou sugestões que V.Sa. possa ter com relação a esta proposta. \n Atenciosamente,\n"
+				]
+			}
+		}
+ 	}
+ 	foot {
+		declarations {
+			period[PER_Assinatura] {
+				name = "Assinatura"
+				description = "Período placeholder para assinatura"
+				tags {"Assinatura"}
+
+				operation {
+					print {
+						[version = "Placeholder para campos de assinatura"]
+					}
+				}
+			}
+		}
+ 		operations {
+			use period[PER_Assinatura]
+		}
+ 	}
+}

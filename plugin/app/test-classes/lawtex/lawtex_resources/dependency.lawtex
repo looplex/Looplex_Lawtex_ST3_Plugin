@@ -1,0 +1,182 @@
+*struct[StructAlias] {
+	name = "..."
+	request = "..."
+	help = "..."
+	fields {
+		+[a] : String {
+			name = "a"
+		},
+		if ([a] == "1") {
+			+[ai] : String {
+				name = "ai"
+			}
+		} elseif ([a] == "2") {
+			+[ai] : String {
+				name = "ai"
+			}
+		} elseif ([a] == "3") {
+			+[ai] : String {
+				name = "ai"
+			}
+		} elseif ([a] == "4") {
+			+[ai] : String {
+				name = "ai"
+			}
+		} elseif ([a] == "5") {
+			+[ai] : String {
+				name = "ai"
+			}
+		} elseif ([a] == "6") {
+			+[ai] : String {
+				name = "ai"
+			}
+		} else {
+			+[ai] : String {
+				name = "ai"
+			}
+		}
+	}
+}
+
+*branch[BRC_AliasBranch] {
+	declarations {
+		+<s> : Integer
+	}
+	operations {
+		if (<s> == 0) {
+			print <s>
+		} elseif (<s> == 1) {
+			print <s>
+		} elseif (<s> == 2) {
+			print <s>
+		} elseif (<s> == 3) {
+			print <s>
+		} elseif (<s> == 4) {
+			print <s>
+		} elseif (<s> == 5) {
+			print <s>
+		} elseif (<s> == 6) {
+			print <s>
+		} else {
+			print <s>
+		}
+	}
+}
+
+*dependency[DEP_AliasDependency] {
+	declarations {
+		+<s> : String
+	}
+	operation {
+		if ( <s> == "1" ) {
+ 			print <s>
+		} elseif ( <s> == "2" ) {
+ 			print <s>
+		} elseif ( <s> == "3" ) {
+ 			print <s>
+		} elseif ( <s> == "4" ) {
+ 			print <s>
+		} elseif ( <s> == "5" ) {
+ 			print <s>
+		} elseif ( <s> == "6" ) {
+ 			print <s>
+		} else {
+ 			print <s>
+		}
+	}
+}
+
+template[TEMP_TemplateAlias] {
+	metainfo {
+		language = "pt_BR"
+		description = "Teste de Dependencia"
+		tags {
+			"Dependências"
+		}
+		declarations {
+			&<v> : Integer {
+				name = "Value"
+				request = "Qual o valor de entrada?"
+				default = 0
+			}
+		}
+	}
+	head {
+		title = "Título principal"
+		operations {
+			print {
+				version = "Primeiro entrada: " & <v>
+			}
+		}
+ 	}
+ 	body {
+		operations {
+			use *dependency[DEP_AliasDependency1],
+			use *dependency[DEP_AliasDependency2]
+		}
+ 	}
+}
+
+*dependency[DEP_AliasDependency1] {
+	name = "Dep 1"
+	description = "Dependencia 1"
+	tags {
+		"D1"
+	}
+	declarations {
+		+<val> : Integer
+	}
+	operation {
+		if ( true AND false ) {
+ 			print {
+ 				version = "O valor é acima de 100."
+ 			}
+		} elseif ( <val> > 100 - 777 ) {
+ 			print {
+ 				version = "O valor é acima de 100."
+ 			}
+		} elseif ( (NOT <val>) > 0 ) {
+ 			print {
+ 				version = "O não valor é acima de 0."
+ 			}
+ 		} elseif ( NOT (<val> > 0) ) {
+ 			print {
+ 				version = "O valor não é acima de 0 e abaixo de 100."
+ 			}
+ 		} elseif ( NOT (- <val> > 0) ) {
+ 			print {
+ 				version = "O valor não é acima de 0 e abaixo de 100."
+ 			}
+ 		} elseif ( NOT - <val> > -10 ) {
+ 			print {
+ 				version = "O valor não é acima de 0 e abaixo de 100."
+ 			}
+		} else {
+ 			print {
+ 				version = "O valor é abaixo de 0."
+ 			}
+		}
+	}
+}
+
+*dependency[DEP_AliasDependency2] {
+	name = "Dep 2"
+	description = "Dependência 2"
+	tags {
+		"D2"
+	}
+	declarations {
+		-<val> : Integer
+	}
+	operation {
+		if ( <valext>.isEmpty() ) {
+ 			print {
+ 				version = "Segundo valor definido como " & <valext>
+ 			}
+		} else {
+			print {
+ 				version = "Valor indefinido"
+ 			}
+		}
+	}
+}

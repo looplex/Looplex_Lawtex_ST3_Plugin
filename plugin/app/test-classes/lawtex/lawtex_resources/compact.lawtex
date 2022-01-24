@@ -1,0 +1,437 @@
+/*
+	Teste simples com o uso de um modelo de contrato de compra e venda de
+	automovel, disponivel na internet para uso geral.
+	versao 0.2
+*/
+
+template[TEMP_Contrato_Particular_De_Compra_E_Venda_De_Automovel1] {
+	metainfo {
+		language = "pt_BR"
+		description =	"Teste simples com o uso de um modelo de contrato de compra e venda de
+						 automovel, disponivel na internet para uso geral."
+		tags {
+			"venda", "compra", "automovel"
+		}
+		declarations {
+			&<place> : String {
+				name = "Lugar"
+				request = "Qual o local do documento?"
+			},
+			&<date> : Date {
+				name = "Data"
+				request = "Qual a data do documento?"
+			},
+			+<comprador> : *Pessoa {
+				name = "Comprador"
+			},
+			+<vendedor> : *Pessoa {
+				name = "Vendedor"
+			},
+			+<testemunha1> : *Testemunha {
+				name = "Testemunha 1"
+			},
+			+<testemunha2> : *Testemunha {
+				name = "Testemunha 2"
+			},
+			+<testemunha3> : *Testemunha {
+				name = "Testemunha 3"
+			}
+		}
+	}
+	head {
+		title = "CONTRATO PARTICULAR DE COMPRA E VENDA DE AUTOMÓVEL"
+		declarations {
+		}
+		operations {
+			use *period[PER_Cabecalho] where ( <p> = <vendedor>, <label> = "VENDEDOR" ),
+			use *period[PER_Cabecalho] where ( <p> = <comprador>, <label> = "COMPRADOR" ),
+			print {
+				[version =	"As partes acima identificadas têm, entre si, justo e acertado o presente Contrato de Compra e Venda de Automóvel, que se regerá pelas cláusulas seguintes e pelas condições descritas no presente."]
+			}
+		}
+ 	}
+ 	body {
+		declarations {
+		}
+		operations {
+			use *topic[TOP_Do_Objeto_Do_Contrato],
+			use *topic[TOP_Das_Obrigacoes],
+			use *topic[TOP_Do_Preco],
+			use *topic[TOP_Da_Multa],
+			use *loop[LOOP_Vetor_Beneficiados],
+			use *topic[TOP_Do_Foro]
+		}
+ 	}
+ 	foot {
+		declarations {
+			+<variableNomeVendedor> : String {
+				name = "Nome do vendedor"
+				request = "Qual o nome do vendedor"
+			},
+			+<variableNomeComprador> : String where ("\A.\@*") {
+				name = "Nome do comprador"
+				request = "Qual o nome do comprador"
+			}
+		}
+ 		operations {
+ 			<variableNomeVendedor> = <vendedor.campoNome>,
+ 			<variableNomeComprador> = <comprador.campoNome>,
+			print {
+				[version =
+				"Por estarem assim justos e contratados, firmam o presente instrumento, em duas vias de igual teor, juntamente com 2 (duas) testemunhas.\n\n
+				(Local, data e ano).\n
+				PARTES\n" &
+				<variableNomeVendedor> & "\n" &
+				<variableNomeComprador> & "\n\n
+				TESTEMUNHAS\n
+				"]
+			},
+			use *period[PER_Rodape] where ( <t> = <testemunha1>, <label> = "TESTEMUNHA1" ),
+			use *period[PER_Rodape] where ( <t> = <testemunha2>, <label> = "TESTEMUNHA2" ),
+			<testemunha3.campoNome> = "Dono do cartório",
+			use *period[PER_Rodape] where ( <t> = <testemunha3>, <label> = "TESTEMUNHA3" )
+
+		}
+ 	}
+}
+
+*period[PER_Cabecalho] {
+	name = "Cabeçalho"
+	description = "Periodo"
+	tags {
+		"Identificação de pessoa"
+	}
+	declarations {
+		+<p> : externs *Pessoa,
+		+<label> : externs String
+	}
+	operation {
+		print {
+			version = <label> & ": " & <p.campoNome> & ", " & <p.campoNacionalidade> & ", " & <p.campoEstadoCivil> & ", possui 0" & <p.campoNumeroFilhos> &
+			" filhos, " & <p.campoProfissao> & ", inscrito no R.G. sob o nº " & <p.campoRG> & ", bem como no C.P.F. nº " & <p.campoCPF> & ", residente e domiciliado na Rua "
+			& <p.campoRua> & ", nº "& <p.campoNumero> & ", bairro " & <p.campoBairro> & ", Cep " & <p.campoCEP> & ", no Estado " & <p.campoEstado> & ", cidade de " & <p.campoCidade> & ";"
+		}
+	}
+}
+
+*period[PER_Rodape] {
+	name = "Rodapé"
+	description = "Periodo"
+	declarations {
+		+<t> : externs *Testemunha,
+		+<label> : externs String
+	}
+	operation {
+		print {
+			version = <label> & ": " & <t.campoNome> & ", inscrito no R.G. sob o nº " & <t.campoRG> & ";"
+		}
+	}
+}
+
+*topic[TOP_Do_Objeto_Do_Contrato] {
+				name = "DO OBJETO DO CONTRATO"
+				title = "DO OBJETO DO CONTRATO"
+				declarations {
+					+<auto> : *Automovel
+				}
+				operations {
+					print {
+						version = "Cláusula 1ª. O presente contrato tem como objeto, o veículo automotor " & <auto.campoNome> & ", marca " & <auto.campoMarca> & ", modelo " & <auto.campoModelo> & ", ano de fabricação " & <auto.campoAnoFabricacao> & ", chassi " & <auto.campoChassi> & ", cor " & <auto.campoCor> & ", placa " & <auto.campoPlaca> & ", categoria " & <auto.campoCategoria> & ", registrado no DETRAN/DUT sob o nº " & <auto.campoRegistroDetran> & ", em nome de " & <auto.campoProprietario> & "."
+					}
+				}
+			}
+
+*topic[TOP_Das_Obrigacoes] {
+				name = "DAS OBRIGAÇÕES"
+				title = "DAS OBRIGAÇÕES"
+				operations {
+					print {
+						version = 	"Cláusula 2ª. O VENDEDOR se obriga a entregar ao COMPRADOR o Documento Único de Transferência (DUT), assinado e a este reconhecido firma.\n
+									 Cláusula 3ª. O VENDEDOR se responsabilizará pela entrega do automóvel ao COMPRADOR, livre de qualquer ônus ou encargo.\n
+									 Cláusula 4ª. O COMPRADOR se responsabilizará, após a assinatura deste instrumento, pelos impostos e taxas que incidirem sobre o automóvel adquirido."
+					}
+				}
+			}
+
+*topic[TOP_Do_Preco] {
+				name = "DO PREÇO"
+				title = "DO PREÇO"
+				declarations {
+					&<variableValorTotal> : Real {
+						name = "Valor do veiculo"
+						request = "Qual o valor total do veiculo"
+					},
+					+<variableValorExpresso> : String {
+						name = "Valor do veiculo por extenso"
+						request = "Qual o valor total por extenso do veiculo"
+					},
+					+<variableQuantidadeParcelas> : Real {
+						name = "Quatidade de parcelas"
+						request = "Quantidade de parcelas"
+					},
+					+<variableValorParcelado> : Integer {
+						name = "Valor parcelado do veiculo"
+						request = "Qual valor de cada parcela do veiculo"
+					},
+					+<variableValorParceladoExpresso> : Real {
+						name = "Valor da parcela por extenso do veiculo"
+						request = "Qual valor total do veiculo"
+					},
+					+<variableDataPagamento> : Integer {
+						name = "Dia do vencimento"
+						request = "Qual o dia de vencimento do pagamento de cada mês"
+					}
+				}
+				operations {
+					/* ainda não há tube DIV <variableValorParcelado> = <variableValorTotal> / <variableQuantidadeParcelas>, */
+					print {
+						version = "Cláusula 5ª. O COMPRADOR pagará ao VENDEDOR, pela compra do veículo objeto deste contrato, a quantia de R$" & <variableValorTotal> & ", " & <variableValorExpresso> & ", dividida em " & <variableQuantidadeParcelas> & " parcelas de R$ " & <variableValorParcelado> & ", " & <variableValorParceladoExpresso> & ", a serem pagas até o dia " & <variableDataPagamento> & "de cada mês."
+					}
+				}
+			}
+
+*topic[TOP_Da_Multa] {
+	name = "DA MULTA"
+	title = "DA MULTA"
+	declarations {
+		&<variablePorcentagemJuros> : Real {
+			name = "Juros"
+			request = "Qual a porcentagem de juros sobre a parcela em atraso"
+		},
+		&<variablePorcentagemMulta> : Real {
+			name = "Multa"
+			request = "Qual a porcentagem de multa sobre a parcela em atraso"
+		},
+		&<variablePorcentagemMultaTotal> : Real {
+			name = "Multa sobre o valor total"
+			request = "Qual a porcentagem de multa sobre o valor da venda para o não cumprimento das cláusulas citadas"
+		}
+	}
+	operations {
+		<variablePorcentagemMulta> = <variablePorcentagemJuros>,
+		<variablePorcentagemMultaTotal> = 45.5,
+		print {
+			version = 	"Cláusula 6ª - Havendo atraso no pagamento das parcelas acordadas, incidirá juros de mora na proporção de " & <variablePorcentagemJuros> & " sobre o valor da parcela em atraso, bem como " & <variablePorcentagemMulta> & " de multa ao mês.
+			Cláusula 7ª - Caso alguma das partes não cumpra o disposto nas cláusulas acima, responsabilizar-se-á pelo pagamento de multa equivalente a " & <variablePorcentagemMultaTotal> & " do valor da venda do automóvel."
+		}
+	}
+}
+
+*topic[TOP_Do_Foro] {
+	name = "DO FORO"
+	title = "DO FORO"
+	declarations {
+		&<variableForo> : String {
+			name = "Nome do foro"
+			request = "Qual o nome do Foro?"
+		}
+	}
+	operations {
+		print {
+			[version = "Cláusula 10ª. Para dirimir quaisquer controvérsias oriundas do CONTRATO, as partes elegem o foro da comarca de "& <variableForo> &";"]
+		}
+	}
+}
+
+*topic[TOP_Dos_Beneficiados] {
+	name = "DOS BENEFICIADOS"
+	description = "DOS BENEFICIADOS"
+	title = "DOS BENEFICIADOS"
+	declarations {
+			&<beneficiado> : externs String /* Por asterisco e verificar o problema */
+	}
+	operations {
+		print {
+			[version = "Beneficiado: "& <beneficiado> & ";"]
+		}
+	}
+}
+
+*loop[LOOP_Vetor_Beneficiados] {
+	name = "Vetor dos nomes dos beneficiados"
+	description = "Vetor dos nomes dos beneficiados"
+	declarations {
+		&|vectorBeneficiados| : Vector[String] {
+			name = "Beneficiados"
+			request = "Liste os nomes dos beneficiados"
+			help = "Coloque o nome de todos os familiares beneficiados pela compra do veiculo."
+		}
+	}
+	operation {
+		foreach (<elem> IN |vectorBeneficiados|) {
+			use *topic[TOP_Dos_Beneficiados] where (<beneficiado> = <elem>)
+		}
+	}
+}
+
+/* definir pessoa */
+*struct[Pessoa] {
+	name = "Dados de pessoa"
+	request = "Dados de pessoa"
+	help = "Informe os dados da pessoa"
+	fields {
+		&[campoNome] : String {
+			name = "Nome"
+			key = true
+			help = "Informe o nome completo da pessoa"
+		},
+		+[campoNacionalidade] : List("Brasileiro", "Outras") {
+			name = "Nacionalidade"
+			key = true
+			atomic = true
+			help = "Informe a nacionalidade da pessoa"
+		},
+		+[campoEstadoCivil] : List("Solteiro", "Casado", "Viuvo") {
+			name = "Estado civil"
+			key = true
+			atomic = true
+			help = "Informe o estado civil da pessoa"
+		},
+		+[campoPossuiFilhos] : Boolean {
+			name = "Possui filhos"
+			key = true
+			help = "A pessoa possui filhos"
+		},
+		if ([campoPossuiFilhos] == true) {
+			&[campoNumeroFilhosPessoa] : *Filho
+		},
+		+[campoProfissao] : String {
+			name = "Profissão"
+			key = true
+			help = "Informe a profissão da pessoa"
+		},
+		+[campoRG] : String {
+			name ="RG"
+			key = true
+			help = "Informe o numero do Registro Geral (RG) da pessoa"
+		},
+		+[campoCPF] : String {
+			name = "CPF"
+			key = true
+			help = "Informe o numero do Cadastro de Pessoa Fisica (CPF) da pessoa"
+		},
+		+[campoRua] : String where ("\A,\a,\@-\d") {
+			name = "Rua"
+			key = true
+			help = "Informe o nome da rua onde mora a pessoa"
+		},
+		+[campoNumero] : String {
+			name = "Numero residencial"
+			key = true
+			help = "Informe o numero residencial da pessoa"
+		},
+		+[campoBairro] : String {
+			name = "Bairro"
+			key = true
+			help = "Informe o nome do bairro onde mora a pessoa"
+		},
+		+[campoCEP] : String {
+			name = "Cep"
+			key = true
+			help = "Informe o CEP da pessoa"
+		},
+		+[campoCidade] : String {
+			name = "Cidade"
+			key = true
+			help = "Informe o nome da cidade onde mora a pessoa"
+		},
+		+[campoEstado] : String {
+			name = "Estado"
+			key = true
+			help = "Informe o nome do Estado onde mora a pessoa"
+		}
+	}
+}
+
+/* Definir filhos */
+*struct[Filho] {
+	name = "Informação adicional"
+	request = "Informação adicional"
+	help = "Informação adicional"
+	fields {
+		+[campoNumeroFilhos] : List("0", "1", "2+") {
+			name = "Numero de filhos"
+			key = true
+			atomic = true
+			help = "Informe o numero de filhos da pessoa"
+		}
+	}
+}
+
+/* Definir testemunhas */
+*struct[Testemunha] {
+	name = "Dados da testemunha"
+	request = "Dados da testemunha"
+	help = "Informe os dados da testemunha"
+	fields {
+		+[campoNome] : String {
+			name = "Nome"
+			key = true
+			help = "Informe o nome da testemunha"
+		},
+		+[campoRG] : String {
+			name ="RG"
+			key = true
+			help = "Informe o numero do Registro Geral (RG) da testemunha"
+		}
+	}
+}
+
+/* definir automovel */
+*struct[Automovel] {
+	name = "Dados do automovel"
+	request = "Dados do automovel"
+	help = "Informe os dados do automovel"
+	fields {
+		+[campoNome] : String {
+			name = "Nome"
+			key = true
+			help = "Informe o nome do veiculo"
+		},
+		+[campoMarca] : String {
+			name = "Marca"
+			key = true
+			help = "Informe a marca do veiculo"
+		},
+		+[campoModelo] : String {
+			name = "Modelo"
+			key = true
+			help = "Informe o modelo"
+		},
+		+[campoAnoFabricacao] : String {
+			name = "Estado"
+			key = true
+			help = "Informe o ano de fabricação do veiculo"
+		},
+		+[campoChassi] : String {
+			name = "Chassi"
+			key = true
+			help = "Informe o chassi do veiculo"
+		},
+		+[campoCor] : String {
+			name = "Cor"
+			key = true
+			help = "Informe a cor do veiculo"
+		},
+		+[campoPlaca] : String {
+			name = "Placa"
+			key = true
+			help = "Informe a placa do veiculo"
+		},
+		+[campoCategoria] : String {
+			name = "Categoria"
+			key = true
+			help = "Informe a categoria do veiculo"
+		},
+		+[campoRegistroDetran] : String {
+			name = "Registro no Detran/Dut"
+			key = true
+			help = "Informe o registro no Detran/Dut do veiculo"
+		},
+		+[campoProprietario] : String {
+			name = "Proprietario"
+			key = true
+			help = "Informe o nome do proprietario do veiculo"
+		}
+	}
+}

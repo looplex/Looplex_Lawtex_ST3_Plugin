@@ -1,0 +1,44 @@
+template[TEMP_TemplateAlias] {
+  metainfo {
+    language = "pt_BR"
+  }
+  head {
+    title = "..."
+  }
+  body {
+    operations {
+      use period[PER_Local]
+    }
+  }
+}
+period[PER_Local] {
+  name = "..."
+  description = "..."
+  tags {
+    "...", "..."
+  }
+  declarations {
+    +<varInt> : externs Integer
+  }
+  operation {
+    print {
+      [version = "..."]
+    }
+  }
+}
+
+period[PER_Local] {
+  name = "..."
+  description = "..."
+  tags {
+    "...", "..."
+  }
+  declarations {
+    +<varInt> : externs Integer
+  }
+  operation {
+    print {
+      [version = "..."]
+    }
+  }
+}

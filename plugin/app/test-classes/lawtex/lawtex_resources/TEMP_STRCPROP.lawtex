@@ -1,0 +1,33 @@
+template[TEMP_DeltaX] {
+	metainfo {
+		language = "pt_BR"
+		statement {
+	     	audience = "audience"
+	     	components = "components"
+	     	functionalities = "funcionalidades"
+	     	inputs = "inputs"
+	     	overview = "overview"
+	     	warnings {
+	            "w1",
+	        	"w2"
+	     	}
+	     	upgrades {
+	            "x1: w1",
+	        	"x2: w2"
+	     	}
+	  	}
+	}
+ 	body {
+		declarations {
+			+<a> : String {
+				label = "xx"
+			}
+		}
+		operations {
+			<a>.name = 23,
+			print <a>.name & <a>.name,
+			print  "\n",
+			print <a> & <a>.name
+		}
+ 	}
+}

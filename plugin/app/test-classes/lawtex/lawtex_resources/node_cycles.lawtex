@@ -1,0 +1,63 @@
+template[TEMP_NODECYCLES] {
+	metainfo {
+		language = "pt_BR"
+	}
+ 	head {
+ 		title=""
+ 	}
+ 	body {
+		operations {
+			use *dependency[DEP_AliasDependencyCycle]
+		}
+ 	}
+}
+
+*dependency[DEP_AliasDependencyCycle] {
+	declarations {
+		+<a> : Integer
+	}
+	operation {
+		if ( <a> > 0 ) {
+ 			print {
+ 				version = "Okay.. Você selecionou um número positivo"
+ 			}
+		} else {
+			use *dependency[DEP_AliasDependencyCycle] where ( <a> = <a>.clear() )
+		}
+	}
+}
+
+/*
+*topic[TOP_AliasTopicCycle] {
+	name = "T1"
+	title = "Tirkw"
+	declarations {
+		+|vectorAlias| : Vector[String] {
+			name = "..."
+			request = "..."
+			howmany = "..."
+			lower = 5
+			upper = 16
+			help = "..."
+		}
+	}
+	operations {
+		use *topic[TOP_AliasTopicCycle]
+	}
+}
+
+*loop[LOOP_AliasLoopCycle] {
+	separator = "%f1; %s2; %p2; e %l2."
+	declarations {
+		+|vectorAlias| : Vector[String] {
+			name = "..."
+			howmany = "..."
+			request = "..."
+		}
+	}
+	operation {
+		foreach (<elem> IN |vectorAlias|) {
+			use *loop[LOOP_AliasLoopCycle]
+		}
+	}
+}*/

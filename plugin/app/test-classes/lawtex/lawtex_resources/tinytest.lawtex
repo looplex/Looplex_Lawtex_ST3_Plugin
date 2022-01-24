@@ -1,0 +1,7 @@
+*period[PER_AliasPeriod] {
+	operation {
+		print {
+			[version = "..."]
+		}
+	}
+}

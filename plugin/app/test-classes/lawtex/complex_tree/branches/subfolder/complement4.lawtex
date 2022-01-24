@@ -1,0 +1,27 @@
+*branch[BRC_Complement4_A] {
+	operations {
+		print "Inside BRC_Complement4_A",
+		print "Done with BRC_Complement4_A"
+	}
+}
+
+*branch[BRC_Complement4_B] {
+	operations {
+		print "Inside BRC_Complement4_B",
+		print "Done with BRC_Complement4_B"
+	}
+}
+
+*branch[BRC_Complement4_C] {
+	operations {
+		print "Inside BRC_Complement4_C",
+		print "Done with BRC_Complement4_C"
+	}
+}
+
+*branch[BRC_Complement4_D] {
+	operations {
+		print "Inside BRC_Complement4_D",
+		print "Done with BRC_Complement4_D"
+	}
+}

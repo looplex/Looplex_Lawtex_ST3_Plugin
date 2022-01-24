@@ -1,0 +1,214 @@
+*struct[PedidosCobrancaCondominio] {
+	name = "Pedidos em cobrança de condomínio"
+	request = "Qual é a cobrança?"
+	help = ""
+	fields {
+		+[tipos] : List ("Verbas condominiais em atraso", "Multas por descumprimento de deveres") {
+			name = "A cobrança realizada será somente de verbas condominiais ou também será de multas por descumprimento de deveres no condomínio?"
+			key = false
+			atomic = false
+			default = "Verbas condominiais em atraso"
+			help = "A cobrança de verbas condominiais pode incluir (i) os valores referentes a verbas condominiais em aberto e também (ii) as multas por descumprimento de deveres do condomínio. A consequência dessa escolha do tipo de pedido é de que a cobrança de verbas em atraso segue o rito sumário. Caso exista cumulação entre verbas e multas não é mais possível seguir o procedimento sumário e a ação corre pelo rito ordinário."
+		},
+		if ([tipos] == "Verbas condominiais em atraso") {
+			+[verbas] : List(
+				"Cota-parte em rateio de despesas do condomínio",
+				"Custeio de despesas extraordinárias",
+				"Contribuição de fundo de reserva",
+				"Contribuição de fundo de obras"
+				) {
+				name = "As verbas condominiais cobradas são sobre atrasos no pagamento de:"
+				key = false
+				default = "Cota-parte em rateio de despesas do condomínio"
+				atomic = false
+				help = "Escolha ao menos uma das opções de cobrança presenta na ação de cobrança de condomínio.\n
+					O valor da cota-parte é um valor estabelecido pelo condomínio edilício e é pago periodicamente pelos condôminos ou em nome dele.\n
+					Custeio de despesas extraordinárias é valor estabelecido por fato excepcional pago pelos condôminos por determinado período, a partir da deliberação da assembleia de condomínio.\n
+					A contribuição para fundo de reserva é valor que os condôminos destinam para ter reservas acumuladas para custeios diversos que excedam o valor da contribuição de cada cota-parte.\n
+					A contribuição para fundo de obras é constituída a partir de deliberação assemblear e tem por finalidade arrecadar os valores necessários para realização de obras no condomínio."
+			}
+		},
+		if ([tipos] == "Multas por descumprimento de deveres") {
+			+[multas] : List(
+				"Realização de obra comprometendo a segurança do edifício",
+				"Realização de obra alterando fachada ou áreas externas",
+				"Uso do imóvel com desvio de destinação",
+				"Uso do imóvel com prejuízo ao sossego dos moradores / Comportamento antissocial",
+				"Uso do imóvel com prejuízo à saúde dos moradores",
+				"Uso do imóvel em contrariedade aos bons costumes",
+				"Embaraço do uso das partes comuns"
+				) {
+				name = "A(s) multa(s) cobrada(s) decorre(m) de:"
+				key = false
+				default = ""
+				atomic = false
+				help = ""
+			}
+		},
+		+[tentativaDePagamentoAmigavelVerbasCondominiais] : Boolean {
+			name = "Houve tentativa prévia de pagamento amigável?"
+			key = false
+			default = false
+			help = ""
+		},
+		&[descricaoDescumprimentos] : Boolean {
+			name = "Gostaria de descrever os descumprimentos de deveres condominiais?"
+			key = false
+			default = ""
+			help = ""
+		},
+		if (([descricaoDescumprimentos] == true) AND ("Uso do imóvel com prejuízo ao sossego dos moradores / Comportamento antissocial" IN [multas])) {
+			+[descricaoDescumprimentoObrigacaoMultaPorPrejuizoSossegoCondominio] : String {
+				name = "Descreva o descumprimento gerador da multa."
+				key = false
+				help = ""
+			},
+			+[notificacaoDefesaPeranteAssembleia] : Boolean {
+				name = "O(A) autor(a) da cobrança realizou notificação para algum dos réus?"
+				key = false
+				help = "De acordo com o STJ (REsp 1365279), nos casos de multa sobre condômino com comportamento antissocial, para garantia do direito de defesa é necessário fazer notificação ao condômino para que tenha oportunidade de defesa."
+			},
+			if ([notificacaoDefesaPeranteAssembleia] == true) {
+				&|reusNotificadosDefesaCondutaAntissocial| : Vector[*ReuNotificadoExtrajudicialmente] {
+					name = "Réus notificados para apresentar defesa por conduta antissocial"
+					request = "Informe os dados das pessoas notificadas para apresentar defesa por conduta antissocial"
+					lower = 1
+				}
+			}
+		}
+	}
+}
+
+
+
+
+*struct[ReuNotificadoExtrajudicialmente] extends *Sujeito {
+	name = "Réu notificado extrajudicialmente"
+	request = "Além dos dados de sujeito, informe o modo como réu foi notificado extrajudicialmente."
+	help = ""
+	fields {
+		+[meioNotificacao] : List ("Por carta com Aviso de Recebimento", "Pela entrega de notificação por representante legal ou pessoa com poderes para cientificar sobre cobrança", "Por E-mail", "Por outro meio") {
+			name = "Meio de notificar sobre cobrança de dívida extrajudicial"
+			key = false
+			atomic = true
+			help = ""
+		},
+		if ("Por outro meio" IN [meioNotificacao]) {
+			+[outroMeioNotificacao] : String {
+				name = "Descreva a forma de notificação utilizada"
+				key = false
+				help = ""
+			}
+		},
+		+[descricaoNotificacaoDefesaPeranteAssembleia] : String {
+			name = "Descreva as informações sobre como a notificação ocorreu, iniciando o texto com \"A notificação foi realizada por meio de ...\""
+			key = false
+			default = ""
+			help = ""
+		},
+		+[dataNotificacaoDefesaPeranteAssembleia] : Date {
+			name = "Data da notificação"
+			key = false
+			default = ""
+			help = "A data da notificação é a data em que o(a) condômino devedor(a) foi informado(a) pelo condomínio da imposição de multa."
+		}
+	}
+}
+
+*loop[LOOP_AliasLoop1] {
+	name = "..."
+	description = "..."
+	separator = "%f1 - %s2 - %p2 - %l2..."
+	declarations {
+		+|vectorAlias| : Vector[*ReuNotificadoExtrajudicialmente] {
+			name = "..."
+		}
+	}
+	operation {
+		foreach (<elem> IN |vectorAlias|) {
+			print {
+				[version = "..."],
+				[version = "..."]
+			}
+		}
+	}
+}
+
+*loop[LOOP_AliasLoop2] {
+	name = "..."
+	description = "..."
+	separator = "%s2 - %p2 - %l2."
+	declarations {
+		+|vectorAlias| : Vector[*ReuNotificadoExtrajudicialmente] {
+			name = "..."
+		}
+	}
+	operation {
+		foreach (<elem> IN |vectorAlias|) {
+			print {
+				[version = "..."],
+				[version = "..."]
+			}
+		}
+	}
+}
+
+*loop[LOOP_AliasLoop3] {
+	name = "..."
+	description = "..."
+	separator = "%p2 - %l2."
+	declarations {
+		+|vectorAlias| : Vector[*ReuNotificadoExtrajudicialmente] {
+			name = "..."
+		}
+	}
+	operation {
+		foreach (<elem> IN |vectorAlias|) {
+			print {
+				[version = "..."],
+				[version = "..."]
+			}
+		}
+	}
+}
+
+*loop[LOOP_AliasLoop4] {
+	name = "..."
+	description = "..."
+	separator = "%l2..."
+	declarations {
+		+|vectorAlias| : Vector[*ReuNotificadoExtrajudicialmente] {
+			name = "..."
+		}
+	}
+	operation {
+		foreach (<elem> IN |vectorAlias|) {
+			print {
+				[version = "..."],
+				[version = "..."]
+			}
+		}
+	}
+}
+
+*loop[LOOP_AliasLoop5] {
+	name = "..."
+	description = "..."
+	separator = "\n"
+	declarations {
+		+|vectorAlias| : Vector[*ReuNotificadoExtrajudicialmente] {
+			name = "..."
+		}
+	}
+	operation {
+		foreach (<elem> IN |vectorAlias|) {
+			print {
+				[version = "..."],
+				[version = "..."]
+			},
+			foreach(<elem> IN |vectorAlias|) where (separator = "%f1; %s2; %p2; e %l2.") {
+				use period[XXX_Alias]
+			}
+		}
+	}
+}

@@ -1,0 +1,70 @@
+*branch[BRC_AliasBranchZICAO] {
+	declarations {
+		+|vector| : Vector[String]
+	}
+	operations {
+		if (EXISTS <v> IN |vector| : (<v> == "a" OR <v> == "b")) {
+			print "ok"
+		}
+	}
+}
+
+/* struct preloaders */
+*struct[PLStruct1] {
+	name = "PL1"
+	request = "..."
+	help = "..."
+	fields {
+		-[string] : String {
+			name = "string"
+			key = false
+			transient = true
+		},
+		+|vectorBoolean| : Vector[Boolean] {
+			name = "vectbool"
+			request = "Entre com os bools"
+		},
+		+[object1] : *PLStruct3 {
+			transient = false
+		},
+		+[object2] : PLStruct4
+	}
+}
+
+*struct[PLStruct3] extends *PLStruct2 where ([b] = 3, [a] = "a1", [vectorBoolean{0}] = true, [vectorBoolean{[b]}] = true)
+
+*struct[PLStruct10] extends *PLStruct2 where ([b].mandatory = "-")
+
+struct[PLStruct4] extends *PLStruct2 where (|M:v{[a]}.v{[a]}.v{[a]}.vectorBoolean| = {true, false, false})
+
+*struct[PLStruct2] extends *PLStruct1 {
+	name = "PL2"
+	id = "teste " & [a]
+	request = "..."
+	help = "..."
+	fields {
+		-[a] : String {
+			name = "a"
+			request = "Entre com a"
+			key = true
+			default = "A"
+			transient = false
+		},
+		+[b] : List(0,1,2) {
+			name = "b"
+			request = "Entre com b"
+			key = false
+			atomic = true
+			default = 0
+		},
+		&|v| : Vector[*PLStruct2] {
+			name = "v"
+			request = "Entre com v"
+		},
+		&[x] : *PLStruct2 {
+			name = "v"
+			request = "Entre com x"
+		}
+	}
+}
+

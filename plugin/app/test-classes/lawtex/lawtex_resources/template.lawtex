@@ -1,0 +1,125 @@
+template[TEMP_FRUITS] {
+	metainfo {
+		language = "pt_BR"
+	}
+	head {
+		title = "Template Frutas"
+	}
+	body {
+		declarations {
+			+<objetoInline> : *Struct
+		}
+		operations {
+			beginList(),
+			use *period[PeriodoQualificacaoPessoaSimples],
+			use *dependency [DEP_LikeOranges],
+			endList()
+		}
+	}
+}
+
+*dependency[DEP_LikeOranges] {
+	name = "Pessoa gosta de laranjas"
+	description = "Pessoa gosta de laranjas"
+	index = true
+	declarations {
+		+<varLikesOranges> : Boolean {
+			request = "Você gosta de laranja"
+		},
+		+<varLikesApples> : Boolean {
+			request = "Você gosta de maçã"
+		}
+	}
+	operation {
+		if (<varLikesOranges>) {
+			if (<varLikesApples>) {
+				use *period[VarLikesApplesTrue]
+			} else {
+				print {
+					[version = " e não gosto de maçã, mas gosto de laranja"]
+				}
+			}
+		} else {
+			if (<varLikesApples>) {
+				print {
+					[version = " e gosto de maçã, mas não gosto de laranja"]
+				}
+			} else {
+				print {
+					[version = " e não gosto de maçã nem gosto de laranja"]
+				}
+			}
+		}
+	}
+}
+
+*period[VarLikesApplesTrue] {
+	name = "Gosta de maçã e laranja"
+	description = "Gosta de maçã e laranja"
+	tags {
+		"maçã", "laranja"
+	}
+	operation {
+		print {
+			version = " e gosto de maçã e laranja"
+		}
+	}
+}
+
+*period[PeriodoQualificacaoPessoaSimples] {
+	name = "Qualificação de pessoa simples"
+	description = "Descrição da qualificação de pessoa simples"
+	declarations {
+		+<nome> : String {
+			request = "nome"
+		},
+		+<dtNasc> : Date {
+			request = "Data de Nascimento"
+		},
+		+<salario> : Real {
+			request = "Salário"
+		},
+		+<qtdIrmaos> : Integer {
+			request = "Quantidade de Irmão"
+		},
+		+<sexo> : Boolean {
+			request = "Sexo"
+		},
+		+<horaDormir> : Time {
+			request = "Hora de Dormir"
+		},
+		+<obj> : *Struct,
+		+|vectorAlias| : Vector[String] {
+			name = "Vinop"
+			request = "INOPVECTOR: "
+			lower = 3
+			upper = 5
+		}
+	}
+	operation {
+		print {
+			version = "Eu, " & <nome> & ", nascido em " & <dtNasc> & ", " & <sexo> & ", possuo salário no valor de "
+				& <salario> & ", com " & <qtdIrmaos> & " irmãos e irmãs como testemunhas, assumo que vou dormir as " & <horaDormir>
+				& " : " & <obj.f1> & " : " & <obj.f2> & " : " & <obj.f3> & " : " & |obj.f3| & " : " & |vectorAlias|
+				& " : " & |PeriodoQualificacaoPessoaSimples:vectorAlias| & " : " & |PeriodoQualificacaoPessoaSimples:obj.f3|
+		}
+	}
+}
+
+*struct[Struct] {
+	name = "Struct Exemplo"
+	request = "Zetacaretone"
+	fields {
+		-[f1] : String {
+			name = "Fech"
+			key = true
+		},
+		-[f2] : *Struct,
+		&|f3| : Vector[String] {
+			name = "Visop"
+			request = "ISOPVECTOR: "
+			lower = 32
+			upper = 552
+		}
+	}
+}

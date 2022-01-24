@@ -1,0 +1,60 @@
+*branch[BRC_Complement2_A] {
+	declarations {
+		branch[BRC_Complement2_A_Internal_A] {
+			declarations {
+				branch[BRC_Complement2_A_Internal_A_1] {
+					operations {
+						print "Inside BRC_Complement3_A_Internal_A_1",
+						print "Done with BRC_Complement3_A_Internal_A_1"
+					}
+				}
+			}
+			operations {
+				print "Inside BRC_Complement3_A_Internal_A",
+				print "Done with BRC_Complement3_A_Internal_A"
+			}
+		},
+		branch[BRC_Complement2_A_Internal_B] {
+			operations {
+				print "Inside BRC_Complement3_A_Internal_B",
+				print "Done with BRC_Complement3_A_Internal_B"
+			}
+		},
+		branch[BRC_Complement2_A_Internal_C] {
+			operations {
+				print "Inside BRC_Complement3_A_Internal_C",
+				print "Done with BRC_Complement3_A_Internal_C"
+			}
+		}
+	}
+	operations {
+		print "Inside BRC_Complement2_A",
+
+		use BRC_Complement2_A_Internal_A,
+		use BRC_Complement2_A_Internal_B,
+		use BRC_Complement2_A_Internal_C,
+
+		print "Done with BRC_Complement2_A"
+	}
+}
+
+*branch[BRC_Complement2_B] {
+	operations {
+		print "Inside BRC_Complement2_B",
+		print "Done with BRC_Complement2_B"
+	}
+}
+
+*branch[BRC_Complement2_C] {
+	operations {
+		print "Inside BRC_Complement2_C",
+		print "Done with BRC_Complement2_C"
+	}
+}
+
+*branch[BRC_Complement2_D] {
+	operations {
+		print "Inside BRC_Complement2_D",
+		print "Done with BRC_Complement2_D"
+	}
+}

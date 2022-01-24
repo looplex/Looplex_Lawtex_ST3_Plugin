@@ -1,0 +1,39 @@
+template[TEMP_TemplateAliasAvacalhacaoDosIndexesDeVetores] {
+	metainfo {
+		language = "pt_BR"
+	}
+	head {
+		title = "..."
+ 	}
+ 	body {
+		declarations {
+			+|vectorSingle1| : Vector[String] {
+				name = "Vetoraço 1"
+			},
+			+|vectorSingle2| : Vector[StructAliasAvacalhacaoDosIndexesDeVetores] {
+				name = "Vetoraço 2"
+			},
+			struct[StructAliasAvacalhacaoDosIndexesDeVetores] {
+				fields {
+					+|fieldV| : Vector[String]
+				}
+			},
+			-<index> : Integer
+		}
+		operations {
+			<index> = 1,
+
+			|vectorSingle1{<index>}|.name = "New Name",
+			|vectorSingle1{<index>}| = "Ab",
+			print |vectorSingle1{<index>}|.name & ": " & |vectorSingle1{<index>}|,
+			|vectorSingle1{<index>}|.alert("XX"),
+			table(|vectorSingle1{<index>}|,"horizontal"),
+
+			|vectorSingle2{<index>}.fieldV|.name = "FFF",
+			|vectorSingle2{<index>}.fieldV{0}| = "Cd",
+			print |vectorSingle2{<index>}.fieldV|.name & ": " & |vectorSingle2{<index>}.fieldV|,
+			|vectorSingle2{<index>}.fieldV|.add("XX"),
+			table(|vectorSingle2{<index>}.fieldV|,"vertical")
+		}
+ 	}
+}

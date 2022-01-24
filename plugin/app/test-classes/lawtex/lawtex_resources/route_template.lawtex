@@ -1,0 +1,140 @@
+/* Route Template */
+template[TEMP_TemplateAlias] {
+		metainfo {
+		language = "pt_BR"
+		description = "Exemplo de template simples para rotas"
+		declarations {
+			&<varGlobal> : String {
+				name = "Variável Global"
+				request = "Qual o valor da variável?"
+			}
+
+		}
+	}
+	head {
+		title = "Um documento qualquer"
+ 	}
+
+
+ 	body {
+		declarations {
+			+<varListAlias1> : List("a","b","c") {
+				name = "Lista inicial"
+				request = "Qual caminho desejas tomar?"
+				atomic = true
+			},
+			-|vectorAlias1| : Vector[*StructName] {
+				name = "Vetor de estrutura"
+			}
+		}
+		operations {
+			print {
+				[version = "Entre com os dados seguintes"],
+				[version = "Entre com os dados"]
+			},
+			foreach(<elem> IN |vectorAlias1|) where (separator = "%f1; %s2; %p2; e %l2.") {
+				print {
+					version = "Sequencia n. " & <elem>
+				}
+			},
+			if (<varListAlias1> == "a") {
+				use *dependency[DEP_AliasDependency_Global]
+			} elseif (<varListAlias1> == "b") {
+				print "Escolheu b"
+			}
+		}
+ 	}
+}
+
+*dependency[DEP_AliasDependency_Global] {
+	name = "Dependência GLobal"
+	description = "DepGlob"
+	declarations {
+		+<objectAlias1> : *StructName,
+		&|vectorAlias1| : Vector[String] {
+			name = "Vetor de String"
+			request = "Entre com a sequência de String"
+			help = "Esta é uma ajuda para vetor atômico"
+		},
+		+<variableAlias1> : Boolean {
+			name = "Escolha uma opção"
+			request = "Você deseja subir?"
+		}
+	}
+	operation {
+		if ( <objectAlias1.field1> == "i" ) {
+ 			use dependency[DEP_AliasDependency_Local]
+		} elseif ( <objectAlias1.field1> == "ii" ) {
+			if (<variableAlias1>) {
+				foreach(<elem> IN |vectorAlias1|) where (separator = "%f1; %s2; %p2; e %l2.") {
+					print {
+						version = "Elemento: " & <elem>
+					}
+				}
+			}
+		}
+	}
+}
+
+dependency[DEP_AliasDependency_Local] {
+	name = "Dependência GLobal"
+	description = "DepGlob"
+	declarations {
+		+|vectorAlias1| : Vector[*StructName] {
+			name = "Vetor de estrutura"
+		}
+	}
+	operation {
+		if ( |vectorAlias1|.isEmpty() ) {
+ 			foreach(<elem> IN |vectorAlias1|) where (separator = "%f1; %s2; %p2; e %l2.") {
+ 				print {
+ 					version = "I: " & <elem>
+ 				}
+ 			}
+		}
+	}
+}
+
+*struct[StructName] {
+	name = "Estrutura teste"
+	request = "Entre com os dados da estrutura"
+	fields {
+		-[field1] : List("i","ii","iii") {
+			name = "Opções romanas"
+			key = false
+			atomic = false
+			default = "ii"
+			help = "Este é um exemplo de ajuda para um field"
+		},
+		&[field2] : Integer {
+			name = "Número inteiro"
+			key = false
+		},
+		-[field3] : Real {
+			name = "Número Real"
+			key = false
+		},
+		&[field4] : Date {
+			name = "Data como restore key"
+			key = true
+		},
+		+[field5] : Time {
+			name = "Time Obrigatório"
+			key = false
+		},
+		+[field6] : List({"a","A"},{"b","B"}) {
+			name = "Lista composta atômica obrigatória"
+			atomic = true
+		},
+		+[field7] : Boolean {
+			name = "Qual opção desejas?"
+			key = false
+			default = true
+		},
+		+|field8| : Vector[List("1","2")] {
+			name = "Vetor de lista"
+			atomic = true
+			request = "Este é um vetor de lista"
+		}
+	}
+}

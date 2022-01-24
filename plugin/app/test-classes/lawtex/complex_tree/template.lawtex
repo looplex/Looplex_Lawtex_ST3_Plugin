@@ -1,0 +1,115 @@
+// import [BRC_Complement1_A, BRC_Complement1_B, BRC_Complement1_C, BRC_Complement1_D] from "/branches/complement1"
+
+// import [BRC_Complement2_A] from "/branches/complement2"
+// import [BRC_Complement2_B] from "branches/complement2"
+// import BRC_Complement2_C from "/branches/complement2"
+// import BRC_Complement2_D from "branches/complement2"
+
+// import [BRC_Complement3_A] from "/complement3"
+// import [BRC_Complement3_B] from "complement3"
+// import BRC_Complement3_C from "/complement3"
+// import BRC_Complement3_D from "complement3"
+
+// import [BRC_Complement4_A] from "/branches/subfolder/complement4"
+// import [BRC_Complement4_B] from "branches/subfolder/complement4"
+// import BRC_Complement4_C from "/branches/subfolder/complement4"
+// import BRC_Complement4_D from "branches/subfolder/complement4"
+
+// ignore BRC_A
+// ignore [BRC_B, BRC_C, BRC_D, BRC_E]
+
+template[TEMP_ComplexTree] {
+	metainfo {
+		declarations {
+			branch[TEMP_ComplexTree_Internal_A] {
+				declarations {
+					branch[TEMP_ComplexTree_Internal_A_1] {
+						operations {
+							print "Inside TEMP_ComplexTree_Internal_A_1",
+							print "Done with TEMP_ComplexTree_Internal_A_1"
+						}
+					}
+				}
+				operations {
+					print "Inside TEMP_ComplexTree_Internal_A",
+					print "Done with TEMP_ComplexTree_Internal_A"
+				}
+			},
+			branch[TEMP_ComplexTree_Internal_B] {
+				operations {
+					print "Inside TEMP_ComplexTree_Internal_B",
+					print "Done with TEMP_ComplexTree_Internal_B"
+				}
+			},
+			branch[TEMP_ComplexTree_Internal_C] {
+				operations {
+					print "Inside TEMP_ComplexTree_Internal_C",
+					print "Done with TEMP_ComplexTree_Internal_C"
+				}
+			}
+		}
+	}
+ 	body {
+		operations {
+
+			print "Inside TEMP_ComplexTree",
+
+			use branch[BRC_ComplexTree_A],
+
+			use *branch[BRC_Complement1_A],
+			use *branch[BRC_Complement1_B],
+			use *branch[BRC_Complement1_C],
+			use *branch[BRC_Complement1_D],
+
+			use *branch[BRC_Complement2_A],
+			use *branch[BRC_Complement2_B],
+			use *branch[BRC_Complement2_C],
+			use *branch[BRC_Complement2_D],
+
+			use *branch[BRC_Complement3_A],
+			use *branch[BRC_Complement3_B],
+			use *branch[BRC_Complement3_C],
+			use *branch[BRC_Complement3_D],
+
+			use *branch[BRC_Complement4_A],
+			use *branch[BRC_Complement4_B],
+			use *branch[BRC_Complement4_C],
+			use *branch[BRC_Complement4_D],
+
+			use TEMP_ComplexTree_Internal_A,
+			use TEMP_ComplexTree_Internal_B,
+			use TEMP_ComplexTree_Internal_C,
+
+			use *branch[BRC_A],
+			use *branch[BRC_B],
+			use *branch[BRC_C],
+			use *branch[BRC_D],
+			use *branch[BRC_E],
+
+			print "Done with TEMP_ComplexTree "
+		}
+ 	}
+}
+
+branch[BRC_ComplexTree_A] {
+	operations {
+		print "Inside BRC_ComplexTree_A ",
+		use branch[BRC_ComplexTree_B],
+		print "Done with BRC_ComplexTree_A"
+	}
+}
+
+branch[BRC_ComplexTree_B] {
+	operations {
+		print "Inside BRC_ComplexTree_B ",
+		use branch[BRC_ComplexTree_C],
+		print "Done with BRC_ComplexTree_B"
+	}
+}
+
+branch[BRC_ComplexTree_C] {
+	operations {
+		print "Inside BRC_ComplexTree_C ",
+		print "Done with BRC_ComplexTree_C"
+	}
+}

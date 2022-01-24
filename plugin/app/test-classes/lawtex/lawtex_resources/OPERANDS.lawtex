@@ -1,0 +1,337 @@
+*struct[MonkeyStruct] {
+	name = "MonkeyStruct"
+	request = "Req. Def. do MonkeyStruct"
+	help = "Ajuda Def. do MonkeyStruct"
+	id = "ID DO Monkey STRUCT"
+	fields {
+		+[fieldMand] : String {
+			name = "fieldMand NAME"
+			request = "fieldMand REQ"
+			key = false
+			default = "WDEF"
+			help = "fieldMand HELP"
+		},
+		&[fieldOpt] : Integer {
+			name = "fieldOpt NAME"
+			request = "fieldOpt REQ"
+			key = false
+			help = "fieldOpt HELP"
+		},
+		-[fieldHidden] : Boolean {
+			request = "fieldHidden REQ"
+			key = false
+			help = "fieldHidden HELP"
+		},
+		-[allwaysHidden] : Boolean {
+			request = "fieldAllwaysHidden REQ"
+			key = false
+			help = "fieldAllwaysHidden HELP"
+		}
+	}
+}
+
+*struct[SimpleStruct] {
+	name = "SimpleStruct"
+	request = "Req. Def. do SimpleStruct"
+	help = "Ajuda Def. do SimpleStruct"
+	id = "ID DO SIMPLE STRUCT"
+	fields {
+		+[fieldMand] : String {
+			name = "fieldMand NAME"
+			request = "fieldMand REQ"
+			key = false
+			default = "WDEF"
+			help = "fieldMand HELP"
+		},
+		&[fieldOpt] : Integer {
+			name = "fieldOpt NAME"
+			request = "fieldOpt REQ"
+			key = false
+			help = "fieldOpt HELP"
+		},
+		-[fieldHidden] : Boolean {
+			request = "fieldHidden REQ"
+			key = false
+			help = "fieldHidden HELP"
+		},
+		&[fieldOpt1] : Real where("[0.1,1.1]") {
+			request = "fieldOpt1 REQ"
+			key = false
+		},
+		&[fieldOpt2] : Date where("dd/mm/yyy") {
+			request = "fieldOpt2 REQ"
+			key = false
+		},
+		&[fieldOpt3] : Time {
+			request = "fieldOpt3 REQ"
+			key = false
+		},
+		+[fieldList1] : List("opt1","opt2") {
+			request = "LIST ATOM"
+			default = "opt1"
+			atomic = true
+		},
+		+[fieldList2] : List("opt1","opt2") {
+			request = "LIST COMP"
+			default = {"opt1","opt2"}
+			atomic = false
+		},
+		+[fieldList3] : List({"opt1","o1"},{"opt2","o2"}) {
+			request = "LIST COMP COMP"
+			default = "opt1"
+			atomic = true
+		}
+	}
+}
+
+*struct[PreloadStruct] extends *MonkeyStruct where ( [fieldMand] = "value", [fieldHidden].mandatory = "&")
+
+*struct[IFStruct] {
+	fields {
+		+[a] : Integer {
+			request = "A"
+		},
+		if ([a] > 0) {
+			+[b] : Integer {
+				request = "Bint"
+			},
+			if ([b] > 1) {
+				+[c] : Integer {
+					request = "C"
+				},
+				if ([c] > 0) {
+					+[d] : Integer {
+						request = "D"
+					}
+				} else {
+					+[e] : Integer {
+						request = "E"
+					}
+				}
+			}
+		} elseif ([a] < 0) {
+			+[b] : Real {
+				request = "Breal"
+			}
+		} else {
+			+[b] : Date {
+				request = "Bdate"
+			}
+		}
+	}
+}
+
+*struct[IFPreloadStruct1] extends *IFStruct where ([a] = 1, [b] = -1)
+
+*struct[IFPreloadStruct2] extends *IFStruct where ([a] = 1, [b] = 2, [c] = -1)
+
+*struct[IFPreloadStruct3] extends *IFStruct where ([a] = 1, [b] = 2, [c] = 3)
+
+*struct[IFPreloadStruct4] extends *IFStruct where ([a] = -1)
+
+*struct[IFPreloadStruct5] extends *IFStruct where ([a] = 0)
+
+*struct[FVORStruct] {
+	fields {
+		+[fieldMand] : String {
+			name = "fieldMand NAME"
+			request = "fieldMand REQ"
+			key = false
+			default = "WDEF"
+			help = "fieldMand HELP"
+		},
+		+|vectorAtom| : Vector[Boolean] {
+			request = "VectAtom"
+			lower = 1
+			upper = 10
+		},
+		+[simobj] : *SimpleStruct {
+			request = "Ind Req"
+			help = "Help Req"
+		},
+		+[plobj] : *PreloadStruct,
+		+[ifprelobj] : *IFPreloadStruct1,
+		+[ifobj] : *IFStruct,
+		+[recobj] : *FVORStruct,
+		+|vectorSimObj| : Vector[*SimpleStruct] {
+			request = "VSimpleStruct Req"
+		},
+		+|vectorPreObj| : Vector[*PreloadStruct] {
+			request = "VectPreloadStruct Req"
+		},
+		+|vectorIfObj| : Vector[*IFStruct] {
+			request = "VectIFStruct Req"
+		},
+		+|vectorRecObj| : Vector[*FVORStruct] {
+			request = "VectFVORStruct Req"
+		}
+	}
+}
+
+list[AliasList] {
+	name = "..."
+	fields = {"Key1", "Key2"}
+	options = ({"Option1a","Option2a"}, {"Option1b","Option2b"})
+	type = "String"
+}
+
+template[TEMP_TemplateAlias] {
+	metainfo {
+		language = "pt_BR"
+	}
+	head {
+		title = "OPERANDS"
+ 	}
+ 	body {
+		declarations {
+			+<ms> : *MonkeyStruct,
+			+<variable1> : String {
+				name = "String"
+				request = "INOP NDString"
+				help = "W/HELP"
+				tip = "W/TIP"
+			},
+			+<variable2> : String {
+				name = "String"
+				request = "INOP DString"
+				default = "W/DEF"
+				help = "W/HELP"
+				tip = "W/TIP"
+			},
+			+<varMand> : String {
+				name = "varMand NAME"
+				request = "varMand REQ"
+				default = "WDEF"
+				help = "varMand HELP"
+			},
+			&<varOpt> : Integer {
+				name = "varOpt NAME"
+				request = "varOpt REQ"
+				help = "varOpt HELP"
+			},
+			&<varHidden> : Boolean {
+				request = "varHidden REQ"
+				help = "varHidden HELP"
+			},
+			&<varOpt1> : Real where("[0.1,1.1]") {
+				request = "varOpt1 REQ"
+			},
+			&<varOpt2> : Date where("dd/mm/yyy") {
+				request = "varOpt2 REQ"
+			},
+			&<varOpt3> : Time {
+				request = "varOpt3 REQ"
+			},
+			+<varList1> : List("opt1","opt2") {
+				request = "LIST ATOM"
+				default = "opt1"
+				atomic = true
+			},
+			+<varList2> : List("opt1","opt2") {
+				request = "LIST COMP"
+				default = {"opt1","opt2"}
+				atomic = false
+			},
+			+<varList3> : List({"opt1","o1"},{"opt2","o2"}) {
+				request = "LIST COMP COMP"
+				default = "opt1"
+				atomic = true
+			},
+			+<varList4> : List[AliasList],
+			+<objectAliasS> : *SimpleStruct,
+			+<objectAliasP> : *PreloadStruct {
+				request = "PreloadStruct inop"
+				help = "PreloadStruct inop"
+			},
+			+<objectAliasI> : *IFStruct {
+				request = "IFStruct inop"
+				help = "IFStruct inop"
+			},
+			+<objectAliasR> : *FVORStruct,
+			+<objectAlias1> : *IFPreloadStruct1,
+			+<objectAlias2> : *IFPreloadStruct2,
+			+<objectAlias3> : *IFPreloadStruct3,
+			+<objectAlias4> : *IFPreloadStruct4,
+			+<objectAlias5> : *IFPreloadStruct5,
+			+|vectorAlias| : Vector[String] {
+				name = "VECT INOP"
+				request = "VECT INOP"
+			},
+			+|vectorSimObj| : Vector[*SimpleStruct] {
+				request = "INOP VSimpleStruct Req"
+			},
+			+|vectorPreObj| : Vector[*PreloadStruct] {
+				request = "INOP VectPreloadStruct Req"
+			},
+			+|vectorIfObj| : Vector[*IFStruct] {
+				request = "INOP VectIFStruct Req"
+			},
+			+|vectorRecObj| : Vector[*FVORStruct] {
+				request = "INOP VectFVORStruct Req"
+			}
+		}
+		operations {
+			<variable1>.name = "Mojarra",
+			print <variable1> & <variable2> & <varMand> & <varOpt> & <varHidden> & <varOpt1> & <varOpt2> & <varOpt3> & <varList1> & <varList2> & <varList3> & <varList4> &
+				<objectAliasS> & <objectAliasS.fieldMand> & <objectAliasS.fieldOpt> & <objectAliasS.fieldHidden> & <objectAliasS.fieldOpt1> & <objectAliasS.fieldOpt2> &
+				<objectAliasS.fieldOpt3> & <objectAliasS.fieldList1> & <objectAliasS.fieldList2> & <objectAliasS.fieldList3> &
+				<objectAliasP> & <objectAliasP.fieldMand> & <objectAliasP.fieldOpt> & <objectAliasP.fieldHidden> &
+				<objectAliasI.a> &
+				<objectAlias1> & <objectAlias1.a> & <objectAlias1.b> &
+				<objectAlias2> & <objectAlias2.a> & <objectAlias2.b> & <objectAlias2.c> & <objectAlias2.e> &
+				<objectAlias3> & <objectAlias3.a> & <objectAlias3.b> & <objectAlias3.c> & <objectAlias3.d> &
+				<objectAlias4> & <objectAlias4.a> & <objectAlias4.b> &
+				<objectAlias5> & <objectAlias5.a> & <objectAlias5.b>,
+			foreach(<elem> IN |vectorAlias|) where (separator = "%f1; %s2; %p2; e %l2.") {
+				print {
+					version = "\n" & <elem>
+				}
+			},
+			foreach(<elem> IN |vectorSimObj|) {
+				print {
+					version = "\n" & <elem> & <elem.fieldMand> & <elem.fieldOpt> & <elem.fieldHidden> & <elem.fieldOpt1> & <elem.fieldOpt2> &
+						<elem.fieldOpt3> & <elem.fieldList1> & <elem.fieldList2> & <elem.fieldList3>
+				}
+			},
+			foreach(<elem> IN |vectorPreObj|) {
+				print {
+					version = "\n" & <elem> & <elem.fieldMand> & <elem.fieldOpt> & <elem.fieldHidden>
+				}
+			},
+			foreach(<elem> IN |vectorIfObj|) {
+				print {
+					version = "\n" & <elem> & <elem.a> & <elem.b>
+				}
+			},
+			print <objectAliasR> & <objectAliasR.fieldMand> &
+					<objectAliasR.simobj> & <objectAliasR.simobj.fieldMand> & <objectAliasR.simobj.fieldOpt> & <objectAliasR.simobj.fieldHidden> & <objectAliasR.simobj.fieldOpt1> & <objectAliasR.simobj.fieldOpt2> &
+					<objectAliasR.simobj.fieldOpt3> & <objectAliasR.simobj.fieldList1> & <objectAliasR.simobj.fieldList2> & <objectAliasR.simobj.fieldList3> &
+					<objectAliasR.plobj> & <objectAliasR.plobj.fieldMand> & <objectAliasR.plobj.fieldOpt> & <objectAliasR.plobj.fieldHidden> &
+					<objectAliasR.ifobj.a> &
+					<objectAliasR.ifprelobj> & <objectAliasR.ifprelobj.a> & <objectAliasR.ifprelobj.b> &
+					<objectAliasR.recobj> & <objectAliasR.recobj.fieldMand> & <objectAliasR.recobj.simobj> &
+					<objectAliasR.recobj.simobj> & <objectAliasR.recobj.simobj.fieldMand> & <objectAliasR.recobj.simobj.fieldOpt> & <objectAliasR.recobj.simobj.fieldHidden> & <objectAliasR.recobj.simobj.fieldOpt1> & <objectAliasR.recobj.simobj.fieldOpt2> &
+					<objectAliasR.recobj.simobj.fieldOpt3> & <objectAliasR.recobj.simobj.fieldList1> & <objectAliasR.recobj.simobj.fieldList2> & <objectAliasR.recobj.simobj.fieldList3> &
+					<objectAliasR.recobj.plobj> & <objectAliasR.recobj.plobj.fieldMand> & <objectAliasR.recobj.plobj.fieldOpt> & <objectAliasR.recobj.plobj.fieldHidden> &
+					<objectAliasR.recobj.ifobj.a> &
+					<objectAliasR.recobj.ifprelobj> & <objectAliasR.recobj.ifprelobj.a> & <objectAliasR.recobj.ifprelobj.b>,
+			foreach(<elem> IN |objectAliasR.vectorAtom|) {
+				print {
+					version = "..." & <elem>
+				}
+			},
+			foreach(<elem> IN |objectAliasR.vectorSimObj|) {
+				print {
+					version = "..." & <elem> & <elem.fieldMand> & <elem.fieldOpt> & <elem.fieldHidden> & <elem.fieldOpt1> & <elem.fieldOpt2> &
+					<elem.fieldOpt3> & <elem.fieldList1> & <elem.fieldList2> & <elem.fieldList3>
+				}
+			},
+			foreach(<elem> IN |objectAliasR.vectorPreObj|) {
+				print {
+					version = "..." & <elem> & <elem.fieldMand> & <elem.fieldOpt> & <elem.fieldHidden>
+				}
+			},
+			print |vectorRecObj|.size() & <ms.fieldMand> & <ms.fieldOpt>
+		}
+ 	}
+}

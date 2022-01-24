@@ -1,0 +1,57 @@
+template[TEMP_BasicTests] {
+   metainfo {
+      language = "pt_BR"
+   }
+   head {
+      title = "AAABBB"
+   }
+   body {
+      declarations {
+         +<a> : *StructAliasBasicTests1 {
+            order = 1
+         }
+      }
+      operations {
+         if (<a.a> == "A") {
+            print <a.b>,
+            print <a.b> * 12 * -12,
+            print 32+2,
+            print NOT <a.b> AND <a.b>,
+            print NOT <a.b> + <a.b>,
+            print NOT <a.b> == <a.b>,
+            print NOT <a.b> IN <a.b>,
+            print NOT <a.b>.isEmpty(),
+            print NOT (true AND false),
+            print true AND NOT (true AND false OR true),
+            print (123 - 2),
+            print -213
+         },
+         lowercase((("22abc")))
+      }
+   }
+}
+
+*struct[StructAliasBasicTests1] {
+   name = "Teste"
+   request = "REQ"
+   help = "HLP"
+   fields {
+      +[a] : String {
+         name = "ATOM"
+         order = 1
+         request = "ATOM"
+         key = false
+         default = "A"
+      },
+      +[b] : String,
+      +[c] : Integer,
+      +[d] : Boolean
+   }
+   loaders {
+      if ([atom] == "a") {
+         [b] = "123",
+         [c] = 12 * -1,
+         [d] = 123 == 12 AND NOT true ~= false
+      }
+   }
+}

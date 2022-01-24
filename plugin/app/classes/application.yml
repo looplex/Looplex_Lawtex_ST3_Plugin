@@ -1,0 +1,87 @@
+api:
+  digest:
+    upload_template:
+      valid_document_statuses: COMPLETED, SIGNED
+  headers:
+    service_key:
+      label: "Ocp-Apim-Subscription-Key"
+      value: "c7e7cf82087342ddb1b933c02627cd99"
+    access_token:
+      label: "accessToken"
+    user_file:
+      label: "user-file"
+  domain:
+    start: "https://apim.looplex.com/"
+    end: "/"
+    environments:
+      staging: "looplex-staging"
+      sandbox: "looplex-sandbox"
+      testing: "looplex-testing"
+      production: "looplex-production"
+  sub_paths:
+    login: "user/login"
+    account_prefix: "account/"
+    documentSubmission: "/templates"
+    find_template_by_content: "/template/content"
+    find_template_by_identifier: "/document/from/"
+    styleAttachmentSubmission: "/style/"
+    template_prefix: "/template/"
+    attachmentSubmission: "/attachment"
+  retryAttemptsLimit: 4
+  rest_template:
+    connectionRequestTimeout: 9000
+    connectTimeout: 9000
+    readTimeout: 0
+
+app:
+  commercial_time:
+    server: "time1.google.com"
+    window:
+      start: "08:00:00"
+      end: "20:00:00"
+
+dao:
+  database:
+    path: "/${user.home}/Looplex_Lawtex_ST3_Plugin/local_database/templates_v1.0.4.db"
+  sql_lite:
+    queries:
+      dependency:
+        insert: "REPLACE INTO documents(id,filepath) VALUES (?,?)"
+        find: "SELECT * FROM documents WHERE id = ?"
+        create_table: "CREATE TABLE IF NOT EXISTS documents(id VARCHAR PRIMARY KEY,filepath VARCHAR NOT NULL)"
+      environment_dependency:
+        insert: "REPLACE INTO document_status(id,hash,environment,status) VALUES (?,?,?,?)"
+        find: "SELECT * FROM document_status WHERE id = ? AND environment = ?"
+        create_table: "CREATE TABLE IF NOT EXISTS document_status(id VARCHAR PRIMARY KEY,hash VARCHAR NOT NULL,environment VARCHAR NOT NULL,status VARCHAR NOT NULL)"
+      generic_attachments:
+        insert: "REPLACE INTO generic_attachments(filepath,template_id,hash,environment,status) VALUES (?,?,?,?,?)"
+        find: "SELECT * FROM generic_attachments WHERE (filepath = ? AND template_id = ? AND environment = ?)"
+        create_table: "CREATE TABLE IF NOT EXISTS generic_attachments(filepath VARCHAR,template_id VARCHAR,hash VARCHAR,environment VARCHAR,status VARCHAR, PRIMARY KEY( filepath, template_id, environment ))"
+      style_attachments:
+        insert: "REPLACE INTO style_attachments(filepath,hash,environment,status) VALUES (?,?,?,?)"
+        find: "SELECT * FROM style_attachments WHERE filepath = ? AND environment = ?"
+        create_table: "CREATE TABLE IF NOT EXISTS style_attachments(filepath VARCHAR,hash VARCHAR,environment VARCHAR,status VARCHAR, PRIMARY KEY( filepath, environment ))"
+      saved_looplex_user:
+        insert: "REPLACE INTO saved_looplex_users(user_id,email,access_token,environment,default_user) VALUES(?,?,?,?,?)"
+        delete: "DELETE FROM saved_looplex_users WHERE ( user_id = ? AND email = ? AND access_token = ? AND environment = ? )"
+        find_all: "SELECT * FROM saved_looplex_users"
+        reset_default_user: "UPDATE saved_looplex_users SET default_user = 0"
+        create_table: "CREATE TABLE IF NOT EXISTS saved_looplex_users(user_id VARCHAR, email VARCHAR NOT NULL,access_token VARCHAR NOT NULL,environment VARCHAR NOT NULL UNIQUE,default_user INT NOT NULL, PRIMARY KEY( user_id, environment ))"
+
+spring:
+  main:
+    web-application-type: none
+
+ui:
+  fxml:
+    upload_template:
+      dimensions:
+        minH: 720
+        minW: 960
+    looplex_login:
+      dimensions:
+        minH: 520
+        minW: 300
+  media:
+    looplex_logo:
+      path: media/looplex_logo.png

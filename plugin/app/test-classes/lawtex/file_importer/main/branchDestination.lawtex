@@ -1,0 +1,24 @@
+*branch[BRC_Destination_A] {
+	operations {
+	}
+}
+
+*branch[BRC_Destination_B] {
+	operations {
+	}
+}
+
+*branch[BRC_Destination_C] {
+	operations {
+	}
+}
+
+*branch[BRC_Destination_D] {
+	operations {
+	}
+}
+
+*branch[BRC_Destination_E] {
+	operations {
+	}
+}

@@ -6,6 +6,7 @@ from Looplex_Lawtex_ST3_Plugin.lib.Config import Config
 from Looplex_Lawtex_ST3_Plugin.lib.Validate_lawtex_file import Validate_lawtex_file
 from Looplex_Lawtex_ST3_Plugin.lib.Upload_lawtex_template import Upload_lawtex_template
 from Looplex_Lawtex_ST3_Plugin.lib.Change_login_context import Change_login_context
+from Looplex_Lawtex_ST3_Plugin.lib.Open_folder import Open_folder
 
 class Validate_lawtex_fileCommand(ExecCommand) :
 
@@ -32,24 +33,12 @@ class Open_logs_folderCommand(sublime_plugin.TextCommand) :
 
     def run(self,edit) :
 
-        if sublime.platform() == "windows":
-
-            os.startfile(Config.retrieve_logs_folder_windows())
-
-        else :
-
-            # Both Linus and OSX
-            os.system('xdg-open "%s"' % Config.retrieve_logs_folder_linux())
+        openFolderService = Open_folder(self.view)
+        openFolderService.openLogsFolder()
 
 class Open_database_folderCommand(sublime_plugin.TextCommand) :
 
     def run(self,edit) :
 
-        if sublime.platform() == "windows":
-
-            os.startfile(Config.retrieve_database_folder_windows())
-
-        else :
-            
-            # Both Linus and OSX
-            os.system('xdg-open "%s"' % Config.retrieve_database_folder_linux())
+        openFolderService = Open_folder(self.view)
+        openFolderService.openDatabaseFolder()

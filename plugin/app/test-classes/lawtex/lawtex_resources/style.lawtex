@@ -1,0 +1,138 @@
+template[TEMP_90Cases] {
+   metainfo {
+      style = "default1"
+      language = "pt_BR"
+   }
+   head {
+      title = "90 testes"
+      style = "default2"
+   }
+   body {
+      style = "default3"
+      declarations {
+         +<obj> : *StructAlias90TestesBase,
+         +|vectObj| : Vector[*StructAlias90TestesBase] {
+            request = "VVV"
+         },
+         +<atom> : String {
+            name = "sss"
+            request = "rrr1"
+            help = "hhh"
+            tip = "ttt"
+         },
+         &<atomDef> : String {
+            request = "rrr2"
+            default = "DEF"
+         },
+         &<listAtom> : List("a","b","c") {
+            request = "rrr3"
+            atomic = true
+         },
+         &<listAtomDef> : List("a","b","c") {
+            request = "rrr4"
+            default = "a"
+            atomic = true
+         },
+         &<listNAtom> : List("a","b","c") {
+            request = "rrr5"
+            atomic = false
+         },
+         &<listNAtomDef> : List("a","b","c") {
+            request = "rrr6"
+            default = {"a"}
+            atomic = false
+         },
+         &<erro1> : struct[StructAlias] {
+            name = "AAA"
+            request = "AAA"
+            help = "AAA"
+            fields {
+               +[f] : String {
+                  name = "QQQ"
+                  request = "QQQ"
+                  key = false
+                  help = "QQQ"
+               }
+            }
+         },
+         &<erro2> : String {},
+         +|vatom| : Vector[String] {
+            name = "vvv"
+            request = "rrr7"
+            help = "hhh"
+            lower = 1
+            upper = 12
+         },
+         +|vlistAtom| : Vector[List("a","b","c")] {
+            request = "rrr8"
+            atomic = true
+         },
+         +|vlistNAtom| : Vector[List("a","b","c")] {
+            request = "rrr9"
+            atomic = false
+         }
+      }
+      operations {
+         print <obj> & |vectObj| & <atom> & <atomDef> & <listAtom> & <listAtomDef> & <listNAtom> & <listNAtomDef> & |vatom| & |listAtom| & |listNAtom| & |vlistAtom| & |vlistNAtom| &
+               <obj.obj> & |obj.vectObj| & <obj.atom> & <obj.atomDef> & <obj.listAtom> & <obj.listAtomDef> & <obj.listNAtom> & <obj.listNAtomDef> & |obj.vatom| & |obj.vlistAtom| & |obj.vlistNAtom|,
+         if (|vectObj|.size() > 0) {
+            print <vectObj{0}.obj> & |vectObj{0}.vectObj| & <vectObj{0}.atom> & <vectObj{0}.atomDef> & <vectObj{0}.listAtom> & <vectObj{0}.listAtomDef> & <vectObj{0}.listNAtom> & <vectObj{0}.listNAtomDef> & |vectObj{0}.vatom| & |vectObj{0}.vlistAtom| & |vectObj{0}.vlistNAtom|
+         }
+      }
+   }
+}
+
+*struct[StructAlias90TestesBase] {
+   name = "NNN"
+   request = "RRR"
+   help = "HHH"
+   fields {
+      &[obj] : *StructAlias90TestesBase,
+      +|vectObj| : Vector[*StructAlias90TestesBase] {
+         request = "VVVV"
+      },
+      +[atom] : String {
+         name = "sssV"
+         request = "rrrV1"
+         help = "hhhV"
+      },
+      &[atomDef] : String {
+         request = "rrrV2"
+         default = "DEFV"
+      },
+      &[listAtom] : List("a","b","c") {
+         request = "rrrV3"
+         atomic = true
+      },
+      &[listAtomDef] : List("aV","bV","cV") {
+         request = "rrrV4"
+         default = "aV"
+         atomic = true
+      },
+      &[listNAtom] : List("a","b","c") {
+         request = "rrrV5"
+         atomic = false
+      },
+      &[listNAtomDef] : List("aV","bV","cV") {
+         request = "rrrV6"
+         default = {"aV"}
+         atomic = false
+      },
+
+      +|vatom| : Vector[String] {
+         name = "vvv"
+         request = "rrrV7"
+         help = "hhh"
+         lower = 1
+         upper = 12
+      },
+      +|vlistAtom| : Vector[List("a","b","c")] {
+         request = "rrrV8"
+         atomic = true
+      },
+      +|vlistNAtom| : Vector[List("a","b","c")] {
+         request = "rrrV9"
+         atomic = false
+      }
+   }
+}

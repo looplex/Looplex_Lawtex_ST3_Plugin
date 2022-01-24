@@ -1,0 +1,92 @@
+template[TEMP_TemplateAlias] {
+	metainfo {
+		language = "pt_BR"
+		declarations {
+			&<level0> : String {
+				name = "0"
+				request = "Que level estamos?"
+			}
+		}
+	}
+	head {
+		title = "Teste de Profundidade" & <level0>
+ 	}
+ 	body { /* ok */
+		operations {
+			use *branch[TOP_T] where (<level1> : <level0>)
+		}
+ 	}
+ 	extra {
+		operations {
+			use *branch[TOP_T] where (<level1> : <level0>)
+		}
+ 	}
+}
+
+*branch[TOP_T] { /*ok*/
+	declarations {
+		+<level1> : externs String
+	}
+	operations {
+		use *branch[TOP_U] where (<level2> : <level1>)
+	}
+}
+
+*branch[TOP_U] { /*ok*/
+	declarations {
+		+<level2> : externs String
+	}
+	operations {
+		use *branch[TOP_V] where (<level3> : <level2>)
+	}
+}
+
+*branch[TOP_V] { /*ok*/
+	declarations {
+		+<level3> : externs String
+	}
+	operations {
+		use *branch[TOP_X] where (<level4> : <level3>),
+		use *branch[TOP_Y] where (<level4> : <level3>)
+	}
+}
+
+*branch[TOP_X] { /*ok*/
+	declarations {
+		+<level4> : externs String
+	}
+	operations {
+		use *branch[TOP_W] where (<level5> : <level4>)
+	}
+}
+
+
+*branch[TOP_Y] { /*ok*/
+	declarations {
+		+<level4> : externs String
+	}
+	operations {
+		use *branch[TOP_W] where (<level5> : <level4>)
+	}
+}
+
+
+*branch[TOP_W] { /*ok*/
+	declarations {
+		+<level5> : externs String
+	}
+	operations {
+		use *branch[TOP_Z] where (<level6> : <level5>)
+	}
+}
+
+*branch[TOP_Z] { /*ok*/
+	declarations {
+		+<level6> : externs String
+	}
+	operations {
+		print {
+			version = <level6>
+		}
+	}
+}

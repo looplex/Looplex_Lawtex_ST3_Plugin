@@ -1,0 +1,118 @@
+template[TEMP_FRUITS]{
+    metainfo{
+        language="pt_BR"
+    }
+    head{
+        title="Template Frutas"
+    }
+    body{
+        operations{
+            <DEP_LikeOrangesChimba:varInt>.ask("Nova request para VarInt."),
+            <DEP_LikeOrangesChimba:varLikesOranges> = true,
+            <DEP_LikeOrangesChimba:varLikesApples> = true,
+            use *DEP_LikeOrangesChimba
+        }
+    }
+}
+
+*branch[DEP_LikeOrangesChimba]{
+    name="Pessoa gosta de laranjas"
+    description="Pessoa gosta de laranjas"
+    declarations{
+        +<varLikesOranges>: Boolean{name="alej1"request="Você gosta de laranja"},
+        +<varLikesApples>: Boolean{name="alej2"request="Você gosta de maçã"},
+        &|vectorAlias| : Vector[String] {
+            name = "Outras 1"
+            request = "Diga outras frutas que tu curte"
+        },
+        &|vectorAlias2| : Vector[List("a", "b", "c")] {
+            name = "Outras 2"
+            atomic = false
+            request = "Diga outras frutas que tu curte"
+        },
+        +<varInt> : Integer {
+            name = "Indice"
+            request = "Entre com um índice qualquer"
+            default = 0
+        }
+    }
+    operations{
+        if(<varLikesOranges>){
+            if(<varLikesApples>){
+                use *period[PeriodoQualificacaoPessoaSimplesChimba],
+                print{[version="e gosto de maçã e laranja"]}
+            }else{
+                use *period[PeriodoQualificacaoPessoaSimplesChimba],
+                print{[version="e não gosto de maçã, mas gosto de laranja"]}
+            }
+        }else{
+            if(<varLikesApples>){
+                use *period[PeriodoQualificacaoPessoaSimplesChimba],
+                print{[version="e gosto de maçã, mas não gosto de laranja"]}
+            }else{
+                use *period[PeriodoQualificacaoPessoaSimplesChimba],
+                print{[version="e não gosto de maçã nem gosto de laranja"]}
+            }
+        },
+        if (FORALL <opt> IN |vectorAlias2| : <opt> IN {"a","b"}) {
+            print "ok"
+        },
+        |vectorAlias| = {"manga = uva?"},
+        |vectorAlias| = {"manga", "uva", "melão", "limão"},
+        /*|vectorAlias|.add("salada mista"),*/
+        /*list2vector(|vectorAlias|,"salada de frutas"), */
+        |vectorAlias2| = {"a"},
+        |vectorAlias2| = {"a", "b"},
+        |vectorAlias2| = {{"a"}, {"a","b"}},
+        <varInt> = 0,
+        print {
+            [version = ", mas gosto de " & <vectorAlias{<varInt>+10*2^2}> & ", " & <vectorAlias{1}> & ", " & <vectorAlias{2}> & ", enfim, uma " & <vectorAlias{3}>]
+        }
+    }
+}
+*struct[PessoaSimplesChimba]{
+    name="Strutura de Pessoa Simples"
+    request="Diga oa valores da Pessoas"
+    help="Ajuda sobre a estrutura de pessoa"
+    fields{
+        +[nome]: String{
+            name="nome"
+            key=false
+        },
+        +[genero]: List("masculino", "feminino") {
+            name="genero"
+            atomic=true
+            key=false
+        },
+        +[dtNasc]: Date{
+            name="Data de Nascimento"
+            key=false
+        },
+        +[salario]: Real{
+            name="Salário"
+            key=false
+        },
+        +[qtdIrmaos]: Integer{
+            name="Quantidade de Irmão"
+            key=false
+        },
+        +[sexo]: Boolean{
+            name="Sexo"
+            key=false
+        },
+        +[horaDormir]: Time{
+            name="Hora de Dormir"
+            key=false
+        }
+    }
+}
+
+*period[PeriodoQualificacaoPessoaSimplesChimba] {
+    name="Qualificação de pessoa simples"description="Descrição da qualificação de pessoa simples"
+    declarations{
+        &<pessoa1>: *PessoaSimplesChimba /* ter uma validação mais forte quanto a isso? pois tá chamando um local!! */
+    }
+    operation{
+        print{[version="Eu,"&<pessoa1.nome>&", nascido em "&<pessoa1.dtNasc>&", "&<pessoa1.sexo>&", possuo salário no valor de "&<pessoa1.salario>&", com "&<pessoa1.qtdIrmaos>&" irmãos e irmãs como testemunhas, assumo que vou dormir as "&<pessoa1.horaDormir>]}
+    }
+}

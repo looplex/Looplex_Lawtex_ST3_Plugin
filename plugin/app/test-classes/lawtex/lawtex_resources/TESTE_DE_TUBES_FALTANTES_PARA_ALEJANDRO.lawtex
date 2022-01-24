@@ -1,0 +1,258 @@
+template[TEMP_TemplateAlej] {
+	metainfo {
+		language = "pt_BR"
+		description = "Um descrição para Alej"
+		declarations {
+			&<place> : String {
+				name = "Lugar"
+				request = "Qual o local do documento?"
+				help = "help de var"
+				tip = "Um tip"
+			},
+			+<varList> : List("a","b","z") {
+				name = "Var list para teste"
+				request = "Escolha as opções"
+				atomic = false
+				help = "help de varList"
+				default = "z"
+				tip = "Dois tip"
+			},
+			+|vectorAlej| : Vector[*StructAlej] {
+				name = "Vector Objeto Alej"
+				request = "Entre com os dados de Objeto Alej"
+				help = "help de vect"
+				lower = 2
+				upper = 4
+			},
+			-<objAlej> : *StructAlej {
+				name = "Objeto Alej"
+				request = "Entre com os dados de Objeto Alej"
+				help = "help de obj"
+			},
+			-|vectorAlejParaAddRemove| : Vector[*StructAlej] {
+				name = "Vector Objeto Alej para add/remove"
+				request = "Não entre com os dados de Objeto Alej para add/remove."
+			},
+			+|vectorString| : Vector[String] {
+				name = "Vetor simples"
+				request = "Entre com os dados do vetor simples"
+			},
+			+#const# : Boolean {
+				name = "const"
+				value = true
+			}
+		}
+	}
+	head {
+		title = "Um title com concat " & <place>
+ 	}
+ 	body {
+		operations {
+			|vectorString|.add("A"),
+			print {
+					version = "Vector na posição 0 deve ser igual A " & |vectorString|.get(0)
+				},
+			|vectorString|.add("B"),
+			print {
+					version = "Vector na posição 1 deve ser igual B " & |vectorString|.get(1)
+				},
+			|vectorString|.add("C"),
+			print {
+					version = "Vector na posição 2 deve ser igual C " & |vectorString|.get(2)
+				},
+			|vectorString|.add(<place>),
+			print {
+					version = "Vector na posição 3 deve ser igual ¨place¨ " & |vectorString|.get(3)
+				},
+			|vectorString|.add(<place> & " com concat"),
+			print {
+					version = "Vector na posição 4 deve ser igual ¨¨place¨ com concat¨" & |vectorString|.get(4)
+				},
+			foreach(<elem> IN |vectorString|) {
+				print {
+					version = <elem>.position() & " deve ser igual a " & position()
+				}
+			},
+			/* quando se tenta remover e não consegue, não lance exceção */
+			|vectorString|.remove(0), /* ou pela posição do elemento. Tente parsear para Long antes de tentar remover pela string */
+			|vectorString|.removeByElement("B"), /* por string do elemento */
+			print {
+				version = "Size: " & |vectorString| & " é igual a 3, sem o A e o B: " & |vectorString|
+			},
+			foreach(<elem> IN |vectorAlej|) {
+				print {
+					version = <elem>.position() & " deve ser igual a " & position()
+				}
+			},
+			if (|vectorAlej|.size() > 1) {
+				<objAlej> = |vectorAlej|.get(0),
+				|vectorAlejParaAddRemove|.add(<objAlej>),
+				|vectorAlejParaAddRemove|.add(|vectorAlej|.get(1)),
+				print {
+					version = "Tem dois elems: " & |vectorAlejParaAddRemove|
+				},
+				|vectorAlejParaAddRemove|.remove(0),
+				print {
+					version = "Agora tem um elem: " & |vectorAlejParaAddRemove|
+				},
+				|vectorAlejParaAddRemove|.removeByElement("Anderson"), /* insira Anderson, depois tente remover via fingerprint da struct */
+				/* entre com dois elementos, e no primeiro, põe 'Anderson' como atomic */
+				if (|vectorAlejParaAddRemove|.size() == 2) {
+					print {
+						version = "Imprime somente o 2o fingerprint: " & |vectorAlejParaAddRemove|.get(1)
+					},
+					|vectorAlejParaAddRemove|.set(1,|vectorAlejParaAddRemove|.get(0)),
+					print {
+						version = "Imprime somente o 2o fingerprint: " & |vectorAlejParaAddRemove|.get(1)
+					},
+					|vectorAlejParaAddRemove{1}| = |vectorAlejParaAddRemove|.get(0),
+					print {
+						version = "Comando equivalente ao set anterior: " & |vectorAlejParaAddRemove|.get(1)
+					}
+				},
+				if (|vectorAlejParaAddRemove|.size() == 1) {
+					print {
+						version = "Imprime somente o fingerprint: " & |vectorAlejParaAddRemove|.get(0)
+					},
+					print {
+						version = "Já que você não registrou o atomic como 'Anderson', visto que o atomic compõe o id da struct, ou seja, o fingerprint, vou remover na força."
+					},
+					|vectorAlejParaAddRemove|.remove(0)
+				},
+				if (|vectorAlejParaAddRemove|.size() > 0) {
+					|vectorAlejParaAddRemove|.error("Isto não deveia acontecer")
+				},
+				print {
+					version = <objAlej>.name & " " & <objAlej.atomic>.name & " " & <objAlej>.key & " " & <objAlej>.request & " "
+								 & <objAlej>.mandatory & " " & <objAlej.atomic>.mandatory & " " & <objAlej.vector>.lower & " "
+								 & <objAlej.vector>.upper & " " & |objAlej.vector|.lower & " " & |objAlej.vector|.upper & " "
+								 & <vectorAlej>.lower & " " & <vectorAlej>.upper & " " & #const#.name & " " & #const# & " "
+								 & <objAlej>.help & " " & <objAlej.atomic>.help & " " & <objAlej.vector>.help & " " & |vectorAlej|.help
+				},
+				<objAlej>.name = "O",
+				<objAlej.atomic>.name = "A",
+				<objAlej>.key = true,
+				<objAlej>.request = "R",
+				<objAlej>.mandatory = false,
+				<objAlej.atomic>.mandatory = false,
+				<objAlej.vector>.lower = 1,
+				<objAlej.vector>.upper = 5,
+				|objAlej.vector|.lower = 1,
+				|objAlej.vector|.upper = 5,
+				<vectorAlej>.lower = 1,
+				<vectorAlej>.upper = 5,
+				#const#.name = "C",
+				#const# = false,
+				<objAlej.atomic>.default = "Alejandro",
+				<objAlej.atomic>.help = "H1",
+				<objAlej>.help = "H2",
+				<objAlej.atomic>.help = "H3",
+				<objAlej.vector>.help = "H4",
+				|vectorAlej|.help = "H4",
+				print {
+					version = <objAlej>.name & " " & <objAlej.atomic>.name & " " & <objAlej>.key & " " & <objAlej>.request & " "
+								 & <objAlej>.mandatory & " " & <objAlej.atomic>.mandatory & " " & <objAlej.vector>.lower & " "
+								 & <objAlej.vector>.upper & " " & |objAlej.vector|.lower & " " & |objAlej.vector|.upper & " "
+								 & <vectorAlej>.lower & " " & <vectorAlej>.upper & " " & #const#.name & " " & #const# & " "
+								 & <objAlej>.help & " " & <objAlej.atomic>.help & " " & <objAlej.vector>.help & " " & |vectorAlej|.help
+				}
+			},
+			<varList>.add("a"),
+			print {
+				version = "Neste caso, como 'a' já é elemento da lista, apenas adiciona a resposta a varList: " & <varList>
+			},
+			print {
+				version = "Neste caso, como 'a' já é elemento da lista, apenas adiciona a resposta a varList: " & <varList>.get(0)
+			},
+			<varList>.set(1,"b"),
+			print {
+				version = "Neste caso, como 'a' já é elemento da lista, apenas adiciona a resposta a varList: " & <varList>.get(1)
+			},
+			/*<varList>.add("c"),
+			print {
+				version = "Neste caso, como 'c' não é elemento da lista, adiciona a resposta e a opção na lista na tabela de properties da lista de varList: " & <varList>
+			},
+			<varList>.remove("c"),*/
+			print {
+				version = "Sempre remove a opção na lista e a answer caso exista: " & <varList>
+			},
+			/*<varList>.removeByKey("b"),*/
+			print {
+				version = "Agora, tanto na optionlist como na answer deve conter apenas um elemento: " & <varList>.size()
+			},
+			print {
+				version = <varList>.mandatory & " " &  <place>.mandatory & " " &  <varList>.name & " " & <varList>.request & " " & <varList>.default & " " & <varList>.tip & " " & <place>.tip & " " & <varList>.atomic
+			},
+			<varList>.name = "N1",
+			<varList>.request = "?",
+			<varList>.default = "a",
+			<varList>.tip = "T",
+			<place>.tip = "T",
+			<varList>.atomic = true,
+			<varList>.mandatory = "-",
+			<place>.mandatory = "-",
+			print {
+				version = <varList>.name & " " & <varList>.request & " " & <varList>.default & " " & <varList>.tip & " " & <place>.tip & " " & <varList>.atomic
+			},
+			use *topic[TOP_AliasAlej],
+			use *topic[TOP_AliasAlej] where ( title = "novo título", name = "new Topic" ),
+			use loop[LOOP_AliasAlej] where ( separator = "\n", name = "new Loop" )
+		}
+ 	}
+}
+
+*topic[TOP_AliasAlej] {
+	name = "TopOrig"
+	description = "D"
+	title = "Velho título"
+	operations {
+		print {
+			version = "..."
+		}
+	}
+}
+
+loop[LOOP_AliasAlej] {
+	name = "LoopOrig"
+	description = "L"
+	separator = "%f1; %s2; %p2; e %l2."
+	declarations {
+		+|vectorAlias| : Vector[Integer] {
+			name = "..."
+			request = "..."
+		},
+		-#cont# : Integer {
+			name = "Acumm"
+			value = 0
+		}
+	}
+	operation {
+		foreach (<elem> IN |vectorAlias|) {
+			<cont> = <cont> + <elem>,
+			print {
+				version = <cont>
+			}
+		}
+	}
+}
+
+*struct[StructAlej] {
+	id = [atomic]
+	name = "Teste de Struct para o Alejandro"
+	request = "Entre com os dados da struct"
+	help = "Lorem Blausius"
+	fields {
+		-[atomic] : String {
+			name = "Um Atomico Qualquer"
+			default = "Anderson"
+			help = "Sem help"
+		},
+		+|vector| : Vector[String] {
+			name = "Vetor de teste"
+			request = "Quais strings desejas cadastrar?"
+			help = "Sem help"
+			lower = 2
+			upper = 4
+		}
+	}
+}

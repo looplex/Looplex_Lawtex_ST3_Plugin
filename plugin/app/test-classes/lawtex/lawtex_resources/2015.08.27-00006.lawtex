@@ -1,0 +1,284 @@
+/*
++ = "obrigatório e aparece na interface"
+& = "não obrigatório e aparece na interface"
+- = "não obrigatório e não aparece na interface"
+*/
+
+*struct[RecursiveStruct] {
+	name = "Struct recursiva"
+	request = "Esta é uma struct recursiva"
+	help = "Cada campo é um tipo diferente"
+	fields {
+		+[field_string_1] : String {
+			name = "Primeiro campo (STRING)"
+			key = true
+			help = "STRING"
+		},
+		&[field_real_2] : Real {
+			name = "Segundo campo (REAL)"
+			key = true
+			help = "REAL"
+		},
+		-[field_boolean_3] : Boolean {
+			name = "Terceiro campo (BOOLEAN)"
+			key = true
+			help = "BOOLEAN"
+		},
+		&[objeto_struct_simples_4] : *SimpleStruct,
+		if ([field_boolean_3] == true) {
+			&[field_date_5] : Date {
+				name = "campo dentro da IFSTRUCT (DATE)"
+				key = false
+				help = "DATE"
+			},
+			&[field_string_2] : String {
+				name = "Texto ifStruct true"
+				key = false
+				help = "STRING IFSTRUCT"
+			},
+			&[field_recursive_struct_6] : *RecursiveStruct
+		},
+		+[campo_repetido_1] : String {
+			name = "repetido"
+			key = true
+			help = "STRING"
+		}
+	}
+}
+
+*struct[RecursiveStructEXT0] extends *RecursiveStruct where ( [field_string_1] = "TESTE DE PRELOAD INICIAL", [field_real_2] = "2015")
+
+*struct[RecursiveStructExtended] extends *RecursiveStruct where ( [field_string_1] = "TESTE DE PRELOAD") {
+	name = "Struct recursiva extendida"
+	request = "..."
+	help = "..."
+	fields {
+		+[campo_repetido_1] : Real {
+			name = "repetido"
+			key = true
+			help = "REAL"
+		},
+		+[green_String_2] : String {
+			name = "green (STRING)"
+			key = true
+			help = "STRING"
+		},
+		if([field_boolean_3] == false){
+			&[white_Real_3] : Real {
+				name = "White (REAL)"
+				key = true
+				help = "REAL"
+			}
+		},
+		-[orange_Boolean_4] : Boolean {
+			name = "Orange (Boolean) o_o"
+			key = true
+			help = "BOOLEAN"
+		},
+		&[blue_Struct_Simples_5] : *SimpleStruct,
+		if ([orange_Boolean_4] == true) {
+			+[red_Date_6] : Date {
+				name = "o_o disse sim! Diga a data."
+				key = false
+				help = "Versão alternativa para date caso o_o diga sim."
+			},
+			&[purple_7] : *RecursiveStructEXT0
+		} else {
+			+[red_Date_6] : Date {
+				name = "o_o disse não! Diga a data."
+				key = false
+				help = "Versão alternativa para date caso o_o diga não."
+			},
+			if ( ([red_Date_6] == now()) )
+{				+[purple_7] : List("OptTeste1","OptTeste2") {
+					name = "Duas opções."
+					key = false
+					atomic = false
+					help = "Somente duas opções. Mas você pode escolher as duas. Ou deveria."
+				},
+				&[yellow_Outra_String_8] : String {
+					name = "Diga algo ou pagará com outra pergunta."
+					key = true
+					help = "Se estiver vazio, você será obrigado a responder mais uma pergunta. Você foi avisado."
+				},
+				if (NOT [yellow_Outra_String_8].isEmpty()) {
+					&[pink_Ainda_outra_string_9] : String {
+						name = "Responda."
+						key = true
+						help = "Você mereceu."
+					},
+					&|gold_Vetor_struct_10| : Vector[*RecursiveStructExtended] {
+						name = "Um vetor de struct recursiva"
+						request = "Recursiva"
+						help = "Teste"
+					}
+				}
+			},
+			+|black_Vetor_simples_11| : Vector[String] {
+				name = "Um vetor de string."
+				request = "Preencha com qualquer coisa."
+				help = "Ajuda não é necessária."
+			},
+			+|silver_Vetor_struct_12| : Vector[*SimpleStruct] {
+				name = "Um vetor de struct simples"
+				request = "Preencha da forma dada pela struct"
+				help = "Ajuda não é necessária."
+			}
+		},
+		&[darkblue_Struct_Simples_13] : *SimpleStruct,
+		+|darkred_14| : Vector[*SimpleStruct] {
+			name = "Um vetor de struct simples"
+			request = "Preencha da forma dada pela struct"
+			help = "Ajuda não é necessária."
+		}
+	}
+}
+
+*struct[StructWithValue] extends *RecursiveStructExtended where ([green_String_2] = "ClobO PARA DOCUMENTO")
+
+*struct[SimpleStruct] {
+	name = "Struct simples"
+	request = "Preencha a struct simples"
+	help = "Só um boolean."
+	fields {
+		-[bool] : Boolean {
+			name = "bool"
+			key = true
+			help = "bool"
+		},
+		+[date] : Date {
+			name = "date"
+			key = false
+			help = "date"
+		}
+	}
+}
+
+*struct[RecursiveStructKiller] extends *RecursiveStruct where ([field_boolean_3] = true, [field_recursive_struct_6] = "null")
+
+*struct[RecursiveStructRescuer] extends *RecursiveStructKiller where ([field_boolean_3] = "true")
+
+*struct[RecursiveStructLevel1] extends *RecursiveStruct where ([field_boolean_3] = "true", [field_string_2] = "IFSTRUCT + PRELOADER OK nv1")
+
+*struct[RecursiveStructLevel3] extends *RecursiveStruct where ([field_boolean_3] = "true", [field_recursive_struct_6.field_boolean_3] = "true", [field_recursive_struct_6.field_recursive_struct_6.field_boolean_3] = "true",[field_recursive_struct_6.field_recursive_struct_6.field_recursive_struct_6.field_boolean_3] = "true",  [field_recursive_struct_6.field_recursive_struct_6.field_recursive_struct_6.field_string_2] = "IFSTRUCT + PRELOADER OK nv3")
+
+*branch[Tópico_de_teste_para_struct] {
+	name = "Tópico para struct"
+	description = "Struct são usadas aqui."
+	tags { "struct", "recursiva", "ifstruct", "extends"}
+	declarations {
+		+<objeto_do_nó> : *RecursiveStructExtended {
+			name = "OBJETO DO NÓ"
+			request = "OBJ DO NÓ"
+		},
+		+<objeto_independente> : *RecursiveStructExtended {
+			name = "OBJETO INDEPENDENTE"
+			request = "OBJ INDEPENDENTE"
+		},
+		+<temp> : *RecursiveStructExtended {
+			name = "Objeto para atribuição do vetor"
+			request = "TEMP"
+		},
+		+<tempOBJ> : *RecursiveStructExtended {
+			name = "Objeto para atribuição do objeto"
+			request = "TEMP"
+		},
+		+|vetor_do_nó| : Vector[*RecursiveStructExtended] {
+			name = "Vetor de struct com preload, ifstruct e recursiva."
+			request = "Preencha"
+		},
+		+<variableAlias_dep1> : Integer {name = "Int1" request = "Diga esse inteiro"},
+		+<objeto_do_nó_2> : *StructWithValue {
+			name = "Outro objeto"
+			request = "OBJ"
+		},
+		+<recursão_morta> : *RecursiveStructKiller {
+			name = "Sem recursão (morto)"
+			request = "objeto sem recursão"
+		},
+		+<recursão_revivida> : *RecursiveStructRescuer{
+			name = "Recursão revivida"
+			request = "Recursão existe novamente"
+		},
+		+<nivel_1> : *RecursiveStructLevel1 {
+			name = "Recursão obrigatória de primeiro nível"
+			request = "Nível 1"
+		},
+		+<nivel_3> : *RecursiveStructLevel3 {
+			name = "Recursão obrigatória até o terceiro nível"
+			request = "Nível 3"
+		}
+	}
+	operations {
+		print {
+			version = "Texto inicial: " & <objeto_do_nó.green_String_2>
+		},
+		print {
+			version = "Texto 2: " & <variableAlias_dep1>
+		},
+		if(|vetor_do_nó|.isNotEmpty()){
+			<temp> = |vetor_do_nó|.get(0)
+		},
+		print {
+			version = "Texto 3: " & <temp.green_String_2>
+		},
+		<tempOBJ> = <objeto_do_nó>,
+		print {
+			version = "Texto 4: " & <tempOBJ.green_String_2>
+		},
+		print {
+			version = "Texto 5: " & <objeto_do_nó_2.green_String_2>
+		},
+		print {
+			version = "Texto 6: " & <objeto_independente.green_String_2> & "!"
+		},
+		print {
+			version = "MORTO: " & <recursão_morta.field_string_1>
+		},
+		print {
+			version = "Revivido: " & <recursão_revivida.field_real_2>
+		},
+		print {
+			version = "Nível 1: " & <nivel_1.field_string_1> & " |||| " & "Nivel 3: " & <nivel_3.field_recursive_struct_6.field_recursive_struct_6.field_recursive_struct_6.field_string_1>
+		}
+	}
+}
+
+
+template[Template_de_teste_RP] {
+	metainfo {
+		language = "pt_BR"
+		description = "..."
+		tags {
+			"TEMPLATE1", "TEMPLATE2"
+		}
+		declarations {
+			&<place> : String {
+				name = "Lugar"
+				request = "Qual o local do documento?"
+				default = here()
+			},
+			&<date> : Date {
+				name = "Data"
+				request = "Qual a data do documento?"
+				default = now()
+			}
+		}
+	}
+	head {
+		title = "Título do documento"
+		operations {
+			use *branch[Tópico_de_teste_para_struct]
+		}
+ 	}
+ 	body {
+		operations {
+			use *branch[Tópico_de_teste_para_struct]
+		}
+ 	}
+ 	foot {
+ 		operations {
+			use *branch[Tópico_de_teste_para_struct]
+		}
+ 	}
+}

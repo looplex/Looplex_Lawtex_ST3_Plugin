@@ -1,0 +1,168 @@
+*topic[TOP_Teste] {
+  title = "Título teste"
+  name = "Tópico teste"
+  description = "Tópico para teste de vértices"
+  tags {
+    "Teste 2", "Tópico", "Vertex"
+  }
+  declarations {
+    +<objectAlias1> : *StructAlias,
+    +<objectAlias2> : StructAlias_Local,
+    +<objectAlias3> : struct[StructAlias_LocalINLINE] {
+      name = "..."
+      request = "..."
+      help = "..."
+      fields {
+        -[fieldAlias] : Integer {
+          name = "..."
+          key = false
+          default = "..."
+          help = "..."
+        }
+      }
+    },
+    -<varListAlias1> : List("1","2") {
+      name = "..."
+      request = "..."
+      atomic = true
+      help = "..."
+      tip = "..."
+    },
+    &<variableAlias1> : String {
+      name = "..."
+      request = "..."
+      default = "..."
+      help = "..."
+      tip = "..."
+    },
+    &<variableAlias2> : String {
+      name = "..."
+      request = "..."
+      default = "..."
+      help = "..."
+      tip = "..."
+    },
+    &<variableAlias3> : Integer {
+      name = "..."
+      request = "..."
+      default = "..."
+      help = "..."
+      tip = "..."
+    },
+    &<variableAlias4> : Real {
+      name = "..."
+      request = "..."
+      default = "..."
+      help = "..."
+      tip = "..."
+    },
+    +<variableAlias5> : Boolean {
+      name = "..."
+      request = "..."
+      default = "..."
+      help = "..."
+      tip = "..."
+    },
+    +<variableAlias6> : Date {
+      name = "..."
+      request = "..."
+      default = "..."
+      help = "..."
+      tip = "..."
+    },
+    +<variableAlias7> : Time {
+      name = "..."
+      request = "..."
+      default = "..."
+      help = ",..."
+      tip = "..."
+    },
+    +|vectorAlias| : Vector[Boolean] {
+      name = "..."
+      request = "..."
+      help = "..."
+    }
+
+  }
+  operations {
+    use *period[PER_Teste] where ( <varListAlias04> : <varListAlias> ),
+    use period[PER_Local] where ( <varListAlias04> = <varListAlias> ),
+    <variableAlias1> = <variableAlias2> + <variableAlias1>,
+    <objectAlias2.fieldAlias>.ask("pergunta?"),
+    <variableAlias3> = 1+3^5*3-2*29^2/2+3-2*8/19+2*5,
+    <variableAlias3> = <variableAlias3> + <objectAlias2.fieldAlias>,
+    <PER_Local:varListAlias04> =  5 + <variableAlias3> / 9,
+    <variableAlias4> = 3.0-2.2*8.1/19.76+2.323*5.53,
+    <variableAlias5> = 34 < 96,
+    <variableAlias5> = <variableAlias4> < 96,
+    <variableAlias6> = "1983-04-08",
+    <variableAlias6> = now(),
+    <variableAlias7> = "12:00:23",
+    print {
+      [version = "UM print com duas versões..."],
+      [version = "Essa é a segunda versão"]
+    },
+    if ( <objectAlias1>.isEmpty() ) {
+       <variableAlias5> = true
+    } elseif ( <variableAlias5> ) {
+       print {
+          [version = "UM print com um versão solitária COM colchete..."]
+       }
+    } elseif ( <variableAlias4> > 36.78 ) {
+       print {
+         version = "UM print com um versão solitária SEM colchete..."
+       }
+    },
+    foreach(<elem> IN |vect|) where (separator = "%f1; %s2; zzzzzzz%p2; e %l2.") {
+      print {
+        version = "Um print solitário SEM colchete e uma expressão simples: " & <elem>
+      }
+    }
+  }
+}
+
+period[PER_Local] {
+  name = "..."
+  description = "..."
+  tags {
+    "...", "..."
+  }
+  declarations {
+    +<varListAlias04> : Integer
+  }
+  operation {
+    print {
+      version = "Período LOCAL de teste contndo apenas uma variável de nome varListAlias04 do tipo Integer.\n Isso está funfando..."
+    }
+  }
+}
+
+*period[PER_Teste] {
+  name = "..."
+  description = "..."
+  tags {
+    "...", "..."
+  }
+  declarations {
+    +<varListAlias04> : externs Integer
+  }
+  operation {
+    print {
+      [version = "Período GLOBAL de teste contndo apenas uma variável de nome varListAlias04 do tipo Integer.\n Isso está funfando..."]
+    }
+  }
+}
+
+struct[StructAlias_Local] {
+  name = "..."
+  request = "..."
+  help = "..."
+  fields {
+    -[fieldAlias] : Integer {
+      name = "..."
+      key = false
+      default = "..."
+      help = "..."
+    }
+  }
+}

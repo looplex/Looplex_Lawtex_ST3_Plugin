@@ -43,7 +43,7 @@ class Config:
 
     def retrieve_jar_dependency_filepath() :
 
-        return os.path.join(sublime.packages_path(), Config.pluginName, 'jar', Config.pluginJar)
+        return os.path.join(sublime.packages_path(), Config.pluginName, 'plugin', 'app', Config.pluginJar)
 
     def retrieve_windows_exe_dependency_filepath() :
 

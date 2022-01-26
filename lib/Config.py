@@ -40,8 +40,8 @@ class Config:
         if sublime.platform() == "windows":
             CREATE_NO_WINDOW = 0x08000000
             context = context.replace("\\", "\\\\")
-            jar_filepath = retrieve_jar_dependency_filepath( "windows" )
-            jre_filepath = retrieve_jre_dependency_filepath( "windows" )
+            jar_filepath = self.retrieve_jar_dependency_filepath( "windows" )
+            jre_filepath = self.retrieve_jre_dependency_filepath( "windows" )
             subprocess.Popen([ jre_filepath, '-jar', jar_filepath, context ], creationflags = CREATE_NO_WINDOW )
 
         else :

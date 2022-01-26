@@ -4,7 +4,7 @@
         "command": "upload_lawtex_template"
     },
     {
-        "keys": ["ctrl+b"],
+        "keys": ["ctrl+option+b"],
         "command": "validate_lawtex_file"
     },
     {

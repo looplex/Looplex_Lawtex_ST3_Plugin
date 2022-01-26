@@ -89,10 +89,9 @@ class Config:
 
     def retrieve_database_folder_windows() :
 
-        try :
-            os.mkdir(os.path.join(os.path.expanduser('~'), 'Documents', Config.mainDataFolder, Config.databaseDataSubFolder))
+        folderPath = os.path.expanduser('~') + Config.mainDataFolder + Config.databaseDataSubFolder
 
-        except OSError as error:
-            pass
+        if not os.path.exists( folderPath ):
+            os.makedirs( folderPath )
 
-        return os.path.join(os.path.expanduser('~'), 'Documents', Config.mainDataFolder, Config.databaseDataSubFolder)
+        return os.path.join(os.path.expanduser('~'), Config.mainDataFolder, Config.logsDataSubFolder)

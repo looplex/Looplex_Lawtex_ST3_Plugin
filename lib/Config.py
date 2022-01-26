@@ -35,13 +35,13 @@ class Config:
         sublime.error_message("Rode este comando em um arquivo .lawtex salvo!")
         return False
 
-    def run_jar_dependency_in_background(self, context) :
+    def run_jar_dependency_in_background(context) :
 
         if sublime.platform() == "windows":
             CREATE_NO_WINDOW = 0x08000000
             context = context.replace("\\", "\\\\")
-            jar_filepath = self.retrieve_jar_dependency_filepath( "windows" )
-            jre_filepath = self.retrieve_jre_dependency_filepath( "windows" )
+            jar_filepath = Config.retrieve_jar_dependency_filepath( "windows" )
+            jre_filepath = Config.retrieve_jre_dependency_filepath( "windows" )
             subprocess.Popen([ jre_filepath, '-jar', jar_filepath, context ], creationflags = CREATE_NO_WINDOW )
 
         else :
@@ -77,7 +77,7 @@ class Config:
 
     def retrieve_logs_folder_windows() :
 
-        folderPath = os.path.expanduser('~'), Config.mainDataFolder, Config.logsDataSubFolder;
+        folderPath = os.path.join( os.path.expanduser('~'), Config.mainDataFolder, Config.logsDataSubFolder )
 
         if not os.path.exists( folderPath ):
             os.makedirs( folderPath )

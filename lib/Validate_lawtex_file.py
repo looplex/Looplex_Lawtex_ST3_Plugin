@@ -21,8 +21,7 @@ class Validate_lawtex_file() :
 
         validate_context = "{\"currentFile\":\"" + self.view.file_name() + "\",\"lang\":\"pt-br\",\"command\":\"VALIDATE_LAWTEX_FILE\"}"
 
-        utilCall = Config()
-        stdout = utilCall.run_jar_dependency_in_background(validate_context)
+        Config.run_jar_dependency_in_background(validate_context)
 
     #     if not stdout == None :
     #         self.verify_results(stdout)

@@ -12,7 +12,12 @@ class Open_folder() :
 
         if sublime.platform() == "windows":
 
-            os.startfile(Config.retrieve_logs_folder_windows())
+            winLogsFolder = Config.retrieve_logs_folder_windows()
+
+            if not os.path.exists( winLogsFolder ):
+                os.makedirs( winLogsFolder )
+
+            os.startfile( winLogsFolder )
 
         else :
 
@@ -23,9 +28,14 @@ class Open_folder() :
 
         if sublime.platform() == "windows":
 
-            os.startfile(Config.retrieve_database_folder_windows())
+            winDatabaseFolder = Config.retrieve_database_folder_windows()
+
+            if not os.path.exists( winDatabaseFolder ):
+                os.makedirs( winDatabaseFolder )
+
+            os.startfile( winDatabaseFolder )
 
         else :
-            
+
             # Both Linus and OSX
             os.system('xdg-open "%s"' % Config.retrieve_database_folder_linux())

@@ -94,4 +94,4 @@ class Config:
         if not os.path.exists( folderPath ):
             os.makedirs( folderPath )
 
-        return os.path.join(os.path.expanduser('~'), Config.mainDataFolder, Config.logsDataSubFolder)
+        return os.path.join(os.path.expanduser('~'), Config.mainDataFolder, Config.databaseDataSubFolder)

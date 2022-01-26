@@ -2,5 +2,14 @@
     {
         "keys": ["ctrl+alt+u"],
         "command": "upload_lawtex_template"
+    },
+    {
+        "keys": ["ctrl+b"],
+        "command": "validate_lawtex_file"
+    },
+    {
+        "keys": ["ctrl+alt+l"],
+        "command": "change_login_context"
     }
+
 ]

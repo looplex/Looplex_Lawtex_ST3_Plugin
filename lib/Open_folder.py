@@ -12,12 +12,7 @@ class Open_folder() :
 
         if sublime.platform() == "windows":
 
-            winLogsFolder = Config.retrieve_logs_folder_windows()
-
-            if not os.path.exists( winLogsFolder ):
-                os.makedirs( winLogsFolder )
-
-            os.startfile( winLogsFolder )
+            os.startfile(Config.retrieve_logs_folder_windows())
 
         else :
 
@@ -28,12 +23,7 @@ class Open_folder() :
 
         if sublime.platform() == "windows":
 
-            winDatabaseFolder = Config.retrieve_database_folder_windows()
-
-            if not os.path.exists( winDatabaseFolder ):
-                os.makedirs( winDatabaseFolder )
-
-            os.startfile( winDatabaseFolder )
+            os.startfile(Config.retrieve_database_folder_windows())
 
         else :
 

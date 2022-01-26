@@ -77,11 +77,10 @@ class Config:
 
     def retrieve_logs_folder_windows() :
 
-        try :
-            os.mkdir(os.path.join(os.path.expanduser('~'), Config.mainDataFolder, Config.logsDataSubFolder))
+        folderPath = os.path.expanduser('~'), Config.mainDataFolder, Config.logsDataSubFolder;
 
-        except OSError as error:
-            pass
+        if not os.path.exists( folderPath ):
+            os.makedirs( folderPath )
 
         return os.path.join(os.path.expanduser('~'), Config.mainDataFolder, Config.logsDataSubFolder)
 

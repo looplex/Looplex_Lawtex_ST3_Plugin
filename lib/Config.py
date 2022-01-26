@@ -47,11 +47,11 @@ class Config:
         else :
             subprocess.Popen([ "java", "-jar", jar_filepath, context ])
 
-    def retrieve_jar_dependency_filepath(self, os_name) :
+    def retrieve_jar_dependency_filepath(os_name) :
 
         return os.path.join(sublime.packages_path(), Config.pluginName, 'jar', os_name, Config.pluginJar)
 
-    def retrieve_jre_dependency_filepath(self, os_name) :
+    def retrieve_jre_dependency_filepath(os_name) :
 
         return os.path.join(sublime.packages_path(), Config.pluginName, 'jre', os_name, 'bin', 'java.exe')
 

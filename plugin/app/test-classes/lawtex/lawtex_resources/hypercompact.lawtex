@@ -1,9 +1,0 @@
-template[TEMP_Contrato_Particular_De_Compra_E_Venda_De_Automovel1] {
-	metainfo {
-	}
- 	body {
-		operations {
-			print "ok"
-		}
- 	}
-}

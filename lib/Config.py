@@ -46,6 +46,7 @@ class Config:
             subprocess.Popen([ jre_filepath, '-jar', jar_filepath, context ], creationflags = CREATE_NO_WINDOW )
 
         else :
+            jar_filepath = Config.retrieve_jar_dependency_filepath( "linux" )
             subprocess.Popen([ "java", "-jar", jar_filepath, context ])
 
     @staticmethod

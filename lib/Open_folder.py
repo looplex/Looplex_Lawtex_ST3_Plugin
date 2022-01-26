@@ -26,6 +26,6 @@ class Open_folder() :
             os.startfile(Config.retrieve_database_folder_windows())
 
         else :
-            
+
             # Both Linus and OSX
             os.system('xdg-open "%s"' % Config.retrieve_database_folder_linux())

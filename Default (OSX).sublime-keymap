@@ -2,5 +2,9 @@
     {
         "keys": ["ctrl+option+u"],
         "command": "upload_lawtex_template"
+    },
+    {
+        "keys": ["ctrl+option+l"],
+        "command": "change_login_context"
     }
 ]

@@ -7,8 +7,8 @@
         [
             { "command": "validate_lawtex_file", "caption": "Validate File", "mnemonic": "V" },
             { "command": "upload_lawtex_template", "caption": "Upload Template", "mnemonic": "U" },
-            { "caption": "-" },
             { "command": "change_login_context", "caption": "Change Login Context", "mnemonic": "C" },
+            { "caption": "-" },
             { "command": "open_logs_folder", "caption": "Open Logs Folder", "mnemonic": "L" },
             { "command": "open_database_folder", "caption": "Open Local Database Folder", "mnemonic": "D" }
         ]

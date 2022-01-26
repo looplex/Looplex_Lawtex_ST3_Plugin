@@ -18,5 +18,4 @@ class Upload_lawtex_template():
         
         login_context = "{\"initialFile\":\"" + sublime.active_window().active_view().file_name() + "\",\"command\":\"UPLOAD_LAWTEX_TEMPLATE\",\"lang\":\"pt-br\"}"
 
-        utilCall = Config()
-        utilCall.run_jar_dependency_in_background(login_context)
+        Config.run_jar_dependency_in_background(login_context)

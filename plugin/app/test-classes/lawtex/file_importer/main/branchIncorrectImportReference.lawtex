@@ -1,7 +1,0 @@
-// import BRC_B from "IncorrectFile.lawtex"
-
-*branch[BRC_A] {
-	operations {
-		use *branch[BRC_B]
-	}
-}

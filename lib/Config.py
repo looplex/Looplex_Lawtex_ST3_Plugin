@@ -16,17 +16,22 @@ class Config:
 
     def check_if_in_lawtex_file(view):
 
-        file_name = view.file_name();
+        try :
 
-        if file_name is not None:
+            file_name = view.file_name()
 
-            if re.search(r"\.lawtex$", view.file_name()):
+            if file_name is not None:
 
-                if not view.is_dirty():
-                    return True
-                else:
-                    sublime.message_dialog("There are unsaved changes on your file, please save them or open it unchanged before validating it.")
-                    return False
+                if re.search(r"\.lawtex$", view.file_name()):
+
+                    if not view.is_dirty():
+                        return True
+                    else:
+                        sublime.message_dialog("There are unsaved changes on your file, please save them or open it unchanged before validating it.")
+                        return False
+
+        except TypeError as error:
+            pass
 
         sublime.error_message("Rode este comando em um arquivo .lawtex salvo!")
         return False

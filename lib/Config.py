@@ -16,17 +16,20 @@ class Config:
 
     def check_if_in_lawtex_file(view):
 
-        if re.search(r"\.lawtex$", view.file_name()):
+        file_name = view.file_name();
 
-            if not view.is_dirty():
-                return True
-            else:
-                sublime.message_dialog("There are unsaved changes on your file, please save them or open it unchanged before validating it.")
-                return False
+        if file_name is not None:
 
-        else :
-            sublime.error_message("Rode este comando em um arquivo .lawtex salvo!")
-            return False
+            if re.search(r"\.lawtex$", view.file_name()):
+
+                if not view.is_dirty():
+                    return True
+                else:
+                    sublime.message_dialog("There are unsaved changes on your file, please save them or open it unchanged before validating it.")
+                    return False
+
+        sublime.error_message("Rode este comando em um arquivo .lawtex salvo!")
+        return False
 
     def run_jar_dependency_in_background(self, context) :
 

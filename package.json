@@ -1,4 +1,10 @@
 {
-  "name": "Looplex Lawtex Plugin",
-  "version": "1.4.5"
-} 
+  "schema_version": "1.2",
+  "packages": [{
+    "name": "Looplex Lawtex For Sublime Text",
+    "description": "Plugin for the Sublime Text editor to aid in creating Lawtex documents for the Looplex platform.",
+    "author": "looplex",
+    "homepage": "https://github.com/looplex/Looplex_Lawtex_ST3_Plugin",
+    "issues": "https://github.com/looplex/Looplex_Lawtex_ST3_Plugin/issues"
+  }]
+}
